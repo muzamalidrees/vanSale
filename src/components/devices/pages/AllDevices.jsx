@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditUserModal from './sections/EditUserModal';
+import EditDeviceModal from './sections/EditDeviceModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllUsers extends Component {
+class AllDevices extends Component {
     _isMounted = false
     constructor() {
         super();
@@ -61,7 +61,7 @@ class AllUsers extends Component {
         })
     }
 
-    deleteUser = () => {
+    deleteDevice = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
         document.getElementById('usersTable').deleteRow(rowToBeDeleted)
@@ -140,12 +140,12 @@ class AllUsers extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditUserModal
-                        ref='editUserModal'
+                    <EditDeviceModal
+                        ref='editDeviceModal'
                     />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteUser}
+                        deleteEntry={this.deleteDevice}
                     />
                 </MDBCardBody>
             </MDBCard>
@@ -154,4 +154,4 @@ class AllUsers extends Component {
 
 }
 
-export default AllUsers
+export default AllDevices

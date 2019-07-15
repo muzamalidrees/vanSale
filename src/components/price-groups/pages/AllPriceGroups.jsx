@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditUserModal from './sections/EditUserModal';
+import EditPriceGroupModal from './sections/EditPriceGroupModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllUsers extends Component {
+class AllPriceGroups extends Component {
     _isMounted = false
     constructor() {
         super();
@@ -61,7 +61,7 @@ class AllUsers extends Component {
         })
     }
 
-    deleteUser = () => {
+    deletePriceGroup = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
         document.getElementById('usersTable').deleteRow(rowToBeDeleted)
@@ -108,10 +108,10 @@ class AllUsers extends Component {
                     // password: user.password,
                     role: currentRole,
                     buttons: <React.Fragment>
-                        <Can I='update' a='user'>
+                        <Can I='update' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         </Can>
-                        <Can I='delete' a='user'>
+                        <Can I='delete' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
@@ -136,16 +136,16 @@ class AllUsers extends Component {
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='usersTable' striped small hover theadColor="teal"
+                    <MDBDataTable id='priceGroupsTable' striped small hover theadColor="teal"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditUserModal
-                        ref='editUserModal'
+                    <EditPriceGroupModal
+                        ref='editPriceGroupModal'
                     />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteUser}
+                        deleteEntry={this.deletePriceGroup}
                     />
                 </MDBCardBody>
             </MDBCard>
@@ -154,4 +154,4 @@ class AllUsers extends Component {
 
 }
 
-export default AllUsers
+export default AllPriceGroups

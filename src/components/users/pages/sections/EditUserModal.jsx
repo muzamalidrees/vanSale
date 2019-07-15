@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBModalFooter, MDBInput } from 'mdbreact';
 import Select from 'react-select';
-import Notification from '../../misc/sections/Notification';
+import Notification from '../../../misc/sections/Notification';
 
 
 
-class EditOrderModal extends Component {
+class EditUserModal extends Component {
     _isMounted = false;
     constructor(props) {
         super(props);
@@ -276,4 +276,4 @@ class EditOrderModal extends Component {
     }
 }
 
-export default EditOrderModal;
+export default EditUserModal;

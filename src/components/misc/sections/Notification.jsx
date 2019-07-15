@@ -10,7 +10,7 @@ class Notification extends Component {
                 show
                 fade
                 labelColor="#2BBBAD"
-                title="Bucket.pk"
+                title="Van Sales"
                 closeClassName="blue-grey-text"
                 message={this.props.message}
                 autohide={1500}

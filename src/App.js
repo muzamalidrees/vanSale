@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/misc/Header';
 import Footer from './components/misc/Footer';
-import Routes from "./components/misc/Routes";
+import AllRoutes from "./components/misc/AllRoutes";
 import { BrowserRouter } from 'react-router-dom';
 import { AbilityContext } from "./configs/Ability-context";
 import defineRulesFor from "./configs/Ability";
@@ -82,7 +82,7 @@ class App extends React.Component {
               loggedIn={this.state.loggedIn}
               loggedOut={this.loggedOut}
             />
-            <Routes
+            <AllRoutes
               changeUser={this.changeUser}
             />
             {/* <Footer /> */}

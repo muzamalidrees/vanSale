@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditUserModal from './sections/EditUserModal';
+import EditCustomerModal from './sections/EditCustomerModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllUsers extends Component {
+class AllCustomers extends Component {
     _isMounted = false
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllUsers')
+        fetch('/getAllCustomers')
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ users: json.data })
+                    this.setState({ customers: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -42,10 +42,10 @@ class AllUsers extends Component {
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editUserModal.setState({
+        this.refs.editCustomerModal.setState({
             modalShow: true
         })
-        this.refs.editUserModal.fetchData(id);
+        this.refs.editCustomerModal.fetchData(id);
     }
 
     handleDelete = (id) => (e) => {
@@ -61,7 +61,7 @@ class AllUsers extends Component {
         })
     }
 
-    deleteUser = () => {
+    deleteCustomer = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
         document.getElementById('usersTable').deleteRow(rowToBeDeleted)
@@ -140,12 +140,12 @@ class AllUsers extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditUserModal
-                        ref='editUserModal'
+                    <EditCustomerModal
+                        ref='editCustomerModal'
                     />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteUser}
+                        deleteEntry={this.deleteCustomers}
                     />
                 </MDBCardBody>
             </MDBCard>
@@ -154,4 +154,4 @@ class AllUsers extends Component {
 
 }
 
-export default AllUsers
+export default AllCustomers

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditUserModal from './sections/EditUserModal';
+import EditCuustomerPricingModal from './sections/EditCuustomerPricingModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllUsers extends Component {
+class AllCustomerPrices extends Component {
     _isMounted = false
     constructor() {
         super();
@@ -42,10 +42,10 @@ class AllUsers extends Component {
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editUserModal.setState({
+        this.refs.editCuustomerPricingModal.setState({
             modalShow: true
         })
-        this.refs.editUserModal.fetchData(id);
+        this.refs.editCuustomerPricingModal.fetchData(id);
     }
 
     handleDelete = (id) => (e) => {
@@ -140,8 +140,8 @@ class AllUsers extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditUserModal
-                        ref='editUserModal'
+                    <EditCuustomerPricingModal
+                        ref='editCuustomerPricingModal'
                     />
                     <DeleteModal
                         ref='deleteModal'
@@ -154,4 +154,4 @@ class AllUsers extends Component {
 
 }
 
-export default AllUsers
+export default AllCustomerPrices
