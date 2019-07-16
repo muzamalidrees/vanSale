@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { Link } from 'react-router-dom'
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -11,28 +12,32 @@ class SetCustomerPrices extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllRoles')
+        fetch('/getAllCustomers')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data, showOptions: true })
+                    this.setState({ customers: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+        fetch('/getAllPriceGroups')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (this._isMounted) {
+                    this.setState({ priceGroups: json.data })
                 }
             })
             .catch((error) => console.log(error))
 
 
-
         this.state = {
-            role: '',
-            name: '',
-            email: '',
-            cell: '',
-            username: '',
-            password: '',
-            roles: '',
-            showOptions: false,
-            message: '',
+            customers: [],
+            priceGroups: [],
+            customer: '',
+            priceGroup: '',
+            notificationMessage: '',
             notificationShow: false
         };
     }
@@ -43,62 +48,50 @@ class SetCustomerPrices extends Component {
 
     handleSelectChange = selectedOption => {
         this.setState({
-            role: selectedOption
+            selectedOption
         })
     }
 
-    handleInput = e => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let form = this.refs.newUserForm
-        if (form.checkValidity() === false) {
-            form.classList.add('was-validated');
+        if (this.state.customer === '' || this.state.customer === null) {
+            this.setState({ customer: null })
+            return
         }
-        else if (this.state.role === '' || this.state.role === null) {
-            this.setState({ role: null })
+        else if (this.state.priceGroup === '' || this.state.priceGroup === null) {
+            this.setState({ priceGroup: null })
             return
         }
         else {
-            let name = this.state.name
-            let email = this.state.email
-            let cell = this.state.cell
-            let username = this.state.username
-            let password = this.state.password
-            let role = this.state.role.value
+            let customerId = this.state.customer.value
+            let priceGroupId = this.state.priceGroup.value
 
-            console.log(name, email, cell, username, password, role);
-            let user = { name: name, email: email, cell: cell, username: username, password: password, role: role }
+
+            console.log(customerId, priceGroupId);
+            let customerPrice = { customerId: customerId, priceGroupId: priceGroupId }
 
             var options = {
                 method: 'POST',
-                body: JSON.stringify(user),
+                body: JSON.stringify(customerPrice),
                 headers: { 'Content-Type': 'application/json' }
             }
-            fetch('/addNewUser', options)
+            fetch('/addNewCustomerPrice', options)
                 .then((res) => res.json())
                 .then((json) => {
                     // console.log(json)
                     if (this._isMounted === true) {
-                        this.setState({ message: json.message, notificationShow: true })
+                        this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
                     if (json.success === true) {
 
                         this.setState({
-                            role: '',
-                            name: '',
-                            email: '',
-                            cell: '',
-                            username: '',
-                            password: ''
+                            customer: '',
+                            priceGroup: '',
                         })
                     }
                     else {
-                        this.username.focus();
+                        this.priceGroup.focus();
                     }
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
@@ -111,130 +104,105 @@ class SetCustomerPrices extends Component {
 
     render() {
 
-        const { role, roles, showOptions } = this.state
-        const customStyles = {
+        const { customer, priceGroup, customers, priceGroups } = this.state
+        const customerStyles = {
             control: (base, state) => ({
                 ...base,
                 borderColor: state.isFocused ?
-                    '#ddd' : role !== null ?
+                    '#ddd' : customer !== null ?
                         '#ddd' : 'red',
-                width: '191px',
-                // float: 'right'
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
             })
         }
-        var roleOptions;
-        if (showOptions) {
-
-            roleOptions = roles.map(role => ({ key: role.id, label: role.name, value: role.id }));
+        const priceGroupStyles = {
+            control: (base, state) => ({
+                ...base,
+                borderBottomColor: state.isFocused ?
+                    '#ddd' : priceGroup !== null ?
+                        '#ddd' : 'red',
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
+            })
         }
+        var customerOptions;
+        var priceGroupOptions;
+        customerOptions = customers.map(customer => ({ key: customer.id, label: customer.name, value: customer.id }));
+        priceGroupOptions = priceGroups.map(priceGroup => ({ key: priceGroup.id, label: priceGroup.name, value: priceGroup.id }));
+        // if (showOptions) {
+
+        // }
 
 
         return (
-            <Can I='create' a='user'>
-                <MDBContainer className='' style={{ marginTop: '80px' }}>
-                    <MDBRow center>
-                        <MDBCol md="6">
-                            <MDBCard className=' p-5'>
+            // <Can I='create' a='customerPrice'>
+            <MDBContainer className='' style={{ marginTop: '80px' }}>
+                <MDBRow center>
+                    <MDBCol md="6">
+                        <MDBCard className=' p-5'>
 
-                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
-                                    New User
-                            </MDBCardHeader>
-                                <MDBCardBody className='p-2'>
+                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="mb-5 text-center font-weight-bold">
+                                Set Customer's Price-Groups
+                                </MDBCardHeader>
+                            <MDBCardBody className='p-0'>
 
-                                    <form ref='newUserForm' onSubmit={this.handleSubmit} noValidate>
-                                        <div className="grey-text">
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.name}
-                                                label="Name"
-                                                name='name'
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
+                                <form onSubmit={this.handleSubmit} className='text-center'>
+                                    <MDBRow className='mb-5 grey-text'>
+                                        <MDBCol sm='1' className=''>
+                                            <MDBIcon icon="user-alt" size='2x' />
+                                        </MDBCol>
+                                        <MDBCol>
+                                            <Select
+                                                styles={customerStyles}
+                                                value={customer}
+                                                onChange={this.handleSelectChange}
+                                                options={customerOptions}
+                                                placeholder='Customer'
+                                                isSearchable
+                                                isClearable
+                                                className='form-control-lg px-0'
                                             />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.email}
-                                                label="Email"
-                                                name="email"
-                                                icon="envelope"
-                                                group
-                                                type="email"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
+                                        </MDBCol>
+                                    </MDBRow>
+                                    <MDBRow className='mb-5 grey-text'>
+                                        <MDBCol sm='1' className=''>
+                                            <MDBIcon icon="search-dollar" size='2x' />
+                                        </MDBCol>
+                                        <MDBCol>
+                                            <Select
+                                                styles={priceGroupStyles}
+                                                value={priceGroup}
+                                                onChange={this.handleSelectChange}
+                                                options={priceGroupOptions}
+                                                placeholder='Price-Group'
+                                                isSearchable
+                                                isClearable
+                                                className='form-control-lg px-0'
                                             />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.cell}
-                                                label="Phone"
-                                                name="cell"
-                                                icon="phone"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.username}
-                                                label="Username"
-                                                name="username"
-                                                inputRef={el => { this.username = el }}
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.password}
-                                                label="Password"
-                                                name="password"
-                                                icon="lock"
-                                                group
-                                                type="text"
-                                                validate
-                                                required>
-                                                {/* <MDBIcon icon="home" style={{ float: 'left' }} /> */}
-                                            </MDBInput>
-                                            {showOptions ?
-                                                <div className=''>
-                                                    <Select
-                                                        styles={customStyles}
-                                                        value={role}
-                                                        onChange={this.handleSelectChange}
-                                                        options={roleOptions}
-                                                        placeholder='Role'
-                                                        isSearchable
-                                                        isClearable
-                                                    />
-                                                </div> : null
-                                            }
-                                        </div>
-                                        <div className="text-right">
-                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
-                                        </div>
-                                    </form>
-                                </MDBCardBody>
-                            </MDBCard>
-                            {
-                                this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.message}
-                                    /> : null
-                            }
-                        </MDBCol>
-                    </MDBRow>
-                </MDBContainer>
-            </Can>
+                                        </MDBCol>
+                                    </MDBRow>
+
+                                    <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
+                                </form>
+                                <Link to='/customerPricing/all'>All Customer Prices..</Link>
+                            </MDBCardBody>
+                        </MDBCard>
+                        {
+                            this.state.notificationShow ?
+                                <Notification
+                                    message={this.state.notificationMessage}
+                                /> : null
+                        }
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+            // </Can>
         );
     }
 }

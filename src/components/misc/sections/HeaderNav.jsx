@@ -115,7 +115,7 @@ class Header extends React.Component {
                                     </MDBDropdownItem>
                                     {/* <Can I='set' a='customer-price'> */}
                                     <MDBDropdownItem>
-                                        <MDBNavLink style={{ color: '#000000' }} to="/customerPricing"><MDBIcon icon="eye" /> Customer-Pricing</MDBNavLink>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/customerPricing/new"><MDBIcon icon="eye" /> Customer-Pricing</MDBNavLink>
                                     </MDBDropdownItem>
                                     {/* </Can> */}
                                 </MDBDropdownMenu>

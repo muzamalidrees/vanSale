@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditCuustomerPricingModal from './sections/EditCuustomerPricingModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
@@ -10,29 +9,40 @@ class AllCustomerPrices extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllUsers')
+        fetch('/getAllCustomerPrices')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ users: json.data })
+                    this.setState({ customerPrices: json.data })
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllRoles')
+        fetch('/getAllCustomers')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data })
+                    this.setState({ customers: json.data })
                 }
             })
             .catch((error) => console.log(error))
+        fetch('/getAllPriceGroups')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (this._isMounted) {
+                    this.setState({ priceGroups: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
         this.state = {
-            users: [],
+            customerPrices: [],
+            customers: [],
+            priceGroups: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            roles: '',
         }
     }
 
@@ -40,13 +50,6 @@ class AllCustomerPrices extends Component {
         this._isMounted = false
     }
 
-
-    handleEdit = (id) => (e) => {
-        this.refs.editCuustomerPricingModal.setState({
-            modalShow: true
-        })
-        this.refs.editCuustomerPricingModal.fetchData(id);
-    }
 
     handleDelete = (id) => (e) => {
         let el = e.target
@@ -61,18 +64,18 @@ class AllCustomerPrices extends Component {
         })
     }
 
-    deleteUser = () => {
+    deleteCustomerPriceGroup = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
-        document.getElementById('usersTable').deleteRow(rowToBeDeleted)
-        let user = { value: dRowValue }
+        document.getElementById('customerPricingTable').deleteRow(rowToBeDeleted)
+        let customerPriceGroup = { value: dRowValue }
 
         var options = {
             method: 'DELETE',
-            body: JSON.stringify(user),
+            body: JSON.stringify(customerPriceGroup),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/deleteUser', options)
+        fetch('/deleteCustomerPriceGroup', options)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -83,36 +86,37 @@ class AllCustomerPrices extends Component {
 
 
     render() {
-        var { users, roles } = this.state;
+        var { customers, priceGroups, customerPrices } = this.state;
         var rows = [];
         var index = 0;
 
-        users.forEach((user) => {
+        customerPrices.forEach((customerPrice) => {
 
             index = index + 1;
-            let currentRole;
-            if (roles !== '' && roles !== null && roles !== undefined) {
-                roles.forEach(role => {
-                    if (role.id.toString() === user.role_id) {
-                        currentRole = role.name
+            let currentCustomer;
+            let currentPriceGroup;
+            if (customers !== '' && customers !== null && customers !== undefined) {
+                customers.forEach(customer => {
+                    if (customer.id.toString() === customerPrice.customer_id) {
+                        currentCustomer = customer.name
+                    }
+                });
+            }
+            if (priceGroups !== '' && priceGroups !== null && priceGroups !== undefined) {
+                priceGroups.forEach(priceGroup => {
+                    if (priceGroup.id.toString() === customerPrice.price_group_id) {
+                        currentPriceGroup = priceGroup.name
                     }
                 });
             }
             rows.push(
                 {
                     index: index,
-                    name: user.name,
-                    email: user.email,
-                    cell: user.cell,
-                    username: user.username,
-                    // password: user.password,
-                    role: currentRole,
+                    customer: currentCustomer,
+                    priceGroup: currentPriceGroup,
                     buttons: <React.Fragment>
-                        <Can I='update' a='user'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
-                        </Can>
-                        <Can I='delete' a='user'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                        <Can I='delete' a='customerPrice'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(customerPrice.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
                 }
@@ -121,10 +125,8 @@ class AllCustomerPrices extends Component {
 
         var data = {
             columns: [
-                { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Email', field: 'email', }, { label: 'Cell', field: 'cell', },
-                { label: 'Username', field: 'username', }, { label: 'Role', field: 'role', },
-                { label: 'Action', field: 'buttons' }
+                { label: '#', field: 'index', }, { label: 'Customer', field: 'customer' },
+                { label: 'Price-Group', field: 'priceGroup', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -132,20 +134,17 @@ class AllCustomerPrices extends Component {
 
             <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Users
+                    Customers' Price-Groups
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='usersTable' striped small hover theadColor="teal"
+                    <MDBDataTable id='customerPricingTable' striped small hover theadColor="teal"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditCuustomerPricingModal
-                        ref='editCuustomerPricingModal'
-                    />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteUser}
+                        deleteEntry={this.deleteCustomerPriceGroup}
                     />
                 </MDBCardBody>
             </MDBCard>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // import { Can } from "../../configs/Ability-context";
 import SecuredSetCustomerPrices from './SecuredSetCustomerPrices';
+import AllCustomerPrices from './pages/AllCustomerPrices';
 
 
 
@@ -23,7 +24,8 @@ class CustomerPricing extends Component {
             //     </h1>
             // </div>
             <Switch>
-                <Route path="/customerPricing" component={SecuredSetCustomerPrices} />
+                <Route path="/customerPricing/new" component={SecuredSetCustomerPrices} />
+                <Route path="/customerPricing/all" component={AllCustomerPrices} />
             </Switch>
 
         )

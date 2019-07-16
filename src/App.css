@@ -2,6 +2,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   -webkit-appearance: none;
   margin: 0;
 }
+
 #productsTable tbody+thead {
   display: none;
 }
@@ -16,6 +17,18 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 #usersTable tbody+thead {
   display: none;
+}
+
+#customersTable tbody+thead {
+  display: none;
+}
+
+#customerPricingTable tbody+thead {
+  display: none;
+}
+
+#priceGroupsTable tbody+thead {
+  display: none
 }
 
 fieldset.legend-border {

@@ -10,29 +10,29 @@ class AllPriceGroups extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllUsers')
+        fetch('/getAllPriceGroups')
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ users: json.data })
+                    this.setState({ priceGroups: json.data })
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllRoles')
+        fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data })
+                    this.setState({ productCategories: json.data })
                 }
             })
             .catch((error) => console.log(error))
         this.state = {
-            users: [],
+            priceGroups: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            roles: '',
+            productCategories: [],
         }
     }
 
@@ -42,10 +42,10 @@ class AllPriceGroups extends Component {
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editUserModal.setState({
+        this.refs.editPriceGroupModal.setState({
             modalShow: true
         })
-        this.refs.editUserModal.fetchData(id);
+        this.refs.editPriceGroupModal.fetchData(id);
     }
 
     handleDelete = (id) => (e) => {
@@ -64,15 +64,15 @@ class AllPriceGroups extends Component {
     deletePriceGroup = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
-        document.getElementById('usersTable').deleteRow(rowToBeDeleted)
-        let user = { value: dRowValue }
+        document.getElementById('priceGroupsTable').deleteRow(rowToBeDeleted)
+        let priceGroup = { value: dRowValue }
 
         var options = {
             method: 'DELETE',
-            body: JSON.stringify(user),
+            body: JSON.stringify(priceGroup),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/deleteUser', options)
+        fetch('/deletePriceGroup', options)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -83,36 +83,35 @@ class AllPriceGroups extends Component {
 
 
     render() {
-        var { users, roles } = this.state;
+        var { priceGroups, productCategories } = this.state;
         var rows = [];
         var index = 0;
 
-        users.forEach((user) => {
+        priceGroups.forEach((priceGroup) => {
 
             index = index + 1;
-            let currentRole;
-            if (roles !== '' && roles !== null && roles !== undefined) {
-                roles.forEach(role => {
-                    if (role.id.toString() === user.role_id) {
-                        currentRole = role.name
+            let currentProductCategory;
+            if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
+                productCategories.forEach(productCategory => {
+                    if (productCategory.id.toString() === priceGroup.product_category_id) {
+                        currentProductCategory = productCategory.name
                     }
                 });
             }
             rows.push(
                 {
                     index: index,
-                    name: user.name,
-                    email: user.email,
-                    cell: user.cell,
-                    username: user.username,
-                    // password: user.password,
-                    role: currentRole,
+                    name: priceGroup.name,
+                    productCategory: currentProductCategory,
+                    sellPrice: priceGroup.sell_price,
+                    buyBackPrice: priceGroup.buy_back_price,
+                    // password: priceGroup.password,
                     buttons: <React.Fragment>
                         <Can I='update' a='PriceGroup'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(priceGroup.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         </Can>
                         <Can I='delete' a='PriceGroup'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(priceGroup.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
                 }
@@ -122,9 +121,8 @@ class AllPriceGroups extends Component {
         var data = {
             columns: [
                 { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Email', field: 'email', }, { label: 'Cell', field: 'cell', },
-                { label: 'Username', field: 'username', }, { label: 'Role', field: 'role', },
-                { label: 'Action', field: 'buttons' }
+                { label: 'Product-Category', field: 'productCategory', }, { label: 'Selling-Price', field: 'sellPrice', },
+                { label: 'Buying-back Price', field: 'buyBackPrice', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -132,7 +130,7 @@ class AllPriceGroups extends Component {
 
             <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Users
+                    Price Groups
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 

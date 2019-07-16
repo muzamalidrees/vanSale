@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -36,7 +36,7 @@ class NewCustomer extends Component {
             invoiceMessage: '',
             routes: '',
             showOptions: false,
-            message: '',
+            notificationMessage: '',
             notificationShow: false
         };
     }
@@ -125,7 +125,6 @@ class NewCustomer extends Component {
     }
 
     render() {
-        console.log('ok');
 
         const { route, routes, showOptions } = this.state
         const customStyles = {
@@ -134,8 +133,10 @@ class NewCustomer extends Component {
                 borderColor: state.isFocused ?
                     '#ddd' : route !== null ?
                         '#ddd' : 'red',
-                width: '191px',
-                // float: 'right'
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
             })
         }
         var routeOptions;
@@ -151,7 +152,7 @@ class NewCustomer extends Component {
                 <MDBRow center>
                     <MDBCol>
                         <MDBCard className=' py-5'>
-                            <MDBCardHeader tag="h4" style={{ color: 'teal' }} className=" p-2 text-center font-weight-bold">
+                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className=" p-2 text-center font-weight-bold">
                                 New Customer
                             </MDBCardHeader>
                             <MDBCardBody className='p-5'>
@@ -222,9 +223,6 @@ class NewCustomer extends Component {
                                                 validate
                                                 required
                                             />
-                                        </MDBCol>
-                                        <MDBCol md="5">
-
                                             <MDBInput
                                                 onInput={this.handleInput}
                                                 value={this.state.postCode}
@@ -234,8 +232,10 @@ class NewCustomer extends Component {
                                                 group
                                                 type="text"
                                                 validate
-                                                required>
-                                            </MDBInput>
+                                                required
+                                            />
+                                        </MDBCol>
+                                        <MDBCol md="5">
                                             <MDBInput
                                                 onInput={this.handleInput}
                                                 value={this.state.customer_id}
@@ -245,8 +245,8 @@ class NewCustomer extends Component {
                                                 group
                                                 type="text"
                                                 validate
-                                                required>
-                                            </MDBInput>
+                                                required
+                                            />
                                             <MDBInput
                                                 onInput={this.handleInput}
                                                 value={this.state.driverMessage}
@@ -256,8 +256,7 @@ class NewCustomer extends Component {
                                                 group
                                                 type="text"
                                                 validate
-                                            >
-                                            </MDBInput>
+                                            />
                                             <MDBInput
                                                 onInput={this.handleInput}
                                                 value={this.state.invoiceMessage}
@@ -265,37 +264,41 @@ class NewCustomer extends Component {
                                                 name="invoiceMessage"
                                                 icon="file-invoice"
                                                 group
-                                                type="text"
+                                                type="textarea"
+                                                rows='2'
                                                 validate
-                                            >
-                                            </MDBInput>
-                                            {/* {showOptions ? */}
-                                            <div className=''>
-                                                <Select
-                                                    styles={customStyles}
-                                                    value={route}
-                                                    onChange={this.handleSelectChange}
-                                                    options={routeOptions}
-                                                    placeholder='Route'
-                                                    isSearchable
-                                                    isClearable
-                                                />
-                                            </div>
-                                            {/* : null */}
-                                            {/* } */}
-
-                                        </MDBCol>
+                                            />
+                                            <MDBRow className='mb-5'>
+                                                <MDBCol sm='1' className=''>
+                                                    <MDBIcon icon="route" size='2x' />
+                                                </MDBCol>
+                                                <MDBCol className=''>
+                                                    {/* {showOptions ? */}
+                                                    <Select
+                                                        styles={customStyles}
+                                                        value={route}
+                                                        onChange={this.handleSelectChange}
+                                                        options={routeOptions}
+                                                        placeholder='Route'
+                                                        isSearchable
+                                                        isClearable
+                                                        className='form-control-md pl-0'
+                                                    >
+                                                    </Select>
+                                                    {/* : null */}
+                                                    {/* } */}
+                                                </MDBCol>
+                                            </MDBRow>
+                                            <MDBBtn className='form-control py-0 font-weight-bold mt-4' size='lg' color="dark" outline type='submit'>Register</MDBBtn>
+                                        </MDBCol> 
                                     </MDBRow>
-                                    <div className="text-right">
-                                        <MDBBtn size='lg' color="teal" outline type='submit'>Register</MDBBtn>
-                                    </div>
                                 </form>
                             </MDBCardBody>
                         </MDBCard>
                         {
                             this.state.notificationShow ?
                                 <Notification
-                                    message={this.state.message}
+                                    message={this.state.notificationMessage}
                                 /> : null
                         }
                     </MDBCol>

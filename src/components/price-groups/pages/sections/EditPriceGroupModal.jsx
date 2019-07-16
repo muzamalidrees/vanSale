@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBModalFooter, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBRow, MDBCol, MDBIcon, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -11,53 +11,45 @@ class EditPriceGroupModal extends Component {
         super(props);
         this.state = {
             modalShow: false,
-            userId: '',
-            role_id: '',
-            role: '',
+            priceGroupId: '',
+            productCategory_id: '',
+            productCategory: '',
             name: '',
-            email: '',
-            cell: '',
-            username: '',
-            password: '',
-            roles: '',
-            roleOptions: [],
-            message: '',
+            sellPrice: '',
+            buyBackPrice: '',
+            productCategories: [],
+            productCategoryOptions: [],
+            notificationMessage: '',
             notificationShow: false
         }
-        // this.deleteProduct = this.deleteProduct.bind(this);
     }
+
     fetchData = (id) => {
         this._isMounted = true
-        fetch('/getSpecificUser/' + id)
+        fetch('/getSpecificPriceGroup/' + id)
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
-                var user = json.data
+                console.log(json)
+                let priceGroup = json.data
                 if (this._isMounted === true) {
                     this.setState({
-                        user: user,
-                        userId: user.id,
-                        role_id: user.role_id,
-                        name: user.name,
-                        email: user.email,
-                        cell: user.cell,
-                        username: user.username,
-                        password: user.password,
+                        priceGroupId: priceGroup.id,
+                        name: priceGroup.name,
+                        productCategory_id: priceGroup.product_category_id,
+                        sellPrice: priceGroup.sell_price,
+                        buyBackPrice: priceGroup.buy_back_price,
                     })
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllRoles')
+
+        fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
-                if (this._isMounted) {
-                    this.setState({ roles: json.data })
-                }
-                this.setRoleOptions(json.data);
+                console.log(json)
+                this.setProductCategoryOptions(json.data);
             })
             .catch((error) => console.log(error))
-
     }
 
     componentWillUnmount = () => {
@@ -71,16 +63,16 @@ class EditPriceGroupModal extends Component {
         });
     }
 
-    setRoleOptions = (roles) => {
-        let roleOptions = roles.map(role => ({ key: role.id, label: role.name, value: role.id }));
-        let currentRole;
-        roles.forEach(role => {
-            if (role.id.toString() === this.state.role_id) {
-                currentRole = { label: role.name, value: role.id }
+    setProductCategoryOptions = (productCategories) => {
+        let productCategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
+        let currentProductCategory;
+        productCategories.forEach(productCategory => {
+            if (productCategory.id.toString() === this.state.productCategory_id) {
+                currentProductCategory = { label: productCategory.name, value: productCategory.id }
             }
         });
         this.setState({
-            roleOptions: roleOptions, role: currentRole,
+            productCategoryOptions: productCategoryOptions, productCategory: currentProductCategory,
         })
     }
 
@@ -92,47 +84,41 @@ class EditPriceGroupModal extends Component {
 
     handleSelectChange = selectedOption => {
         this.setState({
-            role: selectedOption
+            productCategory: selectedOption
         })
 
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let form = this.refs.updateUserForm
+        let form = this.refs.updatePriceGroupForm
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.role === '' || this.state.role === null) {
-            this.setState({ role: null })
+        else if (this.state.productCategory === '' || this.state.productCategory === null) {
+            this.setState({ productCategory: null })
             return
         }
         else {
-            let name = this.state.name
-            let email = this.state.email
-            let cell = this.state.cell
-            let username = this.state.username
-            let password = this.state.password
-            let role = this.state.role.value
-            let userId = this.state.userId
+            let { priceGroupId, name, productCategory, sellPrice, buyBackPrice } = this.state
 
-            // console.log(userId, name, email, cell, username, password, role);
-            let user = { id: userId, name: name, email: email, cell: cell, username: username, password: password, role: role }
+            console.log(priceGroupId, name, productCategory, sellPrice, buyBackPrice);
+
+            let priceGroup = { id: priceGroupId, name: name, productCategory: productCategory, sellPrice: sellPrice, buyBackPrice: buyBackPrice }
 
             var options = {
                 method: 'PUT',
-                body: JSON.stringify(user),
+                body: JSON.stringify(priceGroup),
                 headers: { 'Content-Type': 'application/json' }
             }
-            fetch('/updateUser', options)
+            fetch('/updatePriceGroup', options)
                 .then((res) => res.json())
                 .then((json) => {
                     console.log(json)
                     if (this._isMounted === true) {
-                        this.setState({ message: json.message, notificationShow: true })
+                        this.setState({ notificationMessage: json.message, notificationShow: true })
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
                     }
-
                 })
                 .catch((error) => console.log(error))
             //closing edit modal
@@ -149,35 +135,39 @@ class EditPriceGroupModal extends Component {
 
 
     render() {
-        const { role, roleOptions } = this.state
+        const { productCategory, productCategoryOptions } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
-                borderColor: state.isFocused ?
-                    '#ddd' : role !== null ?
+                borderBottomColor: state.isFocused ?
+                    '#ddd' : productCategory !== null ?
                         '#ddd' : 'red',
-                width: '191px',
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
             })
         }
 
 
         return (
             <MDBContainer>
-                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='lg' centered>
-                    <MDBModalHeader toggle={this.toggle}>Edit PriceGroup Details</MDBModalHeader>
+                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='md' centered>
+                    <MDBModalHeader toggle={this.toggle}>
+                        Edit Price-Group Details
+                    </MDBModalHeader>
                     <MDBModalBody>
-
                         <MDBCard className=' p-5'>
                             <MDBCardBody className='p-2'>
-
-                                <form ref='updateUserForm' onSubmit={this.handleSubmit} noValidate>
+                                <form ref='updatePriceGroupForm' onSubmit={this.handleSubmit} noValidate>
                                     <div className="grey-text">
                                         <MDBInput
                                             onInput={this.handleInput}
                                             value={this.state.name}
                                             label="Name"
                                             name='name'
-                                            icon="user"
+                                            icon="pen-nib"
                                             group
                                             type="text"
                                             validate
@@ -185,14 +175,33 @@ class EditPriceGroupModal extends Component {
                                             success="right"
                                             required
                                         />
+                                        {/* {showCategoryOptions ? */}
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='2' className='pr-0 mr-0'>
+                                                <MDBIcon icon="file-alt" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol className='ml-0 pl-0'>
+                                                <Select
+                                                    styles={customStyles}
+                                                    value={productCategory}
+                                                    onChange={this.handleSelectChange}
+                                                    options={productCategoryOptions}
+                                                    placeholder='Product-Category'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md'
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        {/* : null} */}
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.email}
-                                            label="Email"
-                                            name="email"
-                                            icon="envelope"
+                                            value={this.state.sellPrice}
+                                            label="Selling Price"
+                                            name="sellPrice"
+                                            icon="dollar-sign"
                                             group
-                                            type="email"
+                                            type="number"
                                             validate
                                             error="wrong"
                                             success="right"
@@ -200,76 +209,35 @@ class EditPriceGroupModal extends Component {
                                         />
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.cell}
-                                            label="Phone"
-                                            name="cell"
-                                            icon="phone"
+                                            value={this.state.buyBackPrice}
+                                            label="Buying-back Price"
+                                            name="buyBackPrice"
+                                            icon="dollar-sign"
                                             group
-                                            type="text"
+                                            type="number"
                                             validate
                                             error="wrong"
                                             success="right"
                                         />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.username}
-                                            label="Username"
-                                            name="username"
-                                            inputRef={el => { this.username = el }}
-                                            icon="user"
-                                            group
-                                            type="text"
-                                            validate
-                                            required
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.password}
-                                            label="Password"
-                                            name="password"
-                                            icon="lock"
-                                            group
-                                            type="text"
-                                            validate
-                                            required>
-                                            {/* <MDBIcon icon="home" style={{ float: 'left' }} /> */}
-                                        </MDBInput>
-                                        {/* {showOptions ? */}
-                                        <div className=''>
-                                            <Select
-                                                styles={customStyles}
-                                                // defaultValue={currentRole}
-                                                value={this.state.role}
-                                                onChange={this.handleSelectChange}
-                                                options={roleOptions}
-                                                placeholder='Role'
-                                                isSearchable
-                                                isClearable
-                                            />
-                                        </div>
-                                        {/* : null */}
-                                        {/* } */}
-                                    </div>
-                                    <div className='text-right'>
 
-                                        <MDBBtn size='sm' className='px-2 font-weight-bold' color="secondary" onClick={this.toggle}>Close</MDBBtn>
-                                        <MDBBtn size='sm' className='px-2 font-weight-bold' onClick={this.handleSubmit} outline color="primary">Save updates</MDBBtn>
                                     </div>
+
                                 </form>
+
+                                <div className='text-center'>
+                                    <MDBBtn size='sm' className='font-weight-bold' color="dark" onClick={this.toggle}>Close</MDBBtn>
+                                    <MDBBtn size='sm' className='font-weight-bold' onClick={this.handleSubmit} outline color="dark">Save updates</MDBBtn>
+                                </div>
                             </MDBCardBody>
                             {
                                 this.state.notificationShow ?
                                     <Notification
-                                        message={this.state.message}
+                                        message={this.state.notificationMessage}
                                     />
                                     : null
                             }
                         </MDBCard>
-
-
                     </MDBModalBody>
-                    <MDBModalFooter>
-                    </MDBModalFooter>
                 </MDBModal>
             </MDBContainer >
         );
