@@ -113,7 +113,7 @@ class NewCustomer extends Component {
                         })
                     }
                     else {
-                        this.shopName.focus();
+                        this.customer_id.focus();
                     }
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
@@ -137,6 +137,7 @@ class NewCustomer extends Component {
                 borderTop: 'none',
                 borderRight: 'none',
                 borderLeft: 'none',
+                borderRadius:'none'
             })
         }
         var routeOptions;
@@ -151,11 +152,11 @@ class NewCustomer extends Component {
             <MDBContainer className='' style={{ marginTop: '80px' }}>
                 <MDBRow center>
                     <MDBCol>
-                        <MDBCard className=' py-5'>
+                        <MDBCard className=' py-2'>
                             <MDBCardHeader tag="h4" style={{ color: 'dark' }} className=" p-2 text-center font-weight-bold">
                                 New Customer
                             </MDBCardHeader>
-                            <MDBCardBody className='p-5'>
+                            <MDBCardBody className='p-3'>
 
                                 <form ref='newCustomerForm' onSubmit={this.handleSubmit} noValidate>
                                     <MDBRow around className="grey-text">
@@ -216,7 +217,6 @@ class NewCustomer extends Component {
                                                 value={this.state.shopName}
                                                 label="Shop Name"
                                                 name="shopName"
-                                                inputRef={el => { this.shopName = el }}
                                                 icon="pen-fancy"
                                                 group
                                                 type="text"
@@ -242,6 +242,7 @@ class NewCustomer extends Component {
                                                 label="Id."
                                                 name="customer_id"
                                                 icon="id-card"
+                                                inputRef={el => { this.customer_id = el }}
                                                 group
                                                 type="text"
                                                 validate
@@ -254,7 +255,8 @@ class NewCustomer extends Component {
                                                 name="driverMessage"
                                                 icon="comment"
                                                 group
-                                                type="text"
+                                                type="textarea"
+                                                rows='1'
                                                 validate
                                             />
                                             <MDBInput
@@ -265,7 +267,7 @@ class NewCustomer extends Component {
                                                 icon="file-invoice"
                                                 group
                                                 type="textarea"
-                                                rows='2'
+                                                rows='1'
                                                 validate
                                             />
                                             <MDBRow className='mb-5'>

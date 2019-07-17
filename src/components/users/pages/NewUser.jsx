@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard,MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -118,8 +118,11 @@ class NewUser extends Component {
                 borderColor: state.isFocused ?
                     '#ddd' : role !== null ?
                         '#ddd' : 'red',
-                width: '191px',
-                // float: 'right'
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none'
             })
         }
         var roleOptions;
@@ -130,111 +133,117 @@ class NewUser extends Component {
 
 
         return (
-            <Can I='create' a='user'>
-                <MDBContainer className='' style={{ marginTop: '80px' }}>
-                    <MDBRow center>
-                        <MDBCol md="6">
-                            <MDBCard className=' p-5'>
+            // <Can I='create' a='user'>
+            <MDBContainer className='' style={{ marginTop: '80px' }}>
+                <MDBRow center>
+                    <MDBCol md="6">
+                        <MDBCard className=' p-5'>
 
-                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
-                                    New User
+                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                New User
                             </MDBCardHeader>
-                                <MDBCardBody className='p-2'>
+                            <MDBCardBody className='p-2'>
 
-                                    <form ref='newUserForm' onSubmit={this.handleSubmit} noValidate>
-                                        <div className="grey-text">
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.name}
-                                                label="Name"
-                                                name='name'
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.email}
-                                                label="Email"
-                                                name="email"
-                                                icon="envelope"
-                                                group
-                                                type="email"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.cell}
-                                                label="Phone"
-                                                name="cell"
-                                                icon="phone"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.username}
-                                                label="Username"
-                                                name="username"
-                                                inputRef={el => { this.username = el }}
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.password}
-                                                label="Password"
-                                                name="password"
-                                                icon="lock"
-                                                group
-                                                type="text"
-                                                validate
-                                                required>
-                                                {/* <MDBIcon icon="home" style={{ float: 'left' }} /> */}
-                                            </MDBInput>
-                                            {showOptions ?
-                                                <div className=''>
-                                                    <Select
-                                                        styles={customStyles}
-                                                        value={role}
-                                                        onChange={this.handleSelectChange}
-                                                        options={roleOptions}
-                                                        placeholder='Role'
-                                                        isSearchable
-                                                        isClearable
-                                                    />
-                                                </div> : null
-                                            }
-                                        </div>
-                                        <div className="text-right">
-                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
-                                        </div>
-                                    </form>
-                                </MDBCardBody>
-                            </MDBCard>
-                            {
-                                this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.message}
-                                    /> : null
-                            }
-                        </MDBCol>
-                    </MDBRow>
-                </MDBContainer>
-            </Can>
+                                <form ref='newUserForm' onSubmit={this.handleSubmit} noValidate>
+                                    <div className="grey-text">
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.name}
+                                            label="Name"
+                                            name='name'
+                                            icon="user"
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                            required
+                                        />
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.email}
+                                            label="Email"
+                                            name="email"
+                                            icon="envelope"
+                                            group
+                                            type="email"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                            required
+                                        />
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.cell}
+                                            label="Phone"
+                                            name="cell"
+                                            icon="phone"
+                                            group
+                                            type="text"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                        />
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.username}
+                                            label="Username"
+                                            name="username"
+                                            inputRef={el => { this.username = el }}
+                                            icon="user"
+                                            group
+                                            type="text"
+                                            validate
+                                            required
+                                        />
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.password}
+                                            label="Password"
+                                            name="password"
+                                            icon="lock"
+                                            group
+                                            type="text"
+                                            validate
+                                            required />
+                                        <MDBRow className='mb-5'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="user-tie" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol className=''>
+                                                {/* {showOptions ? */}
+                                                <Select
+                                                    styles={customStyles}
+                                                    value={role}
+                                                    onChange={this.handleSelectChange}
+                                                    options={roleOptions}
+                                                    placeholder='Role'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md pl-0'
+                                                >
+                                                </Select>
+                                                {/* : null */}
+                                                {/* } */}
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </div>
+                                    <div className="text-center">
+                                        <MDBBtn size='sm' color="dark" outline type='submit'>Register</MDBBtn>
+                                    </div>
+                                </form>
+                            </MDBCardBody>
+                        </MDBCard>
+                        {
+                            this.state.notificationShow ?
+                                <Notification
+                                    message={this.state.message}
+                                /> : null
+                        }
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+            // </Can>
         );
     }
 }

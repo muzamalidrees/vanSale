@@ -71,12 +71,12 @@ class NewUser extends Component {
         var { name } = this.state
 
         return (
-            <Can I='create' a='role'>
+            // <Can I='create' a='role'>
                 <MDBContainer className='' style={{ marginTop: '80px' }}>
                     <MDBRow center>
                         <MDBCol md="6">
                             <MDBCard className=' p-5'>
-                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
                                     New Role
                                 </MDBCardHeader>
                                 <MDBCardBody className='p-2'>
@@ -88,7 +88,7 @@ class NewUser extends Component {
                                                 value={this.state.name}
                                                 label="Name"
                                                 name='name'
-                                                icon="user"
+                                                icon="pen-nib"
                                                 inputRef={el => { this.name = el }}
                                                 group
                                                 type="text"
@@ -113,7 +113,7 @@ class NewUser extends Component {
                         </MDBCol>
                     </MDBRow>
                 </MDBContainer>
-            </Can>
+            // </Can>
         );
     }
 }

@@ -31,12 +31,12 @@ class SecuredNewDevice extends Component {
 
     render() {
 
-        if (this.state.loggedIn === false) {
-            return <Redirect to='/login' />
-        }
-        else {
+        // if (this.state.loggedIn === false) {
+        //     return <Redirect to='/login' />
+        // }
+        // else {
             return <NewDevice />
-        }
+        // }
 
     }
 }

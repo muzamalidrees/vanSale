@@ -2,34 +2,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   -webkit-appearance: none;
   margin: 0;
 }
-
-#productsTable tbody+thead {
+table tbody+thead{
   display: none;
 }
 
-#rolesTable tbody+thead {
-  display: none;
-}
-
-#productCategoriesTable tbody+thead {
-  display: none;
-}
-
-#usersTable tbody+thead {
-  display: none;
-}
-
-#customersTable tbody+thead {
-  display: none;
-}
-
-#customerPricingTable tbody+thead {
-  display: none;
-}
-
-#priceGroupsTable tbody+thead {
-  display: none
-}
 
 fieldset.legend-border {
   border: 1px solid #ddd !important;

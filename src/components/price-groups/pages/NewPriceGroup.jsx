@@ -156,7 +156,7 @@ class NewPriceGroup extends Component {
                                         {/* {showCategoryOptions ? */}
                                         <MDBRow className='mb-5 grey-text'>
                                             <MDBCol sm='1' className=''>
-                                                <MDBIcon icon="file-alt" size='2x' />
+                                                <MDBIcon icon="th" size='2x' />
                                             </MDBCol>
                                             <MDBCol>
                                                 <Select

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -11,12 +11,12 @@ class NewDevice extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllRoles')
+        fetch('/getAllDrivers')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data, showOptions: true })
+                    this.setState({ drivers: json.data, showOptions: true })
                 }
             })
             .catch((error) => console.log(error))
@@ -24,15 +24,11 @@ class NewDevice extends Component {
 
 
         this.state = {
-            role: '',
-            name: '',
-            email: '',
-            cell: '',
-            username: '',
-            password: '',
-            roles: '',
+            driver: '',
+            IMEI: '',
+            drivers: '',
             showOptions: false,
-            message: '',
+            notificationMessage: '',
             notificationShow: false
         };
     }
@@ -43,7 +39,7 @@ class NewDevice extends Component {
 
     handleSelectChange = selectedOption => {
         this.setState({
-            role: selectedOption
+            driver: selectedOption
         })
     }
 
@@ -55,50 +51,41 @@ class NewDevice extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let form = this.refs.newUserForm
+        let form = this.refs.newDeviceForm
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.role === '' || this.state.role === null) {
-            this.setState({ role: null })
+        else if (this.state.driver === '' || this.state.driver === null) {
+            this.setState({ driver: null })
             return
         }
         else {
-            let name = this.state.name
-            let email = this.state.email
-            let cell = this.state.cell
-            let username = this.state.username
-            let password = this.state.password
-            let role = this.state.role.value
+            let { driver, IMEI } = this.state;
 
-            console.log(name, email, cell, username, password, role);
-            let user = { name: name, email: email, cell: cell, username: username, password: password, role: role }
+            console.log(driver, IMEI);
+            let device = { IMEI: IMEI, driver: driver }
 
             var options = {
                 method: 'POST',
-                body: JSON.stringify(user),
+                body: JSON.stringify(device),
                 headers: { 'Content-Type': 'application/json' }
             }
-            fetch('/addNewUser', options)
+            fetch('/addNewDevice', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    // console.log(json)
+                    console.log(json)
                     if (this._isMounted === true) {
-                        this.setState({ message: json.message, notificationShow: true })
+                        this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
                     if (json.success === true) {
 
                         this.setState({
-                            role: '',
-                            name: '',
-                            email: '',
-                            cell: '',
-                            username: '',
-                            password: ''
+                            driver: '',
+                            IMEI: '',
                         })
                     }
                     else {
-                        this.username.focus();
+                        this.IMEI.focus();
                     }
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
@@ -111,130 +98,91 @@ class NewDevice extends Component {
 
     render() {
 
-        const { role, roles, showOptions } = this.state
+        const { driver, drivers, showOptions } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
                 borderColor: state.isFocused ?
-                    '#ddd' : role !== null ?
+                    '#ddd' : driver !== null ?
                         '#ddd' : 'red',
-                width: '191px',
-                // float: 'right'
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none'
             })
         }
-        var roleOptions;
+        var driverOptions;
         if (showOptions) {
 
-            roleOptions = roles.map(role => ({ key: role.id, label: role.name, value: role.id }));
+            driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
         }
 
 
         return (
-            <Can I='create' a='user'>
-                <MDBContainer className='' style={{ marginTop: '80px' }}>
-                    <MDBRow center>
-                        <MDBCol md="6">
-                            <MDBCard className=' p-5'>
+            // <Can I='create' a='device'>
+            <MDBContainer className='' style={{ marginTop: '80px' }}>
+                <MDBRow center>
+                    <MDBCol md="6">
+                        <MDBCard className='p-3'>
 
-                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
-                                    New Device
+                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                New Device
                             </MDBCardHeader>
-                                <MDBCardBody className='p-2'>
+                            <MDBCardBody className='p-4'>
 
-                                    <form ref='newUserForm' onSubmit={this.handleSubmit} noValidate>
-                                        <div className="grey-text">
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.name}
-                                                label="Name"
-                                                name='name'
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.email}
-                                                label="Email"
-                                                name="email"
-                                                icon="envelope"
-                                                group
-                                                type="email"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.cell}
-                                                label="Phone"
-                                                name="cell"
-                                                icon="phone"
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.username}
-                                                label="Username"
-                                                name="username"
-                                                inputRef={el => { this.username = el }}
-                                                icon="user"
-                                                group
-                                                type="text"
-                                                validate
-                                                required
-                                            />
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.password}
-                                                label="Password"
-                                                name="password"
-                                                icon="lock"
-                                                group
-                                                type="text"
-                                                validate
-                                                required>
-                                                {/* <MDBIcon icon="home" style={{ float: 'left' }} /> */}
-                                            </MDBInput>
-                                            {showOptions ?
-                                                <div className=''>
-                                                    <Select
-                                                        styles={customStyles}
-                                                        value={role}
-                                                        onChange={this.handleSelectChange}
-                                                        options={roleOptions}
-                                                        placeholder='Role'
-                                                        isSearchable
-                                                        isClearable
-                                                    />
-                                                </div> : null
-                                            }
-                                        </div>
-                                        <div className="text-right">
-                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
-                                        </div>
-                                    </form>
-                                </MDBCardBody>
-                            </MDBCard>
-                            {
-                                this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.message}
-                                    /> : null
-                            }
-                        </MDBCol>
-                    </MDBRow>
-                </MDBContainer>
-            </Can>
+                                <form ref='newDeviceForm' onSubmit={this.handleSubmit} noValidate>
+                                    <div className="grey-text">
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={this.state.IMEI}
+                                            label="IMEI"
+                                            name="IMEI"
+                                            inputRef={el => { this.IMEI = el }}
+                                            icon="barcode"
+                                            group
+                                            type="text"
+                                            validate
+                                            required
+                                        />
+                                        <MDBRow className='mb-5'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="user-tie" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol className=''>
+                                                {/* {showOptions ? */}
+                                                <Select
+                                                    styles={customStyles}
+                                                    value={driver}
+                                                    onChange={this.handleSelectChange}
+                                                    options={driverOptions}
+                                                    placeholder='Driver'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md pl-0'
+                                                >
+                                                </Select>
+                                                {/* : null */}
+                                                {/* } */}
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </div>
+                                    <div className="text-center">
+                                        <MDBBtn size='sm' color="dark" outline type='submit'>Register</MDBBtn>
+                                    </div>
+                                </form>
+                            </MDBCardBody>
+                        </MDBCard>
+                        {
+                            this.state.notificationShow ?
+                                <Notification
+                                    message={this.state.notificationMessage}
+                                /> : null
+                        }
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+            // </Can >
         );
     }
 }

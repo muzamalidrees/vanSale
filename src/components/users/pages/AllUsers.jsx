@@ -109,7 +109,7 @@ class AllUsers extends Component {
                     role: currentRole,
                     buttons: <React.Fragment>
                         <Can I='update' a='user'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         </Can>
                         <Can I='delete' a='user'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
@@ -136,7 +136,7 @@ class AllUsers extends Component {
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='usersTable' striped small hover theadColor="teal"
+                    <MDBDataTable id='usersTable' striped small hover theadColor="dark"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>

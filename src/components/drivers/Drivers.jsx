@@ -10,7 +10,6 @@ class Drivers extends Component {
     constructor() {
         super();
         this.state = {
-            date: new Date(),
         };
     }
 

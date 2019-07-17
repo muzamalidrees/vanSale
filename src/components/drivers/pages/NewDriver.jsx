@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -11,12 +11,12 @@ class NewDriver extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllRoles')
+        fetch('/getAllRoutes')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data, showOptions: true })
+                    this.setState({ routes: json.data, showOptions: true })
                 }
             })
             .catch((error) => console.log(error))
@@ -24,15 +24,16 @@ class NewDriver extends Component {
 
 
         this.state = {
-            role: '',
+            driver_id: '',
             name: '',
             email: '',
             cell: '',
-            username: '',
-            password: '',
-            roles: '',
+            address: '',
+            route: '',
+            dailyMessage: '',
+            routes: '',
             showOptions: false,
-            message: '',
+            notificationMessage: '',
             notificationShow: false
         };
     }
@@ -43,7 +44,7 @@ class NewDriver extends Component {
 
     handleSelectChange = selectedOption => {
         this.setState({
-            role: selectedOption
+            route: selectedOption
         })
     }
 
@@ -55,50 +56,49 @@ class NewDriver extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let form = this.refs.newUserForm
+        let form = this.refs.newDriverForm
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.role === '' || this.state.role === null) {
-            this.setState({ role: null })
+        else if (this.state.route === '' || this.state.route === null) {
+            this.setState({ route: null })
             return
         }
         else {
-            let name = this.state.name
-            let email = this.state.email
-            let cell = this.state.cell
-            let username = this.state.username
-            let password = this.state.password
-            let role = this.state.role.value
+            let { driver_id, name, email, cell, address, route, dailyMessage } = this.state
+            console.log(driver_id, name, email, cell, address, route, dailyMessage);
 
-            console.log(name, email, cell, username, password, role);
-            let user = { name: name, email: email, cell: cell, username: username, password: password, role: role }
+            let driver = {
+                driver_id: driver_id, name: name, email: email, cell: cell, address: address,
+                route: route.value, daily_message: dailyMessage
+            }
 
             var options = {
                 method: 'POST',
-                body: JSON.stringify(user),
+                body: JSON.stringify(driver),
                 headers: { 'Content-Type': 'application/json' }
             }
-            fetch('/addNewUser', options)
+            fetch('/addNewDriver', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    // console.log(json)
+                    console.log(json)
                     if (this._isMounted === true) {
-                        this.setState({ message: json.message, notificationShow: true })
+                        this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
                     if (json.success === true) {
 
                         this.setState({
-                            role: '',
+                            driver_id: '',
                             name: '',
                             email: '',
                             cell: '',
-                            username: '',
-                            password: ''
+                            address: '',
+                            route: '',
+                            dailyMessage: ''
                         })
                     }
                     else {
-                        this.username.focus();
+                        this.driver_id.focus();
                     }
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
@@ -111,38 +111,53 @@ class NewDriver extends Component {
 
     render() {
 
-        const { role, roles, showOptions } = this.state
+        const { route, routes, showOptions } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
-                borderColor: state.isFocused ?
-                    '#ddd' : role !== null ?
+                borderBottomColor: state.isFocused ?
+                    '#ddd' : route !== null ?
                         '#ddd' : 'red',
-                width: '191px',
-                // float: 'right'
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
             })
         }
-        var roleOptions;
+        var routeOptions;
         if (showOptions) {
 
-            roleOptions = roles.map(role => ({ key: role.id, label: role.name, value: role.id }));
+            routeOptions = routes.map(route => ({ key: route.id, label: route.name, value: route.id }));
         }
 
 
         return (
-            <Can I='create' a='user'>
-                <MDBContainer className='' style={{ marginTop: '80px' }}>
-                    <MDBRow center>
-                        <MDBCol md="6">
-                            <MDBCard className=' p-5'>
-
-                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
-                                    New Driver
+            // <Can I='create' a='driver'>
+            <MDBContainer className='' style={{ marginTop: '80px' }}>
+                <MDBRow center>
+                    <MDBCol >
+                        <MDBCard className=' py-5'>
+                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                New Driver
                             </MDBCardHeader>
-                                <MDBCardBody className='p-2'>
+                            <MDBCardBody className='p-5'>
 
-                                    <form ref='newUserForm' onSubmit={this.handleSubmit} noValidate>
-                                        <div className="grey-text">
+                                <form ref='newDriverForm' onSubmit={this.handleSubmit} noValidate>
+                                    <MDBRow around className="grey-text">
+                                        <MDBCol md="5">
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={this.state.driver_id}
+                                                label="Id."
+                                                name="driver_id"
+                                                icon="id-card"
+                                                inputRef={el => { this.driver_id = el }}
+                                                group
+                                                type="text"
+                                                validate
+                                                required
+                                            />
                                             <MDBInput
                                                 onInput={this.handleInput}
                                                 value={this.state.name}
@@ -167,7 +182,6 @@ class NewDriver extends Component {
                                                 validate
                                                 error="wrong"
                                                 success="right"
-                                                required
                                             />
                                             <MDBInput
                                                 onInput={this.handleInput}
@@ -180,61 +194,71 @@ class NewDriver extends Component {
                                                 validate
                                                 error="wrong"
                                                 success="right"
+                                                required
                                             />
+                                        </MDBCol>
+                                        <MDBCol md="5">
                                             <MDBInput
                                                 onInput={this.handleInput}
-                                                value={this.state.username}
-                                                label="Username"
-                                                name="username"
-                                                inputRef={el => { this.username = el }}
-                                                icon="user"
+                                                value={this.state.address}
+                                                label="Address"
+                                                name="address"
+                                                icon="map-marker-alt"
                                                 group
                                                 type="text"
                                                 validate
+                                                error="wrong"
+                                                success="right"
                                                 required
                                             />
                                             <MDBInput
                                                 onInput={this.handleInput}
-                                                value={this.state.password}
-                                                label="Password"
-                                                name="password"
-                                                icon="lock"
+                                                value={this.state.dailyMessage}
+                                                label="Daily Message"
+                                                name="dailyMessage"
+                                                icon="file-invoice"
                                                 group
-                                                type="text"
+                                                type="textarea"
+                                                rows='1'
                                                 validate
-                                                required>
-                                                {/* <MDBIcon icon="home" style={{ float: 'left' }} /> */}
-                                            </MDBInput>
-                                            {showOptions ?
-                                                <div className=''>
+                                            />
+                                            <MDBRow className='mb-5'>
+                                                <MDBCol sm='1' className=''>
+                                                    <MDBIcon icon="route" size='2x' />
+                                                </MDBCol>
+                                                <MDBCol className=''>
+                                                    {/* {showOptions ? */}
                                                     <Select
                                                         styles={customStyles}
-                                                        value={role}
+                                                        value={route}
                                                         onChange={this.handleSelectChange}
-                                                        options={roleOptions}
-                                                        placeholder='Role'
+                                                        options={routeOptions}
+                                                        placeholder='Route'
                                                         isSearchable
                                                         isClearable
-                                                    />
-                                                </div> : null
-                                            }
-                                        </div>
-                                        <div className="text-right">
-                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
-                                        </div>
-                                    </form>
-                                </MDBCardBody>
-                            </MDBCard>
-                            {
-                                this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.message}
-                                    /> : null
-                            }
-                        </MDBCol>
-                    </MDBRow>
-                </MDBContainer>
-            </Can>
+                                                        className='form-control-md pl-0'
+                                                    >
+                                                    </Select>
+                                                    {/* : null */}
+                                                    {/* } */}
+                                                </MDBCol>
+                                            </MDBRow>
+                                            <MDBBtn className='form-control py-0 font-weight-bold mt-4' size='lg' color="dark" outline type='submit'>Register</MDBBtn>
+                                        </MDBCol>
+                                    </MDBRow>
+                                </form>
+                            </MDBCardBody>
+                        </MDBCard>
+                        {
+                            this.state.notificationShow ?
+                                <Notification
+                                    message={this.state.notificationMessage}
+                                /> : null
+                        }
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
+            // </Can>
         );
     }
 }

@@ -10,29 +10,29 @@ class AllDevices extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllUsers')
+        fetch('/getAllDevices')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ users: json.data })
+                    this.setState({ devices: json.data })
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllRoles')
+        fetch('/getAllDrivers')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
-                    this.setState({ roles: json.data })
+                    this.setState({ drivers: json.data })
                 }
             })
             .catch((error) => console.log(error))
         this.state = {
-            users: [],
+            devices: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            roles: '',
+            drivers: '',
         }
     }
 
@@ -42,10 +42,10 @@ class AllDevices extends Component {
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editUserModal.setState({
+        this.refs.editDeviceModal.setState({
             modalShow: true
         })
-        this.refs.editUserModal.fetchData(id);
+        this.refs.editDeviceModal.fetchData(id);
     }
 
     handleDelete = (id) => (e) => {
@@ -64,15 +64,15 @@ class AllDevices extends Component {
     deleteDevice = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
-        document.getElementById('usersTable').deleteRow(rowToBeDeleted)
-        let user = { value: dRowValue }
+        document.getElementById('devicesTable').deleteRow(rowToBeDeleted)
+        let device = { value: dRowValue }
 
         var options = {
             method: 'DELETE',
-            body: JSON.stringify(user),
+            body: JSON.stringify(device),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/deleteUser', options)
+        fetch('/deleteDevice', options)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -83,36 +83,32 @@ class AllDevices extends Component {
 
 
     render() {
-        var { users, roles } = this.state;
+        var { devices, drivers } = this.state;
         var rows = [];
         var index = 0;
 
-        users.forEach((user) => {
+        devices.forEach((device) => {
 
             index = index + 1;
-            let currentRole;
-            if (roles !== '' && roles !== null && roles !== undefined) {
-                roles.forEach(role => {
-                    if (role.id.toString() === user.role_id) {
-                        currentRole = role.name
+            let currentDriver;
+            if (drivers !== '' && drivers !== null && drivers !== undefined) {
+                drivers.forEach(driver => {
+                    if (driver.id.toString() === device.driver_id) {
+                        currentDriver = driver.name
                     }
                 });
             }
             rows.push(
                 {
                     index: index,
-                    name: user.name,
-                    email: user.email,
-                    cell: user.cell,
-                    username: user.username,
-                    // password: user.password,
-                    role: currentRole,
+                    IMEI: device.IMEI,
+                    driver: currentDriver,
                     buttons: <React.Fragment>
-                        <Can I='update' a='user'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
+                        <Can I='update' a='device'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(device.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         </Can>
-                        <Can I='delete' a='user'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                        <Can I='delete' a='device'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(device.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
                 }
@@ -121,10 +117,8 @@ class AllDevices extends Component {
 
         var data = {
             columns: [
-                { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Email', field: 'email', }, { label: 'Cell', field: 'cell', },
-                { label: 'Username', field: 'username', }, { label: 'Role', field: 'role', },
-                { label: 'Action', field: 'buttons' }
+                { label: '#', field: 'index', }, { label: 'IMEI', field: 'IMEI' },
+                { label: 'Driver', field: 'driver', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -132,11 +126,11 @@ class AllDevices extends Component {
 
             <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Users
+                    All Devices
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='usersTable' striped small hover theadColor="teal"
+                    <MDBDataTable id='devicesTable' striped small hover theadColor="dark"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>

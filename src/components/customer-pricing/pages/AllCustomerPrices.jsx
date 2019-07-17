@@ -138,7 +138,7 @@ class AllCustomerPrices extends Component {
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='customerPricingTable' striped small hover theadColor="teal"
+                    <MDBDataTable id='customerPricingTable' striped small hover theadColor="dark"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>

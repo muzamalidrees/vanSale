@@ -31,12 +31,12 @@ class SecuredAllDrivers extends Component {
 
     render() {
 
-        if (this.state.loggedIn === false) {
-            return <Redirect to='/login' />
-        }
-        else {
-            return <AllDrivers />
-        }
+        // if (this.state.loggedIn === false) {
+        //     return <Redirect to='/login' />
+        // }
+        // else {
+        return <AllDrivers />
+        // }
 
     }
 }
