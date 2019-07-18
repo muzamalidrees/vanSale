@@ -14,6 +14,7 @@ import Drivers from '../drivers/Drivers';
 import Routes from '../routes/Routes';
 import Devices from '../devices/Devices';
 import Home from '../home/pages/Home';
+import ReactSideBar from './sections/ReactSideBar';
 
 
 
@@ -40,26 +41,28 @@ class AllRoutes extends Component {
 
 
         return (
-
+            
             <div style={{}} className="container-fluid">
-                <Switch>
-                    {/* <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
-                    {/* <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
-                    <Route exact path="/" component={Home} />
-                    <Route path="/home" component={Home} />
-                    <Route path="/users" component={Users} />
-                    <Route path="/roles" component={Roles} />
-                    <Route path="/products" component={Products} />
-                    <Route path="/productCategories" component={ProductCategories} />
-                    <Route path="/customers" component={Customers} />
-                    <Route path="/priceGroups" component={PriceGroups} />
-                    <Route path="/customerPricing" component={CustomerPricing} />
-                    <Route path="/drivers" component={Drivers} />
-                    <Route path="/routes" component={Routes} />
-                    <Route path="/devices" component={Devices} />
-                    <Route path='/' component={NotFound} />
-                </Switch>
-            </div>
+            
+                <ReactSideBar />
+                    <Switch>
+                        {/* <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
+                        {/* <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
+                        <Route exact path="/" component={Home} />
+                        <Route path="/home" component={Home} />
+                        <Route path="/users" component={Users} />
+                        <Route path="/roles" component={Roles} />
+                        <Route path="/products" component={Products} />
+                        <Route path="/productCategories" component={ProductCategories} />
+                        <Route path="/customers" component={Customers} />
+                        <Route path="/priceGroups" component={PriceGroups} />
+                        <Route path="/customerPricing" component={CustomerPricing} />
+                        <Route path="/drivers" component={Drivers} />
+                        <Route path="/routes" component={Routes} />
+                        <Route path="/devices" component={Devices} />
+                        <Route path='/' component={NotFound} />
+                    </Switch>
+                </div>
 
         )
     }
