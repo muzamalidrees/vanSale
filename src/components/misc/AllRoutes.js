@@ -44,7 +44,7 @@ class AllRoutes extends Component {
 
         return (
             <React.Fragment>
-                {/* <ReactSideBar /> */}
+                <ReactSideBar />
                 <div style={{}} className="container-fluid">
                     <Switch>
                         {/* <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}

@@ -76,11 +76,13 @@ class App extends React.Component {
 
   render() {
 
+   
+
     return (
       <BrowserRouter>
         <AbilityContext.Provider value={ability}>
           <div
-            // style={{ marginLeft: '15%' }}
+            style={{ marginLeft: '15%' }}
           >
             <Header
               loggedIn={this.state.loggedIn}
