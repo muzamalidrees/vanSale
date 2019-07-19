@@ -27,7 +27,7 @@ class Header extends React.Component {
     return (
       <div>
         <header>
-          <MDBNavbar color="black" dark expand="md" scrolling fixed="top">
+          <MDBNavbar color="black" dark expand="lg" scrolling fixed="top">
             <MDBNavbarBrand>
               <strong className="white-text">Bucket Orders Management</strong>
             </MDBNavbarBrand>

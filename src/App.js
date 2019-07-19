@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { AbilityContext } from "./configs/Ability-context";
 import defineRulesFor from "./configs/Ability";
 import { Ability } from "@casl/ability";
+import ReactSideBar from './components/misc/sections/ReactSideBar';
+
 
 
 const ability = new Ability();
@@ -77,7 +79,9 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <AbilityContext.Provider value={ability}>
-          <div>
+          <div
+            // style={{ marginLeft: '15%' }}
+          >
             <Header
               loggedIn={this.state.loggedIn}
               loggedOut={this.loggedOut}

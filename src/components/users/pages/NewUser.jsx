@@ -14,7 +14,7 @@ class NewUser extends Component {
         fetch('/getAllRoles')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
                     this.setState({ roles: json.data, showOptions: true })
                 }

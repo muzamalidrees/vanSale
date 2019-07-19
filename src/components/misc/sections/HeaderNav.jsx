@@ -34,7 +34,31 @@ class Header extends React.Component {
                     {/* {this.props.loggedIn ? */}
                     <React.Fragment>
                         <MDBNavItem >
-                            <MDBNavLink to="/home"><MDBIcon icon="home" /> Home</MDBNavLink>
+                            <MDBDropdown>
+                                <MDBDropdownToggle nav caret>
+                                    <MDBIcon icon="home" > </MDBIcon>  Home
+                                </MDBDropdownToggle>
+                                <MDBDropdownMenu className="text-white">
+                                    <MDBDropdownItem>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/home"><MDBIcon icon="home" /> Home</MDBNavLink>
+                                    </MDBDropdownItem>
+                                    <MDBDropdownItem>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/sales/all"><MDBIcon icon="eye" /> All Sales</MDBNavLink>
+                                    </MDBDropdownItem>
+                                    {/* <Can I='create' a='role'> */}
+                                    <MDBDropdownItem>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/returns/new"><MDBIcon icon="plus" /> New Returns</MDBNavLink>
+                                    </MDBDropdownItem>
+                                    {/* </Can> */}
+                                    <MDBDropdownItem>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/returns/all"><MDBIcon icon="eye" /> All Returns</MDBNavLink>
+                                    </MDBDropdownItem>
+                                    <MDBDropdownItem>
+                                        <MDBNavLink style={{ color: '#000000' }} to="/invoices/all"><MDBIcon icon="eye" /> All Invoices</MDBNavLink>
+                                    </MDBDropdownItem>
+                                </MDBDropdownMenu>
+                            </MDBDropdown>
+                            {/* <MDBNavLink to="/home"><MDBIcon icon="home" /> Home</MDBNavLink>  */}
                         </MDBNavItem>
                         {/* <Can I='read' a='user'> */}
                         <MDBNavItem>
@@ -184,12 +208,12 @@ class Header extends React.Component {
                             </MDBDropdown>
                         </MDBNavItem>
                         {/* </Can> */}
-                       
+
                     </React.Fragment>
                     {/* : */}
                     {/* null */}
                     {/* } */}
-                    
+
 
                 </MDBNavbarNav>
                 <MDBNavbarNav right id='secondNav'>

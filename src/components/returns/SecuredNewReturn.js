@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Home from './pages/Home';
+import NewReturn from './pages/NewReturn';
 import { Redirect } from 'react-router'
 
 
-class SecuredHome extends Component {
+class SecuredNewReturn extends Component {
     _isMounted = false
     state = {
-        loggedIn: ''
+        loggedIn: true
     }
     constructor() {
         super()
@@ -30,12 +30,12 @@ class SecuredHome extends Component {
     }
 
     render() {
-        
+
         // if (this.state.loggedIn === false) {
         //     return <Redirect to='/login' />
         // }
         // else {
-            return <Home />
+            return <NewReturn />
         // }
 
     }
@@ -43,4 +43,4 @@ class SecuredHome extends Component {
 
 
 
-export default SecuredHome
+export default SecuredNewReturn

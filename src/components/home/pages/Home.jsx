@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Can } from '../../../configs/Ability-context'
-
+import NewSale from '../../sales/pages/NewSale';
+import ProductsTable from '../../sales/pages/sections/ProductsTable'
 
 
 class Home extends Component {
@@ -9,6 +10,7 @@ class Home extends Component {
         super();
 
         this.state = {
+            displaySaleProductsTable: 'none',
         }
     }
 
@@ -18,13 +20,14 @@ class Home extends Component {
     render() {
 
         return (
-            <div style={{marginTop:'72px'}}>
-                Home
-                Home
-                Home
-                Home
-                Home
-                Home
+            <div style={{ marginTop: '72px' }}>
+                < NewSale
+                    tableType={'sales'}
+                />
+                <ProductsTable
+                    ref='saleProductstable'
+                    display={this.state.displaySaleProductsTable}
+                />
             </div>
         );
     }

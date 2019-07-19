@@ -13,7 +13,9 @@ import CustomerPricing from '../customer-pricing/CustomerPricing';
 import Drivers from '../drivers/Drivers';
 import Routes from '../routes/Routes';
 import Devices from '../devices/Devices';
-import Home from '../home/pages/Home';
+import Sales from '../sales/Sales';
+import Returns from '../returns/Returns';
+import Invoices from '../invoices/Invoices';
 import ReactSideBar from './sections/ReactSideBar';
 
 
@@ -41,15 +43,14 @@ class AllRoutes extends Component {
 
 
         return (
-            
-            <div style={{}} className="container-fluid">
-            
-                <ReactSideBar />
+            <React.Fragment>
+                {/* <ReactSideBar /> */}
+                <div style={{}} className="container-fluid">
                     <Switch>
                         {/* <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
                         {/* <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
-                        <Route exact path="/" component={Home} />
-                        <Route path="/home" component={Home} />
+                        <Route exact path="/" component={SecuredHome} />
+                        <Route path="/home" component={SecuredHome} />
                         <Route path="/users" component={Users} />
                         <Route path="/roles" component={Roles} />
                         <Route path="/products" component={Products} />
@@ -60,9 +61,13 @@ class AllRoutes extends Component {
                         <Route path="/drivers" component={Drivers} />
                         <Route path="/routes" component={Routes} />
                         <Route path="/devices" component={Devices} />
+                        <Route path="/sales" component={Sales} />
+                        <Route path="/returns" component={Returns} />
+                        <Route path="/invoices" component={Invoices} />
                         <Route path='/' component={NotFound} />
                     </Switch>
                 </div>
+            </React.Fragment>
 
         )
     }

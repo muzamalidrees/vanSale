@@ -20,6 +20,8 @@ class ReactSideBar extends Component {
     }
 
     onSetSidebarOpen(open) {
+        console.log('setSidebaropen');
+        
         this.setState({ sidebarOpen: open, displayBtn: !this.state.displayBtn });
     }
 
@@ -33,6 +35,8 @@ class ReactSideBar extends Component {
     }
 
     mediaQueryChanged() {
+        console.log(mql.matches);
+
         this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
     }
 
@@ -42,7 +46,7 @@ class ReactSideBar extends Component {
             root: {
                 position: "absolute",
                 top: 66,
-                left: 3,
+                left: 0,
                 right: 0,
                 bottom: 0,
                 overflow: "hidden"
@@ -50,7 +54,7 @@ class ReactSideBar extends Component {
             sidebar: {
                 zIndex: 2,
                 position: "absolute",
-                width: '200px',
+                width: '15%',
                 top: 0,
                 bottom: 0,
                 transition: "transform .3s ease-out",
@@ -70,7 +74,7 @@ class ReactSideBar extends Component {
             },
             overlay: {
                 zIndex: 1,
-                position: "fixed",
+                position: "absolute",
                 top: 0,
                 left: 0,
                 right: 0,
