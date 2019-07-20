@@ -35,7 +35,6 @@ class ReactSideBar extends Component {
     }
 
     mediaQueryChanged() {
-        console.log(mql.matches);
 
         this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { MDBBtn, MDBIcon } from 'mdbreact'
 
 
 class PTableRow extends Component {
@@ -14,33 +15,29 @@ class PTableRow extends Component {
     }
 
     deleteRowfn(e) {
+        let { tableId, containerId } = this.props
         let el = e.target
         let row = el.closest('tr')
 
         let i = row.rowIndex;
         let price = row.cells[5].innerHTML;
-        let pChecked = row.cells[7].innerHTML;
-
-        this.props.deleteProduct(price, i, pChecked);
+        this.props.deleteProductFrmTbl(price, i, tableId, containerId);
 
     }
 
     handleBlur = name => e => {
+        let { pPrice } = this.state
+        let { tableId } = this.props
 
-        this.props.minusFromTotal(this.state.pPrice);
-        if (this.props.pChecked) {
-            this.props.minusFromTotalValueAdded(this.state.pPrice);
-        }
+        this.props.minusFromTotal(pPrice, tableId);
+
         var a = e.target.innerHTML
         this.setState({ [name]: a })
         this.setState(state => {
-            var pPrice = [state.pRate * state.pQTY]
+            let pPrice = [state.pRate * state.pQTY]
             return { pPrice }
         }, function () {
-            this.props.addToTotal(parseInt(this.state.pPrice));
-            if (this.props.pChecked) {
-                this.props.addToTotalValueAdded(parseInt(this.state.pPrice));
-            }
+            this.props.addToTotal(parseInt(this.state.pPrice), this.props.tableId);
         })
     }
     onKeyPress = (e) => {
@@ -53,31 +50,22 @@ class PTableRow extends Component {
     }
 
     render() {
-        var pName = this.props.pName;
-        var pSKU = this.props.pSKU;
-        var pRate = this.props.pRate;
-        var pQTY = this.props.pQTY;
-        var pRemarks = this.props.pRemarks;
-        var pChecked = (this.props.pChecked) ? 'Yes' : 'No';
-        var index = this.props.index;
-        var id = this.props.Id
+
+
+        let { index, pId, pName, pRate, pQTY, saleDate } = this.props
 
         return (
 
             <tr >
                 <td>{index}</td>
-                <td suppressContentEditableWarning={true} contentEditable='true'>{pName}</td>
-                <td suppressContentEditableWarning={true} contentEditable='true'>{pSKU}</td>
-                <td suppressContentEditableWarning={true} onKeyPress={this.onKeyPress} onBlur={this.handleBlur('pRate')} contentEditable='true'>{pRate}</td>
+                <td style={{ display: 'none' }}>{pId}</td>
+                <td>{pName}</td>
+                <td>{pRate}</td>
                 <td suppressContentEditableWarning={true} onKeyPress={this.onKeyPress} onBlur={this.handleBlur('pQTY')} contentEditable='true'>{pQTY}</td>
-                <td >{this.state.pPrice}</td>
-                <td suppressContentEditableWarning={true} contentEditable='true'>{pRemarks}</td>
-                <td>{pChecked}</td>
-                <td style={{ display: 'none' }}>{id}</td>
+                <td>{this.state.pPrice}</td>
+                <td style={{ display: 'none' }}>{saleDate.toString()}</td>
                 <td>
-                    <button onClick={this.deleteRowfn.bind(this)} type='button' className=" btn-sm btn-dark mb-1">
-                        <i className="fas fa-trash"></i>
-                    </button>
+                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.deleteRowfn.bind(this)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                 </td>
             </tr >
         );

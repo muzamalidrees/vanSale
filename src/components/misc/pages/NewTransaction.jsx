@@ -4,10 +4,11 @@ import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+import { Can } from '../../../configs/Ability-context'
 
 
 
-class NewSale extends Component {
+class NewTransaction extends Component {
     _isMounted = false
     constructor(props) {
         super(props);
@@ -41,11 +42,12 @@ class NewSale extends Component {
                 }
             })
             .catch((error) => console.log(error))
+
         this.state = {
             saleDate: '',
             invoiceId: 1,
             rate: '',
-            qty: 1,
+            qty: '',
             customer: '',
             customers: [],
             product: '',
@@ -53,8 +55,10 @@ class NewSale extends Component {
             driver: '',
             drivers: [],
             showOptions: false,
+            total: 0,
 
         }
+        this.handleProductSubmit = this.handleProductSubmit.bind(this)
     }
 
     handleDateChange = (value) => {
@@ -93,35 +97,86 @@ class NewSale extends Component {
         })
     }
 
+    handleSelectChange = selectedOption => {
+
+        this.setState({
+            selectedOption
+        })
+    }
+
+    onKeyPress = (e) => {
+        if ((e.which) === 101 || (e.which) === 45) e.preventDefault();
+    }
+
     handleProductSubmit = (e) => {
         e.preventDefault();
         let form = this.refs.productDetailsForm;
-
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.product === '' || this.state.product === null) {
-            this.setState({ product: null })
-            return
+        // else if (this.state.product === '' || this.state.product === null) {
+        //     this.setState({ product: null })
+        //     return
+        // }
+        // else if (this.refs.customerSelect === undefined) {
+        //     if (this.state.driver === '' || this.state.driver === null) {
+        //         this.setState({ driver: null })
+        //         return
+        //     }
+        // }
+        // else if (this.state.customer === '' || this.state.customer === null) {
+        //     this.setState({ customer: null })
+        //     return
+        // }
+        else {
+            let pId = this.state.product.value;
+            let pName = this.state.product.label;
+            let pRate = this.state.rate;
+            let pQTY = this.state.qty
+            let pPrice = this.price.value;
+            let saleDate = this.state.saleDate
+            let tableId = this.props.tableId
+            // console.log(pId, pRate, pQTY, pPrice, saleDate);
+
+            this.addTotalValue(pPrice);
+            this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice, saleDate);
+            document.getElementById(`${this.props.containerId}`).style.display = '';
+            this.setState({
+                product: '',
+                rate: '',
+                qty: '',
+                saleDate: '',
+            })
         }
+    }
+
+    minusTotalValue = (value) => {
+
+        this.setState({
+            total: this.state.total - parseInt(value)
+        })
+    }
+
+    addTotalValue = (value) => {
+
+        this.setState({
+            total: this.state.total + parseInt(value)
+        })
     }
 
 
 
 
 
-
-
-
-
     render() {
-        var { invoiceId, saleDate, rate, qty, customer, customers, product, products, driver, drivers, showOptions } = this.state
+        var { invoiceId, saleDate, rate, qty, customer, customers, product,
+            products, driver, drivers, showOptions, total } = this.state
         const customerStyles = {
             control: (base, state) => ({
                 ...base,
                 borderColor: state.isFocused ?
                     '#ddd' : customer !== null ?
-                        '#ddd' : '#red',
+                        '#ddd' : 'red',
                 fontWeight: 370,
             })
         }
@@ -130,7 +185,7 @@ class NewSale extends Component {
                 ...base,
                 borderColor: state.isFocused ?
                     '#ddd' : driver !== null ?
-                        '#ddd' : '#red',
+                        '#ddd' : 'red',
                 fontWeight: 370,
             })
         }
@@ -139,7 +194,7 @@ class NewSale extends Component {
                 ...base,
                 borderColor: state.isFocused ?
                     '#ddd' : product !== null ?
-                        '#ddd' : '#red',
+                        '#ddd' : 'red',
                 fontWeight: 370,
             })
         }
@@ -148,9 +203,15 @@ class NewSale extends Component {
         var driverOptions;
         if (showOptions) {
 
-            productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
-            customerOptions = customers.map(customer => ({ key: customer.id, label: customer.name, value: customer.id }));
-            driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
+            productOptions = products.map(product => ({
+                key: product.id, label: product.name, value: product.id
+            }));
+            customerOptions = customers.map(customer => ({
+                key: customer.id, label: customer.name, value: customer.id
+            }));
+            driverOptions = drivers.map(driver => ({
+                key: driver.id, label: driver.name, value: driver.id
+            }));
         }
 
 
@@ -161,7 +222,7 @@ class NewSale extends Component {
                     <MDBCol>
                         <MDBCard className=' p-2'>
                             <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                                New Sales
+                                New {this.props.tableId === 'saleProductstable' ? 'Sales' : 'Returns'}
                             </MDBCardHeader>
                             <MDBCardBody className='p-2'>
                                 <form ref='productDetailsForm' onSubmit={this.handleProductSubmit} noValidate >
@@ -185,6 +246,7 @@ class NewSale extends Component {
                                                 />
                                                 {/* <MDBInput style={{ display: 'none' }} value={invoiceId} className='m-0' disabled /> */}
                                             </MDBCol>
+                                            {/* <Can I='am' a='driver'> */}
                                             <MDBCol md='3' className='mb-3' middle >
                                                 <Select
                                                     styles={customerStyles}
@@ -195,9 +257,12 @@ class NewSale extends Component {
                                                     isSearchable
                                                     isClearable
                                                     className='form-control-md'
+                                                    ref='customerSelect'
                                                 >
                                                 </Select>
                                             </MDBCol>
+                                            {/* </Can> */}
+                                            {/* <Can I='am' a='operator'> */}
                                             <MDBCol md='3' className='mb-3' middle >
                                                 <Select
                                                     styles={driverStyles}
@@ -208,9 +273,11 @@ class NewSale extends Component {
                                                     isSearchable
                                                     isClearable
                                                     className='form-control-md'
+                                                    ref='driverSelect'
                                                 >
                                                 </Select>
                                             </MDBCol>
+                                            {/* </Can> */}
                                         </MDBRow>
                                         <MDBRow className=' p-0'>
                                             <MDBCol md='3' className='' middle >
@@ -226,22 +293,61 @@ class NewSale extends Component {
                                                 >
                                                 </Select>
                                             </MDBCol>
-                                            <MDBCol size='md' className=''>
-                                                <MDBInput type='number' value={rate} label='Rate' name='rate' onInput={this.handleInput} outline required />
+                                            <MDBCol size='lg' className=''>
+                                                <MDBInput
+                                                    type='number'
+                                                    value={rate}
+                                                    label='Rate'
+                                                    name='rate'
+                                                    onInput={this.handleInput}
+                                                    outline required
+                                                    onKeyPress={this.onKeyPress}
+                                                />
 
                                             </MDBCol>
-                                            <MDBCol size='md' className=''   >
-                                                <MDBInput type='number' value={qty} label='Qty.' name='qty' onInput={this.handleInput} outline required />
+                                            <MDBCol size='lg' className=''   >
+                                                <MDBInput
+                                                    type='number'
+                                                    value={qty}
+                                                    label='Qty.'
+                                                    name='qty'
+                                                    onInput={this.handleInput}
+                                                    outline required
+                                                    onKeyPress={this.onKeyPress}
+                                                />
 
                                             </MDBCol>
-                                            <MDBCol size='md' className=''>
-                                                <MDBInput type='number' value={rate * qty} label='Price' outline disabled />
+                                            <MDBCol size='lg' className=''>
+                                                <MDBInput
+                                                    type='number'
+                                                    value={rate * qty}
+                                                    inputRef={el => this.price = el}
+                                                    label='Price'
+                                                    outline
+                                                    disabled
+                                                />
                                             </MDBCol>
-                                            <MDBCol size='md' middle className=' text-center'>
-                                                <MDBBtn size='sm' color="dark" className='font-weight-bold' style={{ fontSize: '14px', borderRadius: '5px' }} type='submit'>Add Product</MDBBtn>
+                                            <MDBCol size='lg' middle className=' text-center'>
+                                                <MDBBtn
+                                                    size='sm'
+                                                    color="dark"
+                                                    className='font-weight-bold'
+                                                    style={{ fontSize: '12px', borderRadius: '5px' }}
+                                                    type='submit'
+                                                    outline
+                                                    >
+                                                    Add Product
+                                                    </MDBBtn>
                                             </MDBCol>
                                             <MDBCol md='2'>
-                                                <MDBInput type='number' value={rate} label='Total' name='total' disabled />
+                                                <MDBInput
+                                                    type='number'
+                                                    value={total}
+                                                    label='Total'
+                                                    name='total'
+                                                    className='font-weight-bold'
+                                                    disabled
+                                                />
                                             </MDBCol>
                                         </MDBRow>
                                     </fieldset>
@@ -256,4 +362,4 @@ class NewSale extends Component {
 }
 
 
-export default NewSale
+export default NewTransaction
