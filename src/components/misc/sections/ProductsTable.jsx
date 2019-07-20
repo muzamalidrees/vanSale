@@ -14,7 +14,7 @@ class ProductsTable extends Component {
         this.addProductToTbl = this.addProductToTbl.bind(this);
     }
 
-    addProductToTbl = (pId, pName, pRate, pQTY, pPrice, saleDate) => {
+    addProductToTbl = (pId, pName, pRate, pQTY, pPrice, trDate) => {
         var row = [];
         let index = this.state.Rows.length + 1;
         row.push(
@@ -25,7 +25,7 @@ class ProductsTable extends Component {
                 pRate={pRate}
                 pQTY={pQTY}
                 pPrice={pPrice}
-                saleDate={saleDate}
+                trDate={trDate}
                 key={Math.random()}
                 id={Math.random()}
                 tableId={this.props.tableId}

@@ -44,7 +44,7 @@ class NewTransaction extends Component {
             .catch((error) => console.log(error))
 
         this.state = {
-            saleDate: '',
+            trDate: '',
             invoiceId: 1,
             rate: '',
             qty: '',
@@ -63,7 +63,7 @@ class NewTransaction extends Component {
 
     handleDateChange = (value) => {
         this.setState({
-            saleDate: value
+            trDate: value
         });
     }
 
@@ -134,18 +134,18 @@ class NewTransaction extends Component {
             let pRate = this.state.rate;
             let pQTY = this.state.qty
             let pPrice = this.price.value;
-            let saleDate = this.state.saleDate
+            let trDate = this.state.trDate
             let tableId = this.props.tableId
-            // console.log(pId, pRate, pQTY, pPrice, saleDate);
+            // console.log(pId, pRate, pQTY, pPrice, trDate);
 
             this.addTotalValue(pPrice);
-            this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice, saleDate);
+            this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice, trDate);
             document.getElementById(`${this.props.containerId}`).style.display = '';
             this.setState({
                 product: '',
                 rate: '',
                 qty: '',
-                saleDate: '',
+                trDate: '',
             })
         }
     }
@@ -169,7 +169,7 @@ class NewTransaction extends Component {
 
 
     render() {
-        var { invoiceId, saleDate, rate, qty, customer, customers, product,
+        var { invoiceId, trDate, rate, qty, customer, customers, product,
             products, driver, drivers, showOptions, total } = this.state
         const customerStyles = {
             control: (base, state) => ({
@@ -232,7 +232,7 @@ class NewTransaction extends Component {
                                             <MDBCol md='2' className='mb-3' middle >
                                                 <DatePicker
                                                     id='datePicker'
-                                                    selected={saleDate}
+                                                    selected={trDate}
                                                     placeholderText='Date'
                                                     onChange={this.handleDateChange}
                                                     className='form-control'

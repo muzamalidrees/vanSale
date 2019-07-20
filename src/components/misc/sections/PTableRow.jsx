@@ -52,7 +52,7 @@ class PTableRow extends Component {
     render() {
 
 
-        let { index, pId, pName, pRate, pQTY, saleDate } = this.props
+        let { index, pId, pName, pRate, pQTY, trDate } = this.props
 
         return (
 
@@ -63,7 +63,7 @@ class PTableRow extends Component {
                 <td>{pRate}</td>
                 <td suppressContentEditableWarning={true} onKeyPress={this.onKeyPress} onBlur={this.handleBlur('pQTY')} contentEditable='true'>{pQTY}</td>
                 <td>{this.state.pPrice}</td>
-                <td style={{ display: 'none' }}>{saleDate.toString()}</td>
+                <td style={{ display: 'none' }}>{trDate.toString()}</td>
                 <td>
                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.deleteRowfn.bind(this)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                 </td>

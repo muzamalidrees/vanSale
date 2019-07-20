@@ -21,15 +21,15 @@ class Home extends Component {
         this._isMounted = false
     }
 
-    addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, saleDate) => {
-        console.log(tableId, pId, pName, pRate, pQTY, pPrice, saleDate);
+    addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, trDate) => {
+        console.log(tableId, pId, pName, pRate, pQTY, pPrice, trDate);
 
         if (tableId === 'saleProductstable') {
-            this.refs.saleProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, saleDate)
+            this.refs.saleProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
             this.refs.saleProductstable.setState({ askOtherSection: true })
         }
         else {
-            this.refs.returnProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, saleDate)
+            this.refs.returnProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
             // this.refs.returnProductstable.setState({ askOtherSection: true })
         }
     }
