@@ -65,7 +65,10 @@ class NewProduct extends Component {
             let { name, description, barCode, productCategory } = this.state
 
             console.log(name, description, barCode, productCategory, productCategory.value);
-            let product = { name: name, description: description, barCode: barCode, productCategory: productCategory.value }
+            let product = {
+                name: name, description: description, barCode: barCode,
+                productCategory: productCategory.value
+            }
 
             var options = {
                 method: 'POST',

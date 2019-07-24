@@ -74,15 +74,15 @@ class NewCustomer extends Component {
             let address = this.state.address
             let shopName = this.state.shopName
             let postCode = this.state.postCode
-            let route_id = this.state.route.value
+            let routeId = this.state.route.value
             let customer_id = this.state.customer_id
             let driverMessage = this.state.driverMessage
             let invoiceMessage = this.state.invoiceMessage
 
-            console.log(name, email, cell, address, shopName, route_id, postCode, customer_id, driverMessage, invoiceMessage);
+            console.log(name, email, cell, address, shopName, routeId, postCode, customer_id, driverMessage, invoiceMessage);
             let customer = {
                 name: name, email: email, cell: cell, address: address, shopName: shopName, postCode: postCode,
-                route_id: route_id, customer_id: customer_id, driverMessage: driverMessage, invoiceMessage: invoiceMessage
+                routeId: routeId, customer_id: customer_id, driverMessage: driverMessage, invoiceMessage: invoiceMessage
             }
 
             var options = {

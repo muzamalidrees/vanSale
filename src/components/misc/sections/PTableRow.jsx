@@ -28,8 +28,10 @@ class PTableRow extends Component {
     handleBlur = name => e => {
         let { pPrice } = this.state
         let { tableId } = this.props
+        console.log(tableId, pPrice);
 
-        this.props.minusFromTotal(pPrice, tableId);
+        { tableId === 'saleProductsTable' ? this.props.minusFromTotal(pPrice) : this.props.addToTotal(pPrice) }
+
 
         var a = e.target.innerHTML
         this.setState({ [name]: a })
@@ -37,7 +39,11 @@ class PTableRow extends Component {
             let pPrice = [state.pRate * state.pQTY]
             return { pPrice }
         }, function () {
-            this.props.addToTotal(parseInt(this.state.pPrice), this.props.tableId);
+            console.log(tableId, this.state.pPrice);
+            {
+                this.props.tableId === 'saleProductsTable' ? this.props.addToTotal(parseInt(this.state.pPrice)) :
+                    this.props.minusFromTotal(parseInt(this.state.pPrice))
+            }
         })
     }
     onKeyPress = (e) => {
@@ -52,7 +58,7 @@ class PTableRow extends Component {
     render() {
 
 
-        let { index, pId, pName, pRate, pQTY, trDate } = this.props
+        let { index, pId, pName, pRate, pQTY, } = this.props
 
         return (
 
@@ -63,7 +69,6 @@ class PTableRow extends Component {
                 <td>{pRate}</td>
                 <td suppressContentEditableWarning={true} onKeyPress={this.onKeyPress} onBlur={this.handleBlur('pQTY')} contentEditable='true'>{pQTY}</td>
                 <td>{this.state.pPrice}</td>
-                <td style={{ display: 'none' }}>{trDate.toString()}</td>
                 <td>
                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.deleteRowfn.bind(this)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                 </td>

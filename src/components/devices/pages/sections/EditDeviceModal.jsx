@@ -98,7 +98,7 @@ class EditDeviceModal extends Component {
             let { deviceId, IMEI, driver } = this.state
             console.log(deviceId, IMEI, driver);
 
-            let device = { id: deviceId, IMEI: IMEI, driver: driver.value }
+            let device = { id: deviceId, IMEI: IMEI, driverId: driver.value }
 
             var options = {
                 method: 'PUT',

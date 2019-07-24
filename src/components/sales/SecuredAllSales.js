@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AllSales from './pages/AllSales';
+import AllTransactions from '../misc/pages/AllTransactions';
 import { Redirect } from 'react-router'
 
 
@@ -35,7 +35,7 @@ class SecuredAllSales extends Component {
         //     return <Redirect to='/login' />
         // }
         // else {
-            return <AllSales />
+            return <AllTransactions trType='sales' />
         // }
 
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AllReturns from './pages/AllReturns';
+import AllTransactions from '../misc/pages/AllTransactions';
 import { Redirect } from 'react-router'
 
 
@@ -36,7 +36,7 @@ class SecuredAllReturns extends Component {
         //     return <Redirect to='/login' />
         // }
         // else {
-            return <AllReturns />
+        return <AllTransactions trType='returns' />
         // }
 
     }

@@ -104,7 +104,10 @@ class EditPriceGroupModal extends Component {
 
             console.log(priceGroupId, name, productCategory, sellPrice, buyBackPrice);
 
-            let priceGroup = { id: priceGroupId, name: name, productCategory: productCategory, sellPrice: sellPrice, buyBackPrice: buyBackPrice }
+            let priceGroup = {
+                id: priceGroupId, name: name, productCategory: productCategory.value,
+                sellPrice: sellPrice, buyBackPrice: buyBackPrice
+            }
 
             var options = {
                 method: 'PUT',

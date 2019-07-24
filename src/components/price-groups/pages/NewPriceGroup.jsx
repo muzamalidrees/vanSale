@@ -67,7 +67,10 @@ class NewPriceGroup extends Component {
 
             console.log(name, productCategory, sellPrice, buyBackPrice);
 
-            let priceGroup = { name: name, productCategory: productCategory, sellPrice: sellPrice, buyBackPrice: buyBackPrice }
+            let priceGroup = {
+                name: name, productCategory: productCategory.value,
+                sellPrice: sellPrice, buyBackPrice: buyBackPrice
+            }
 
             var options = {
                 method: 'POST',

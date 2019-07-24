@@ -14,7 +14,7 @@ class ProductsTable extends Component {
         this.addProductToTbl = this.addProductToTbl.bind(this);
     }
 
-    addProductToTbl = (pId, pName, pRate, pQTY, pPrice, trDate) => {
+    addProductToTbl = (pId, pName, pRate, pQTY, pPrice, ) => {
         var row = [];
         let index = this.state.Rows.length + 1;
         row.push(
@@ -25,7 +25,6 @@ class ProductsTable extends Component {
                 pRate={pRate}
                 pQTY={pQTY}
                 pPrice={pPrice}
-                trDate={trDate}
                 key={Math.random()}
                 id={Math.random()}
                 tableId={this.props.tableId}
@@ -44,45 +43,52 @@ class ProductsTable extends Component {
     }
 
     displayOtherSection = () => {
-        this.props.displayOtherSection();
+        this.props.displayOtherSection(true);
+        this.props.displaySubmitButton(false);
         this.setState({ askOtherSection: false })
     }
 
     displaySubmitButton = () => {
-        this.props.displaySubmitButton();
+        this.props.displaySubmitButton(true);
+        this.props.displayOtherSection(false);
         this.setState({ askOtherSection: false })
 
     }
 
+
     handleSubmit = () => {
-        console.log('submit ok');
+        this.props.displayOtherSection(false);
+        this.props.displaySubmitButton(false);
+        // document.getElementById('saleProductsContainer').style.display = 'none'
+        // document.getElementById('returnProductsContainer').style.display = 'none'
+        let salesTable = document.getElementById('saleProductsTable')
+        let returnsTable = document.getElementById('returnProductsTable')
+        if (salesTable.rows.length > 1) {
+            for (let index = 1; index < salesTable.rows.length; index++) {
+                const pId = salesTable.rows[index].cells[1].innerHTML;
+                const pRate = salesTable.rows[index].cells[3].innerHTML;
+                const pQty = salesTable.rows[index].cells[4].innerHTML;
+                const pPrice = salesTable.rows[index].cells[5].innerHTML;
+                this.props.saveSales(pId, pRate, pQty, pPrice);
+                this.props.deleteProductFrmTbl(pPrice, index, 'saleProductsTable', 'saleProductsContainer')
+            }
+        }
+        if (returnsTable.rows.length > 1) {
+            for (let index = 1; index < returnsTable.rows.length; index++) {
+                const pId = returnsTable.rows[index].cells[1].innerHTML;
+                const pRate = returnsTable.rows[index].cells[3].innerHTML;
+                const pQty = returnsTable.rows[index].cells[4].innerHTML;
+                const pPrice = returnsTable.rows[index].cells[5].innerHTML;
+                this.props.saveReturns(pId, pRate, pQty, pPrice);
+                this.props.deleteProductFrmTbl(pPrice, index, 'returnProductsTable', 'returnProductsContainer')
+
+            }
+        }
+        this.props.saveInvoice()
+
     }
-    // submitOrder = () => {
-    //     let allFormsValid = this.props.checkOrderDetailsValidity();
-    //     // let allFormsValid = true
-    //     if (allFormsValid) {
-    //         document.getElementById('pTableCard').style.display = 'none';
-    //         this.props.saveOrderToDB();
-    //         this.setState({ submitOrderBtn: false })
-    //         let pTable = document.getElementById('productsTable');
-    //         for (let index = 1; index < pTable.rows.length; index++) {
-    //             const pName = pTable.rows[index].cells[1].innerHTML;
-    //             const pSKU = pTable.rows[index].cells[2].innerHTML;
-    //             const pRate = pTable.rows[index].cells[3].innerHTML;
-    //             const pQTY = pTable.rows[index].cells[4].innerHTML;
-    //             const pPrice = pTable.rows[index].cells[5].innerHTML;
-    //             const pRemarks = pTable.rows[index].cells[6].innerHTML;
-    //             const pChecked = pTable.rows[index].cells[7].innerHTML;
-    //             this.props.saveOrderDetailsToDB(pName, pSKU, pRate, pQTY, pPrice, pRemarks, pChecked);
-    //         }
-    //         for (let index = pTable.rows.length - 1; index > 0; index--) {
-    //             pTable.deleteRow(index);
-    //         }
-    //     }
-    //     else {
-    //         console.log('something wrong')
-    //     }
-    // }
+
+
 
     render() {
         let { tableId, containerId, isDisplaySubmitButton, } = this.props
@@ -93,12 +99,12 @@ class ProductsTable extends Component {
                     <MDBCol>
                         <MDBCard className='p-2'>
                             <MDBCardHeader style={{ color: 'dark' }} tag="h4" className="text-center font-weight-bold">
-                                Products to be {tableId === 'saleProductstable' ? 'Sale' : 'Returned'}
+                                Products to be {tableId === 'saleProductsTable' ? 'Sale' : 'Returned'}
                             </MDBCardHeader>
                             <MDBCardBody className='p-2'>
                                 <MDBTable id={tableId} striped responsive bordered >
                                     <caption style={{ display: `${this.state.askOtherSection ? '' : 'none'}`, fontWeight: 'bold' }}>
-                                        Any {tableId === 'saleProductstable' ? 'Returns' : 'Sales'} ?
+                                        Any {tableId === 'saleProductsTable' ? 'Returns' : 'Sales'} ?
                                         <MDBBtn
                                             size='sm'
                                             color="dark"

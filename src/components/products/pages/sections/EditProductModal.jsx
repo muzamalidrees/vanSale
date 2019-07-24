@@ -107,7 +107,7 @@ class EditProductModal extends Component {
 
             let product = {
                 id: productId, name: name, description: description,
-                barCode: barCode, productCategory: productCategory
+                barCode: barCode, productCategory: productCategory.value
             }
 
             var options = {

@@ -79,7 +79,7 @@ class SetCustomerPrices extends Component {
             fetch('/addNewCustomerPrice', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    // console.log(json)
+                    console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                     }

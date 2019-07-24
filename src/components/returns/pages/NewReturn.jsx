@@ -12,6 +12,7 @@ class NewReturn extends Component {
         this.state = {
             displaySalesSection: false,
             isDisplaySubmitButton: false,
+            invoiceId: 1,
 
         }
         this.addProductToTbl = this.addProductToTbl.bind(this)
@@ -29,8 +30,8 @@ class NewReturn extends Component {
             this.refs.returnProductstable.setState({ askOtherSection: true })
         }
         else {
-            this.refs.saleProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
-            // this.refs.saleProductstable.setState({ askOtherSection: true })
+            this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
+            // this.refs.saleProductsTable.setState({ askOtherSection: true })
         }
     }
 
@@ -48,7 +49,7 @@ class NewReturn extends Component {
             tableId === 'returnProductstable' ?
                 this.refs.returnProductstable.setState({ askOtherSection: false })
                 :
-                this.refs.saleProductstable.setState({ askOtherSection: false })
+                this.refs.saleProductsTable.setState({ askOtherSection: false })
         }
     }
 
@@ -67,14 +68,33 @@ class NewReturn extends Component {
 
     }
 
-    displayOtherSection = () => {
-        this.setState({ displaySalesSection: true })
+    displayOtherSection = (value) => {
+        this.setState({ displayReturnsSection: value })
     }
 
-    displaySubmitButton = () => {
-        this.setState({ isDisplaySubmitButton: true })
+    displaySubmitButton = (value) => {
+        this.setState({ isDisplaySubmitButton: value })
     }
 
+    componentDidMount() {
+        this.fetchLastInvoiceId();
+    }
+
+    fetchLastInvoiceId = () => {
+        let currentComponent = this;
+        this._isMounted = true
+        fetch('/getLastInvoiceID')
+            .then((res) => res.json())
+            .then(function (json) {
+                console.log(json)
+                if (json.data.length !== 0 && this._isMounted) {
+                    let lastInvoiceID = json.data.shift();
+                    let id = lastInvoiceID.id;
+                    currentComponent.setState({ invoiceId: id + 1 })
+                }
+            })
+            .catch((error) => console.log(error));
+    }
 
     render() {
 
@@ -97,24 +117,26 @@ class NewReturn extends Component {
                         displayOtherSection={this.displayOtherSection}
                         displaySubmitButton={this.displaySubmitButton}
                         isDisplaySubmitButton={this.state.isDisplaySubmitButton}
+                        invoiceId={this.state.invoiceId}
                     />
                 </div>
                 <div style={{ display: `${this.state.displaySalesSection ? '' : 'none'}` }}>
                     < NewTransaction
                         ref='saleProducts'
-                        tableId={'saleProductstable'}
+                        tableId={'saleProductsTable'}
                         containerId={'saleProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
                     />
                     <ProductsTable
-                        ref='saleProductstable'
-                        tableId={'saleProductstable'}
+                        ref='saleProductsTable'
+                        tableId={'saleProductsTable'}
                         containerId={'saleProductsContainer'}
                         askOtherSection={this.state.askOtherSection}
                         deleteProductFrmTbl={this.deleteProductFrmTbl}
                         minusFromTotal={this.minusFromTotal}
                         addToTotal={this.addToTotal}
                         isDisplaySubmitButton={!this.state.isDisplaySubmitButton}
+                        invoiceId={this.state.invoiceId}
                     />
                 </div>
             </React.Fragment>

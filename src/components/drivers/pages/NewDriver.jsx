@@ -70,7 +70,7 @@ class NewDriver extends Component {
 
             let driver = {
                 driver_id: driver_id, name: name, email: email, cell: cell, address: address,
-                route: route.value, daily_message: dailyMessage
+                routeId: route.value, dailyMessage: dailyMessage
             }
 
             var options = {

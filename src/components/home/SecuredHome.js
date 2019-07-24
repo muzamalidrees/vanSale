@@ -18,7 +18,7 @@ class SecuredHome extends Component {
                 // console.log(json);
                 if (this._isMounted === true) {
 
-                    this.setState({ loggedIn: json.loggedIn })
+                    this.setState({ loggedIn: json.loggedIn, user: json.user })
                 }
             })
             .catch((err => {
@@ -30,12 +30,12 @@ class SecuredHome extends Component {
     }
 
     render() {
-        
+
         // if (this.state.loggedIn === false) {
         //     return <Redirect to='/login' />
         // }
         // else {
-            return <Home />
+        return <Home user={this.state.user} />
         // }
 
     }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Can } from '../../../configs/Ability-context'
 import NewTransaction from '../../misc/pages/NewTransaction';
 import ProductsTable from '../../misc/sections/ProductsTable';
+import InvoiceDetails from '../../misc/sections/InvoiceDetails'
+
 
 
 class Home extends Component {
@@ -12,7 +14,7 @@ class Home extends Component {
         this.state = {
             displayReturnsSection: false,
             isDisplaySubmitButton: false,
-            
+            invoiceId: 1,
         }
         this.addProductToTbl = this.addProductToTbl.bind(this)
     }
@@ -21,58 +23,141 @@ class Home extends Component {
         this._isMounted = false
     }
 
-    addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, trDate) => {
-        console.log(tableId, pId, pName, pRate, pQTY, pPrice, trDate);
+    addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, ) => {
+        console.log(tableId, pId, pName, pRate, pQTY, pPrice);
 
-        if (tableId === 'saleProductstable') {
-            this.refs.saleProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
-            this.refs.saleProductstable.setState({ askOtherSection: true })
+        if (tableId === 'saleProductsTable') {
+            this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice);
+            this.refs.invoiceDetails.addTotalValue(pPrice);
+            {
+                this.state.displayReturnsSection ?
+                    console.log()
+                    :
+                    this.refs.saleProductsTable.setState({ askOtherSection: true })
+            }
         }
         else {
-            this.refs.returnProductstable.addProductToTbl(pId, pName, pRate, pQTY, pPrice, trDate)
-            // this.refs.returnProductstable.setState({ askOtherSection: true })
+            this.refs.returnProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice)
+            this.refs.invoiceDetails.minusTotalValue(pPrice);
+            // this.refs.returnProductsTable.setState({ askOtherSection: true })
         }
     }
 
     deleteProductFrmTbl = (price, i, tableId, containerId) => {
-        if (tableId === 'saleProductstable') {
-            this.refs.saleProducts.minusTotalValue(price)
+        if (tableId === 'saleProductsTable') {
+            this.refs.invoiceDetails.minusTotalValue(price)
         }
         else {
-            this.refs.returnProducts.minusTotalValue(price)
+            this.refs.invoiceDetails.addTotalValue(price)
         }
         let table = document.getElementById(`${tableId}`);
         table.deleteRow(i);
         if (table.rows.length === 1) {
             document.getElementById(`${containerId}`).style.display = 'none'
-            tableId === 'saleProductstable' ?
-                this.refs.saleProductstable.setState({ askOtherSection: false })
-                :
-                this.refs.returnProductstable.setState({ askOtherSection: false })
+            if (tableId === 'saleProductsTable') {
+                this.displaySubmitButton(false)
+                this.refs.saleProductsTable.setState({ askOtherSection: false })
+            }
+            else {
+                this.displaySubmitButton(false)
+                this.refs.returnProductsTable.setState({ askOtherSection: false, isDisplaySubmitButton: false })
+            }
         }
     }
 
-    minusFromTotal = (tableId, pPrice) => {
-        tableId === 'saleProductstable' ?
-            this.refs.saleProducts.minusTotalValue(pPrice)
-            :
-            this.refs.returnProducts.minusTotalValue(pPrice)
+    minusFromTotal = (pPrice) => {
+
+        this.refs.invoiceDetails.minusTotalValue(pPrice);
     }
 
-    addToTotal = (tableId, pPrice) => {
-        tableId === 'saleProductstable' ?
-            this.refs.saleProducts.addTotalValue(pPrice)
-            :
-            this.refs.returnProducts.addTotalValue(pPrice)
+    addToTotal = (pPrice) => {
 
+        this.refs.invoiceDetails.addTotalValue(pPrice);
     }
 
-    displayOtherSection = () => {
-        this.setState({ displayReturnsSection: true })
+    displayOtherSection = (value) => {
+        this.setState({ displayReturnsSection: value })
     }
 
-    displaySubmitButton = () => {
-        this.setState({ isDisplaySubmitButton: true })
+    displaySubmitButton = (value) => {
+        this.setState({ isDisplaySubmitButton: value })
+    }
+
+    saveSales = (pId, pRate, pQty, pPrice) => {
+        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
+
+        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+
+        let sales = {
+            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
+            invoiceId: invoiceId, customerId: customer.value, driverId: driverId
+        }
+
+        var options = {
+            method: 'POST',
+            body: JSON.stringify(sales),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/addNewSale', options)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+            .catch((error) => console.log(error))
+
+        var options2 = {
+            method: 'PUT',
+            body: JSON.stringify(sales),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/updateSalesItemQty', options2)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+            .catch((error) => console.log(error))
+    }
+
+    saveReturns = (pId, pRate, pQty, pPrice) => {
+
+        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
+
+        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+
+        let returns = {
+            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
+            invoiceId: invoiceId, customerId: customer.value, driverId: driverId
+        }
+
+        var options = {
+            method: 'POST',
+            body: JSON.stringify(returns),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/addNewReturn', options)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+            .catch((error) => console.log(error))
+
+        var options2 = {
+            method: 'PUT',
+            body: JSON.stringify(returns),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/updateReturnsItemQty', options2)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+            .catch((error) => console.log(error))
+    }
+
+    saveInvoice = () => {
+        console.log(this.refs.invoiceDetails.state.invoiceId);
+        this.refs.invoiceDetails.saveInvoice();
+
     }
 
 
@@ -80,16 +165,18 @@ class Home extends Component {
 
         return (
             <React.Fragment>
-                <div style={{ marginTop: '72px' }}>
+                <div style={{ marginTop: '72px', paddingTop: '20px' }}>
+                    <InvoiceDetails
+                        ref='invoiceDetails' />
                     < NewTransaction
                         ref='saleProducts'
-                        tableId={'saleProductstable'}
+                        tableId={'saleProductsTable'}
                         containerId={'saleProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
                     />
                     <ProductsTable
-                        ref='saleProductstable'
-                        tableId={'saleProductstable'}
+                        ref='saleProductsTable'
+                        tableId={'saleProductsTable'}
                         containerId={'saleProductsContainer'}
                         deleteProductFrmTbl={this.deleteProductFrmTbl}
                         minusFromTotal={this.minusFromTotal}
@@ -97,24 +184,32 @@ class Home extends Component {
                         displayOtherSection={this.displayOtherSection}
                         displaySubmitButton={this.displaySubmitButton}
                         isDisplaySubmitButton={this.state.isDisplaySubmitButton}
+                        saveReturns={this.saveReturns}
+                        saveSales={this.saveSales}
+                        saveInvoice={this.saveInvoice}
                     />
                 </div>
                 <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
                     < NewTransaction
                         ref='returnProducts'
-                        tableId={'returnProductstable'}
+                        tableId={'returnProductsTable'}
                         containerId={'returnProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
                     />
                     <ProductsTable
-                        ref='returnProductstable'
-                        tableId={'returnProductstable'}
+                        ref='returnProductsTable'
+                        tableId={'returnProductsTable'}
                         containerId={'returnProductsContainer'}
                         askOtherSection={this.state.askOtherSection}
                         deleteProductFrmTbl={this.deleteProductFrmTbl}
                         minusFromTotal={this.minusFromTotal}
                         addToTotal={this.addToTotal}
                         isDisplaySubmitButton={!this.state.isDisplaySubmitButton}
+                        saveReturns={this.saveReturns}
+                        saveSales={this.saveSales}
+                        saveInvoice={this.saveInvoice}
+                        displayOtherSection={this.displayOtherSection}
+                        displaySubmitButton={this.displaySubmitButton}
                     />
                 </div>
             </React.Fragment>

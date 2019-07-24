@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard,MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -72,7 +72,10 @@ class NewUser extends Component {
             let role = this.state.role.value
 
             console.log(name, email, cell, username, password, role);
-            let user = { name: name, email: email, cell: cell, username: username, password: password, role: role }
+            let user = {
+                name: name, email: email, cell: cell, username: username,
+                password: password, role: role
+            }
 
             var options = {
                 method: 'POST',

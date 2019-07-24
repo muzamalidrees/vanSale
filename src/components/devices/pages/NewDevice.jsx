@@ -62,8 +62,8 @@ class NewDevice extends Component {
         else {
             let { driver, IMEI } = this.state;
 
-            console.log(driver, IMEI);
-            let device = { IMEI: IMEI, driver: driver }
+            console.log(driver.value, IMEI);
+            let device = { IMEI: IMEI, driverId: driver.value }
 
             var options = {
                 method: 'POST',
