@@ -3,6 +3,7 @@ import {
   MDBNavbar, MDBNavbarBrand, MDBNavbarToggler
 } from "mdbreact";
 import HeaderNav from './sections/HeaderNav';
+import { Redirect } from 'react-router-dom'
 
 
 class Header extends React.Component {
@@ -22,8 +23,8 @@ class Header extends React.Component {
     });
   }
 
-  render() {
 
+  render() {
     return (
       <div>
         <header>
@@ -32,7 +33,7 @@ class Header extends React.Component {
               <strong className="white-text">Bucket Orders Management</strong>
             </MDBNavbarBrand>
             <MDBNavbarToggler onClick={this.onClick} />
-            <HeaderNav loggedOut={this.props.loggedOut} loggedIn={this.props.loggedIn} collapse={this.state.collapse} />
+            <HeaderNav loggingOut={this.props.loggingOut} loggedIn={this.props.loggedIn} collapse={this.state.collapse} />
           </MDBNavbar>
         </header>
       </div>

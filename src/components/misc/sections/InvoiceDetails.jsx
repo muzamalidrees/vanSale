@@ -16,29 +16,18 @@ class InvoiceDetails extends Component {
         fetch('/getAllCustomers')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ customers: json.data })
                 }
             })
             .catch((error) => console.log(error))
 
-        // fetch('/getAllDrivers')
-        //     .then((res) => res.json())
-        //     .then((json) => {
-        //         console.log(json)
-        //         if (this._isMounted) {
-        //             this.setState({ drivers: json.data })
-        //         }
-        //     })
-        //     .catch((error) => console.log(error))
 
         this.state = {
             trDate: '',
             customer: '',
             customers: [],
-            // driver: '',
-            // drivers: [],
             showOptions: false,
             total: 0,
             invoiceId: 1
@@ -60,6 +49,8 @@ class InvoiceDetails extends Component {
         this.setState({
             selectedOption
         })
+        document.getElementById('addProductbtn').disabled = false
+
     }
 
     minusTotalValue = (value) => {
@@ -86,7 +77,7 @@ class InvoiceDetails extends Component {
         fetch('/getLastInvoiceID')
             .then((res) => res.json())
             .then(function (json) {
-                console.log(json)
+                // console.log(json)
                 if (json.data.length !== 0 && this._isMounted) {
                     let lastInvoiceID = json.data.shift();
                     let id = lastInvoiceID.id;
@@ -97,12 +88,9 @@ class InvoiceDetails extends Component {
     }
 
     saveInvoice = () => {
-        this.setState({
-            trDate: '', customer: '', total: 0
-        })
         let { trDate, total, customer } = this.state
 
-        let invoice = { date: trDate, total: total, customerId: customer.value, driverId: driverId }
+        let invoice = { date: trDate, total: total, customerId: customer.value, driverId: this.props.driverId }
         var options = {
             method: 'POST',
             body: JSON.stringify(invoice),
@@ -114,6 +102,10 @@ class InvoiceDetails extends Component {
                 console.log(json)
             })
             .catch((error) => console.log(error))
+
+        this.setState({
+            trDate: '', customer: '', total: 0
+        })
     }
 
 
@@ -129,26 +121,14 @@ class InvoiceDetails extends Component {
                 fontWeight: 370,
             })
         }
-        // const driverStyles = {
-        //     control: (base, state) => ({
-        //         ...base,
-        //         borderColor: state.isFocused ?
-        //             '#ddd' : driver !== null ?
-        //                 '#ddd' : 'red',
-        //         fontWeight: 370,
-        //     })
-        // }
+
 
         var customerOptions;
-        // var driverOptions;
         if (showOptions) {
 
             customerOptions = customers.map(customer => ({
                 key: customer.id, label: customer.name, value: customer.id
             }));
-            // driverOptions = drivers.map(driver => ({
-            //     key: driver.id, label: driver.name, value: driver.id
-            // }));
         }
 
 
@@ -188,22 +168,6 @@ class InvoiceDetails extends Component {
                     >
                     </Select>
                 </MDBCol>
-                {/* <Can I='am' a='operator'>
-                    <MDBCol lg='3' className='mb-3' middle >
-                        <Select
-                            styles={driverStyles}
-                            value={driver}
-                            onChange={this.handleSelectChange}
-                            options={driverOptions}
-                            placeholder='Driver'
-                            isSearchable
-                            isClearable
-                            className='form-control-md'
-                            ref='driverSelect'
-                        >
-                        </Select>
-                    </MDBCol>
-                </Can> */}
                 <MDBCol lg='2' className='mb-3' >
                     <MDBInput
                         type='number'

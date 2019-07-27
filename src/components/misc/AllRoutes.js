@@ -47,9 +47,9 @@ class AllRoutes extends Component {
                 <ReactSideBar />
                 <div style={{}} className="container-fluid">
                     <Switch>
-                        {/* <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
-                        {/* <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} /> */}
-                        <Route exact path="/" component={SecuredHome} />
+                        <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} />
+                        <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} />
+                        {/* <Route exact path="/" component={SecuredHome} /> */}
                         <Route path="/home" component={SecuredHome} />
                         <Route path="/users" component={Users} />
                         <Route path="/roles" component={Roles} />

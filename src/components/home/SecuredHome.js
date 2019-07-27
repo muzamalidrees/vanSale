@@ -4,39 +4,31 @@ import { Redirect } from 'react-router'
 
 
 class SecuredHome extends Component {
-    _isMounted = false
-    state = {
-        loggedIn: ''
-    }
+    loggedIn
     constructor() {
         super()
-        this._isMounted = true;
-        fetch('/isAuth')
+        this.user = localStorage.getItem('ui')
+        // console.log(this.user);
 
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json);
-                if (this._isMounted === true) {
+        if (this.user !== null) {
+            // console.log('user not null');
+            this.loggedIn = true
+        }
+        else {
+            // console.log('user null 2');
+            this.loggedIn = false
+        }
 
-                    this.setState({ loggedIn: json.loggedIn, user: json.user })
-                }
-            })
-            .catch((err => {
-                console.log(err);
-            }))
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
     }
 
     render() {
 
-        // if (this.state.loggedIn === false) {
-        //     return <Redirect to='/login' />
-        // }
-        // else {
-        return <Home user={this.state.user} />
-        // }
+        if (this.loggedIn === false) {
+            return <Redirect to='/login' />
+        }
+        else {
+            return <Home />
+        }
 
     }
 }

@@ -14,9 +14,39 @@ class NewTransaction extends Component {
         fetch('/getAllProducts')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ products: json.data, showOptions: true })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllCustomerPrices')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ customerPrices: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllPriceGroups')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ priceGroups: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllProductPrices')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ productPrices: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -27,6 +57,9 @@ class NewTransaction extends Component {
             product: '',
             products: [],
             showOptions: false,
+            customerPrices: [],
+            priceGroups: [],
+            productPrices: [],
         }
         this.handleProductSubmit = this.handleProductSubmit.bind(this)
     }
@@ -35,12 +68,14 @@ class NewTransaction extends Component {
         this._isMounted = false
     }
 
+    //handling changing inputs
     handleInput = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
+    //handling product change
     handleSelectChange = selectedOption => {
 
         this.setState({
@@ -49,40 +84,103 @@ class NewTransaction extends Component {
         this.setProductRate(selectedOption.value)
     }
 
+    //assuring only numbers allowed in input type=number s.
     onKeyPress = (e) => {
         if ((e.which) === 101 || (e.which) === 45) e.preventDefault();
     }
 
+    //handling scanning products
     handleScanProduct = () => {
 
     }
 
+    //setting product rate on selecting products
     setProductRate = (pId) => {
-        const { products } = this.state;
-        const product = products.filter((product) => product.id == pId).shift()
-        this.setState({ rate: product.price })
+        let { customerId, tableId } = this.props
+        let { customerPrices, products, priceGroups, productPrices } = this.state
+        //checking if customer is selected or not
+        if (customerId === '') {
+            this.message.innerHTML = 'Please select a customer first.'
+            document.getElementById('addProductbtn').disabled = true
+        }
+        else {
+            let customerPriceGroups = [];
+            let productCategory
+            //finding all price-groups assidned to customer
+            let customerAllPrices = customerPrices
+                .filter(customerPrice => customerPrice.customer_id.toString() === customerId);
+            //getting customer's all price-groups
+            customerAllPrices.forEach(customerPrice => {
+                customerPriceGroups.push(priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id))
+            });
+            //finding selected product's category
+            products.forEach(product => {
+                if (product.id.toString() === pId) {
+                    productCategory = product.product_category_id;
+                }
+            });
+
+            //finding price-group that holds this productCategory
+            let desiredPriceGroup = customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategory)
+            //finding prices
+            let productPrice = productPrices.filter(productPrice =>
+                productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId
+            )
+            //setting selling rate
+            if (tableId === 'saleProductsTable') {
+                this.setState({ rate: productPrice.sell_price })
+            }
+            //setting returning rate
+            else {
+                this.setState({ rate: productPrice.buy_back_price })
+            }
+        }
     }
 
+    //adding product to table
     handleProductSubmit = (e) => {
+
+        //preventing default behaviour of form submit
         e.preventDefault();
+
+        //checking form validity
         let form = this.refs.productDetailsForm;
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        // else if (this.state.product === '' || this.state.product === null) {
-        //     this.setState({ product: null })
-        //     return
-        // }
-        // else if (this.refs.customerSelect === undefined) {
-        //     if (this.state.driver === '' || this.state.driver === null) {
-        //         this.setState({ driver: null })
-        //         return
-        //     }
-        // }
-        // else if (this.state.customer === '' || this.state.customer === null) {
-        //     this.setState({ customer: null })
-        //     return
-        // }
+        else if (this.state.product === '' || this.state.product === null) {
+            this.setState({ product: null })
+            return
+        }
+        else if (this.state.customer === '' || this.state.customer === null) {
+            this.setState({ customer: null })
+            return
+        }
+
+        //checking product's qty in stock
+        else if (this.props.tableId === 'saleProductsTable') {
+            let driver = this.props.driverId
+            let checkQty = { driver: driver, product: this.state.product.value }
+            let options = {
+                method: 'GET',
+                body: JSON.stringify(checkQty),
+                headers: { 'Content-Type': 'application/json' }
+            }
+            fetch('/checkDriverItemQty', options)
+                .then((res) => res.json())
+                .then((json) => {
+                    // console.log(json)
+                    let stock = json.qty;
+                    if (this.state.qty > stock) {
+                        alert("Maximum Available Qty of " + this.state.product.label + " is: " + stock)
+                        this.refs.qty.focus();
+                        return;
+                    }
+                })
+                .catch((error) => console.log(error))
+        }
+
+        // adding product to table
         else {
             let pId = this.state.product.value;
             let pName = this.state.product.label;
@@ -93,7 +191,11 @@ class NewTransaction extends Component {
             // console.log(pId, pRate, pQTY, pPrice, trDate);
 
             this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice);
+
+            //setting table display.
             document.getElementById(`${this.props.containerId}`).style.display = '';
+
+            // setting form again empty
             this.setState({
                 product: '',
                 rate: '',
@@ -107,6 +209,7 @@ class NewTransaction extends Component {
     render() {
         var { rate, qty, product, products, showOptions } = this.state
 
+        //setting product select styles
         const productStyles = {
             control: (base, state) => ({
                 ...base,
@@ -116,6 +219,8 @@ class NewTransaction extends Component {
                 fontWeight: 370,
             })
         }
+
+        //setting product options
         var productOptions;
         if (showOptions) {
 
@@ -183,6 +288,7 @@ class NewTransaction extends Component {
                                                 value={qty}
                                                 label='Qty.'
                                                 name='qty'
+                                                ref='qty'
                                                 onInput={this.handleInput}
                                                 outline required
                                                 onKeyPress={this.onKeyPress}
@@ -199,17 +305,19 @@ class NewTransaction extends Component {
                                                 disabled
                                             />
                                         </MDBCol>
-                                        <MDBCol size='lg' middle className=' text-center'>
+                                        <MDBCol size='lg' className=''>
+                                            <label style={{ color: 'red' }} className='mb-0 p-0' ref={el => this.message = el}></label>
                                             <MDBBtn
+                                                id='addProductbtn'
                                                 size='sm'
                                                 color="dark"
-                                                className='font-weight-bold form-control ml-0'
-                                                style={{ fontSize: '12px', borderRadius: '5px' }}
+                                                className='font-weight-bold form-control ml-0 '
+                                                style={{ fontSize: '13px', borderRadius: '5px', marginTop: '1px' }}
                                                 type='submit'
                                                 outline
                                             >
                                                 Add Product
-                                                    </MDBBtn>
+                                            </MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                     {/* </fieldset> */}

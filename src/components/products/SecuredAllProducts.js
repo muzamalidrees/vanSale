@@ -31,12 +31,12 @@ class SecuredAllProducts extends Component {
 
     render() {
 
-        // if (this.state.loggedIn === false) {
-        //     return <Redirect to='/login' />
-        // }
-        // else {
+        if (this.state.loggedIn === false) {
+            return <Redirect to='/login' />
+        }
+        else {
             return <AllProducts />
-        // }
+        }
 
     }
 }

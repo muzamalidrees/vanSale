@@ -9,6 +9,7 @@ class LoginForm extends React.Component {
             username: '',
             password: '',
             isLoggedIn: false,
+            user: ''
         }
         this.handleLogin = this.handleLogin.bind(this);
     }
@@ -38,10 +39,10 @@ class LoginForm extends React.Component {
         fetch('/auth', options)
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json);
+                console.log(json);
                 let message = json.message;
                 this.refs.loginLabel.innerHTML = message;
-                if (message === 'incorrect Password') {
+                if (message === 'incorrect password') {
                     this.password.value = "";
                     this.password.focus();
                 }
@@ -51,11 +52,20 @@ class LoginForm extends React.Component {
                 }
                 else {
                     this.setState({
-
-                        isLoggedIn : true
+                        isLoggedIn: true,
+                        user: json.user
+                    }, function () {
+                        if (typeof (Storage) !== "undefined") {
+                            localStorage.setItem('uri', JSON.stringify(json.user.id))
+                            localStorage.setItem('ui', JSON.stringify(json.user.role_id))
+                        }
+                        else {
+                            alert('Please use another browser to get it working correctly.')
+                        }
                     })
                     // console.log(json.user.role_id);
                     let user = json.user.role_id
+
                     this.props.changeUser(user);
 
                 }
@@ -63,6 +73,11 @@ class LoginForm extends React.Component {
             })
             .catch((err) => console.log(err))
     }
+
+
+
+
+
     onChangeLabel = () => {
         this.refs.loginLabel.innerHTML = '';
     }
@@ -77,7 +92,7 @@ class LoginForm extends React.Component {
                 <MDBContainer className=" mt-5 pt-5">
                     <MDBRow className=" mt-5 pt-5">
                         <MDBCol md="6" className='mx-auto'>
-                            <form ref='myForm' style={{ marginTop: '100px' }} onSubmit={this.validateLogin} noValidate>
+                            <form ref='myForm' onSubmit={this.validateLogin} noValidate>
                                 <p className="h5 text-center mb-4">Sign in</p>
                                 <div className="grey-text">
                                     <MDBInput
@@ -123,7 +138,7 @@ class LoginForm extends React.Component {
                                 </div>
                                 <label ref='loginLabel' style={{ color: 'red' }}></label>
                                 <div className="text-center">
-                                    <MDBBtn type="submit">Login</MDBBtn>
+                                    <MDBBtn color='dark' type="submit">Login</MDBBtn>
                                 </div>
                             </form>
                         </MDBCol>

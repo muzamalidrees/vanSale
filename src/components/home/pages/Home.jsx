@@ -15,8 +15,16 @@ class Home extends Component {
             displayReturnsSection: false,
             isDisplaySubmitButton: false,
             invoiceId: 1,
+            customerId: ''
         }
         this.addProductToTbl = this.addProductToTbl.bind(this)
+    }
+
+    componentDidMount = () => {
+        let customerId = this.refs.invoiceDetails.state.customer.value
+        {
+            !customerId === undefined ? this.setState({ customerId }) : console.log();
+        }
     }
 
     componentWillUnmount = () => {
@@ -90,7 +98,7 @@ class Home extends Component {
 
         let sales = {
             pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: driverId
+            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
         }
 
         var options = {
@@ -126,7 +134,7 @@ class Home extends Component {
 
         let returns = {
             pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: driverId
+            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
         }
 
         var options = {
@@ -173,6 +181,7 @@ class Home extends Component {
                         tableId={'saleProductsTable'}
                         containerId={'saleProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
+                        customerId={this.state.customerId}
                     />
                     <ProductsTable
                         ref='saleProductsTable'
@@ -195,6 +204,7 @@ class Home extends Component {
                         tableId={'returnProductsTable'}
                         containerId={'returnProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
+                        customerId={this.state.customerId}
                     />
                     <ProductsTable
                         ref='returnProductsTable'

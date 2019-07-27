@@ -123,6 +123,7 @@ class ReactSideBar extends Component {
                 onSetOpen={this.onSetSidebarOpen}
                 styles={styles}
             >
+                k
                 {!this.state.sidebarDocked ?
                     <MDBBtn id='btn' size='lg' color='dark' className='px-2 py-1' onClick={() => this.onSetSidebarOpen(true)} style={this.state.displayBtn ? { display: '' } : { display: 'none' }}>
                         <MDBIcon className='m-0 p-0' style={{ fontSize: '30px' }} icon='bars' />
