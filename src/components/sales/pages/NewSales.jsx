@@ -5,13 +5,13 @@ import ProductsTable from '../../misc/sections/ProductsTable';
 import InvoiceDetails from '../../misc/sections/InvoiceDetails'
 
 
-class NewReturn extends Component {
+class NewSales extends Component {
     _isMounted = false
     constructor() {
         super();
 
         this.state = {
-            displaySalesSection: false,
+            displayReturnsSection: false,
             isDisplaySubmitButton: false,
             invoiceId: 1,
             customerId: ''
@@ -33,25 +33,25 @@ class NewReturn extends Component {
     addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, ) => {
         console.log(tableId, pId, pName, pRate, pQTY, pPrice);
 
-        if (tableId === 'returnProductsTable') {
-            this.refs.returnProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice);
+        if (tableId === 'saleProductsTable') {
+            this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice);
             this.refs.invoiceDetails.addTotalValue(pPrice);
             {
-                this.state.displaySalesSection ?
+                this.state.displayReturnsSection ?
                     console.log()
                     :
-                    this.refs.returnProductsTable.setState({ askOtherSection: true })
+                    this.refs.saleProductsTable.setState({ askOtherSection: true })
             }
         }
         else {
-            this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice)
+            this.refs.returnProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice)
             this.refs.invoiceDetails.minusTotalValue(pPrice);
-            // this.refs.saleProductsTable.setState({ askOtherSection: true })
+            // this.refs.returnProductsTable.setState({ askOtherSection: true })
         }
     }
 
     deleteProductFrmTbl = (price, i, tableId, containerId) => {
-        if (tableId === 'returnProductsTable') {
+        if (tableId === 'saleProductsTable') {
             this.refs.invoiceDetails.minusTotalValue(price)
         }
         else {
@@ -61,13 +61,13 @@ class NewReturn extends Component {
         table.deleteRow(i);
         if (table.rows.length === 1) {
             document.getElementById(`${containerId}`).style.display = 'none'
-            if (tableId === 'returnProductsTable') {
+            if (tableId === 'saleProductsTable') {
                 this.displaySubmitButton(false)
-                this.refs.returnProductsTable.setState({ askOtherSection: false })
+                this.refs.saleProductsTable.setState({ askOtherSection: false })
             }
             else {
                 this.displaySubmitButton(false)
-                this.refs.saleProductsTable.setState({ askOtherSection: false, isDisplaySubmitButton: false })
+                this.refs.returnProductsTable.setState({ askOtherSection: false, isDisplaySubmitButton: false })
             }
         }
     }
@@ -83,7 +83,7 @@ class NewReturn extends Component {
     }
 
     displayOtherSection = (value) => {
-        this.setState({ displaySalesSection: value })
+        this.setState({ displayReturnsSection: value })
     }
 
     displaySubmitButton = (value) => {
@@ -176,16 +176,16 @@ class NewReturn extends Component {
                     <InvoiceDetails
                         ref='invoiceDetails' />
                     < NewTransaction
-                        ref='returnProducts'
-                        tableId={'returnProductsTable'}
-                        containerId={'returnProductsContainer'}
+                        ref='saleProducts'
+                        tableId={'saleProductsTable'}
+                        containerId={'saleProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
                         customerId={this.state.customerId}
                     />
                     <ProductsTable
-                        ref='returnProductsTable'
-                        tableId={'returnProductsTable'}
-                        containerId={'returnProductsContainer'}
+                        ref='saleProductsTable'
+                        tableId={'saleProductsTable'}
+                        containerId={'saleProductsContainer'}
                         deleteProductFrmTbl={this.deleteProductFrmTbl}
                         minusFromTotal={this.minusFromTotal}
                         addToTotal={this.addToTotal}
@@ -197,18 +197,18 @@ class NewReturn extends Component {
                         saveInvoice={this.saveInvoice}
                     />
                 </div>
-                <div style={{ display: `${this.state.displaySalesSection ? '' : 'none'}` }}>
+                <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
                     < NewTransaction
-                        ref='saleProducts'
-                        tableId={'saleProductsTable'}
-                        containerId={'saleProductsContainer'}
+                        ref='returnProducts'
+                        tableId={'returnProductsTable'}
+                        containerId={'returnProductsContainer'}
                         addProductToTbl={this.addProductToTbl}
                         customerId={this.state.customerId}
                     />
                     <ProductsTable
-                        ref='saleProductsTable'
-                        tableId={'saleProductsTable'}
-                        containerId={'saleProductsContainer'}
+                        ref='returnProductsTable'
+                        tableId={'returnProductsTable'}
+                        containerId={'returnProductsContainer'}
                         askOtherSection={this.state.askOtherSection}
                         deleteProductFrmTbl={this.deleteProductFrmTbl}
                         minusFromTotal={this.minusFromTotal}
@@ -226,5 +226,4 @@ class NewReturn extends Component {
     }
 }
 
-
-export default NewReturn
+export default NewSales

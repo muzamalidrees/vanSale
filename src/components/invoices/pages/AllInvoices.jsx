@@ -99,7 +99,6 @@ class AllInvoices extends Component {
                     date: invoiceDate,
                     customer: invoice.customer_id,
                     driver: invoice.driver_id,
-                    operator: invoice.operator_id,
                     total: invoice.total,
                     buttons: <React.Fragment>
                         <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(invoice.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
@@ -117,7 +116,7 @@ class AllInvoices extends Component {
         var data = {
             columns: [
                 { label: '#', field: 'index', }, { label: 'Date', field: 'date', }, { label: 'Customer', field: 'customer', },
-                { label: 'Driver', field: 'driver' }, { label: 'Operator', field: 'operator', },
+                { label: 'Driver', field: 'driver' },
                 { label: 'Total', field: 'total', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows

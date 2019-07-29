@@ -10,13 +10,15 @@ import ProductCategories from '../product-categories/ProductCategories';
 import Customers from '../customers/Customers';
 import PriceGroups from '../price-groups/PriceGroups';
 import CustomerPricing from '../customer-pricing/CustomerPricing';
+import ProductPricing from '../product-pricing/ProductPricing';
+import DriverRouting from '../driver-routing/DriverRouting';
 import Drivers from '../drivers/Drivers';
 import Routes from '../routes/Routes';
 import Devices from '../devices/Devices';
 import Sales from '../sales/Sales';
 import Returns from '../returns/Returns';
 import Invoices from '../invoices/Invoices';
-import ReactSideBar from './sections/ReactSideBar';
+// import ReactSideBar from './sections/ReactSideBar';
 
 
 
@@ -44,7 +46,7 @@ class AllRoutes extends Component {
 
         return (
             <React.Fragment>
-                <ReactSideBar />
+                {/* <ReactSideBar /> */}
                 <div style={{}} className="container-fluid">
                     <Switch>
                         <Route exact path="/" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} />
@@ -58,6 +60,8 @@ class AllRoutes extends Component {
                         <Route path="/customers" component={Customers} />
                         <Route path="/priceGroups" component={PriceGroups} />
                         <Route path="/customerPricing" component={CustomerPricing} />
+                        <Route path="/productPricing" component={ProductPricing} />
+                        <Route path="/driverRouting" component={DriverRouting} />
                         <Route path="/drivers" component={Drivers} />
                         <Route path="/routes" component={Routes} />
                         <Route path="/devices" component={Devices} />
@@ -68,7 +72,6 @@ class AllRoutes extends Component {
                     </Switch>
                 </div>
             </React.Fragment>
-
         )
     }
 }

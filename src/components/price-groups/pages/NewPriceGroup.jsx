@@ -14,7 +14,7 @@ class NewPriceGroup extends Component {
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 if (this._isMounted) {
                     this.setState({ productCategories: json.data, showCategoryOptions: true })
                 }
@@ -26,9 +26,7 @@ class NewPriceGroup extends Component {
         this.state = {
             name: '',
             productCategory: '',
-            sellPrice: '',
-            buyBackPrice: '',
-            productCategories: '',
+            productCategories: [],
             showCategoryOptions: false,
             notificationMessage: '',
             notificationShow: false
@@ -63,13 +61,14 @@ class NewPriceGroup extends Component {
         }
         else {
 
-            let { name, productCategory, sellPrice, buyBackPrice } = this.state
+            let {
+                name, productCategory,
+            } = this.state
 
-            console.log(name, productCategory, sellPrice, buyBackPrice);
+            console.log(name, productCategory);
 
             let priceGroup = {
                 name: name, productCategory: productCategory.value,
-                sellPrice: sellPrice, buyBackPrice: buyBackPrice
             }
 
             var options = {
@@ -89,9 +88,6 @@ class NewPriceGroup extends Component {
                         this.setState({
                             name: '',
                             productCategory: '',
-                            sellPrice: '',
-                            buyBackPrice: '',
-
                         })
                     }
                     else {
@@ -123,6 +119,8 @@ class NewPriceGroup extends Component {
             })
         }
         var CategoryOptions;
+        console.log(productCategories);
+
         if (showCategoryOptions) {
 
             CategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
@@ -175,32 +173,6 @@ class NewPriceGroup extends Component {
                                             </MDBCol>
                                         </MDBRow>
                                         {/* : null} */}
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.sellPrice}
-                                            label="Selling Price"
-                                            name="sellPrice"
-                                            icon="dollar-sign"
-                                            group
-                                            type="number"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.buyBackPrice}
-                                            label="Buying-back Price"
-                                            name="buyBackPrice"
-                                            icon="dollar-sign"
-                                            group
-                                            type="number"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                        />
-
                                     </div>
                                     <div className="text-center">
                                         <MDBBtn size='sm' color="dark" outline type='submit'>Submit</MDBBtn>

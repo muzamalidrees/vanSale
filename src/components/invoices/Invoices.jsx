@@ -17,11 +17,7 @@ class Invoices extends Component {
     render() {
 
         return (
-            // <div>
-            //     <h1 style={{ marginTop: '80px' }}>
-            //         Orders Page
-            //     </h1>
-            // </div>
+            
             <Switch>
                 <Route path="/invoices/all" component={SecuredAllInvoices} />
             </Switch>

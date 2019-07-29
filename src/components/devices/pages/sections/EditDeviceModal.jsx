@@ -37,11 +37,13 @@ class EditDeviceModal extends Component {
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllDrivers')
+        fetch('/getAllUsers')
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                this.setDriverOptions(json.data);
+                let users = json.data;
+                let drivers = users.filter(user => user.role_id === 3)
+                this.setDriverOptions(drivers);
             })
             .catch((error) => console.log(error))
 

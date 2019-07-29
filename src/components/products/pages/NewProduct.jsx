@@ -16,7 +16,7 @@ class NewProduct extends Component {
             .then((json) => {
                 console.log(json)
                 if (this._isMounted) {
-                    this.setState({ ProductCategories: json.data, showOptions: true })
+                    this.setState({ productCategories: json.data, showCategoryOptions: true })
                 }
             })
             .catch((error) => console.log(error))
@@ -28,8 +28,8 @@ class NewProduct extends Component {
             description: '',
             barCode: '',
             productCategory: '',
-            ProductCategories: [],
-            showOptions: false,
+            productCategories: '',
+            showCategoryOptions: false,
             notificationMessage: '',
             notificationShow: false
         };
@@ -105,7 +105,7 @@ class NewProduct extends Component {
 
     render() {
 
-        const { productCategory, productCategories, showOptions } = this.state
+        const { productCategory, productCategories, showCategoryOptions } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
@@ -119,10 +119,11 @@ class NewProduct extends Component {
                 borderRadius: 'none'
             })
         }
-        var productCategoryOptions;
-        if (showOptions) {
-
-            productCategoryOptions = productCategories.map(productCategory => ({
+        var CategoryOptions;
+        console.log(productCategories);
+        
+        if (showCategoryOptions) {
+            CategoryOptions = productCategories.map(productCategory => ({
                 key: productCategory.id, label: productCategory.name, value: productCategory.id
             }));
         }
@@ -192,7 +193,7 @@ class NewProduct extends Component {
                                                     styles={customStyles}
                                                     value={productCategory}
                                                     onChange={this.handleSelectChange}
-                                                    options={productCategoryOptions}
+                                                    options={CategoryOptions}
                                                     placeholder='Category'
                                                     isSearchable
                                                     isClearable

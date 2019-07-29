@@ -42,10 +42,15 @@ class Header extends React.Component {
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/home"><MDBIcon icon="home" /> Home</MDBNavLink>
                                         </MDBDropdownItem>
+                                        {/* <Can I='create' a='sale'> */}
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/sales/new"><MDBIcon icon="plus" /> New Sales</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        {/* </Can> */}
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/sales/all"><MDBIcon icon="eye" /> All Sales</MDBNavLink>
                                         </MDBDropdownItem>
-                                        {/* <Can I='create' a='role'> */}
+                                        {/* <Can I='create' a='return'> */}
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/returns/new"><MDBIcon icon="plus" /> New Returns</MDBNavLink>
                                         </MDBDropdownItem>
@@ -109,6 +114,9 @@ class Header extends React.Component {
                                         {/* </Can> */}
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/productcategories/all"><MDBIcon icon="eye" />View Product-Categories</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/productPricing/new"><MDBIcon icon="eye" /> Product-Pricing</MDBNavLink>
                                         </MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
@@ -176,6 +184,9 @@ class Header extends React.Component {
                                         {/* </Can> */}
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/devices/all"><MDBIcon icon="eye" /> View Devices</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/driverRouting/new"><MDBIcon icon="eye" /> Driver-Routing</MDBNavLink>
                                         </MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>

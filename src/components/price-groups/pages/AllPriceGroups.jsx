@@ -41,12 +41,12 @@ class AllPriceGroups extends Component {
     }
 
 
-    handleEdit = (id) => (e) => {
-        this.refs.editPriceGroupModal.setState({
-            modalShow: true
-        })
-        this.refs.editPriceGroupModal.fetchData(id);
-    }
+    // handleEdit = (id) => (e) => {
+    //     this.refs.editPriceGroupModal.setState({
+    //         modalShow: true
+    //     })
+    //     this.refs.editPriceGroupModal.fetchData(id);
+    // }
 
     handleDelete = (id) => (e) => {
         let el = e.target
@@ -103,13 +103,10 @@ class AllPriceGroups extends Component {
                     index: index,
                     name: priceGroup.name,
                     productCategory: currentProductCategory,
-                    sellPrice: priceGroup.sell_price,
-                    buyBackPrice: priceGroup.buy_back_price,
-                    // password: priceGroup.password,
                     buttons: <React.Fragment>
-                        <Can I='update' a='PriceGroup'>
+                        {/* <Can I='update' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(priceGroup.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
-                        </Can>
+                        </Can> */}
                         <Can I='delete' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(priceGroup.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
@@ -121,8 +118,7 @@ class AllPriceGroups extends Component {
         var data = {
             columns: [
                 { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Product-Category', field: 'productCategory', }, { label: 'Selling-Price', field: 'sellPrice', },
-                { label: 'Buying-back Price', field: 'buyBackPrice', }, { label: 'Action', field: 'buttons' }
+                { label: 'Product-Category', field: 'productCategory', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -138,9 +134,9 @@ class AllPriceGroups extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditPriceGroupModal
+                    {/* <EditPriceGroupModal
                         ref='editPriceGroupModal'
-                    />
+                    /> */}
                     <DeleteModal
                         ref='deleteModal'
                         deleteEntry={this.deletePriceGroup}

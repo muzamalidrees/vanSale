@@ -11,12 +11,14 @@ class NewDevice extends Component {
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllDrivers')
+        fetch('/getAllUsers')
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
+                let users = json.data;
+                let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
-                    this.setState({ drivers: json.data, showOptions: true })
+                    this.setState({ drivers: drivers })
                 }
             })
             .catch((error) => console.log(error))
@@ -114,7 +116,6 @@ class NewDevice extends Component {
         }
         var driverOptions;
         if (showOptions) {
-
             driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
         }
 

@@ -128,7 +128,7 @@ class AllTransactions extends Component {
         </MDBCardHeader>
         <MDBCardBody className='p-2'>
           <MDBBtn size='sm' className='m-0 p-0 font-weight-bold' color='info ' >
-            <MDBNavLink to={this.props.trType === 'sales' ? '/home' : '/returns/new'} className='m-0' style={{ fontSize: '16px', color: 'white' }}>
+            <MDBNavLink to={this.props.trType === 'sales' ? '/sales/new' : '/returns/new'} className='m-0' style={{ fontSize: '16px', color: 'white' }}>
               New {this.props.trType === 'sales' ? 'Sales' : 'Returns'}
             </MDBNavLink>
           </MDBBtn>

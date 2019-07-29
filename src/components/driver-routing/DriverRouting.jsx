@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // import { Can } from "../../configs/Ability-context";
-import SecuredAllSales from './SecuredAllSales';
-import SecuredNewSales from './SecuredNewSales';
+import SecuredSetDriverRoutes from './SecuredSetDriverRoutes';
+import AllDriverRoutes from './pages/AllDriverRoutes';
 
 
 
-class Sales extends Component {
+class DriverRouting extends Component {
     constructor() {
         super();
         this.state = {
@@ -14,18 +14,18 @@ class Sales extends Component {
         };
     }
 
-
     render() {
+
 
         return (
             // <div>
             //     <h1 style={{ marginTop: '80px' }}>
-            //         Orders Page
+            //         Users Page
             //     </h1>
             // </div>
             <Switch>
-                <Route path="/sales/new" component={SecuredNewSales} />
-                <Route path="/sales/all" component={SecuredAllSales} />
+                <Route path="/driverRouting/new" component={SecuredSetDriverRoutes} />
+                <Route path="/driverRouting/all" component={AllDriverRoutes} />
             </Switch>
 
         )
@@ -33,4 +33,4 @@ class Sales extends Component {
 }
 
 
-export default Sales
+export default DriverRouting

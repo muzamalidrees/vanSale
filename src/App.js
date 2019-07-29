@@ -81,7 +81,7 @@ class App extends React.Component {
         <AbilityContext.Provider value={ability}>
           {this.state.loggedIn === false ? <Redirect to='/login' /> : null}
           <div
-            style={{ marginLeft: '15%' }}
+            // style={{ marginLeft: '15%' }}
           >
             <Header
               loggedIn={this.state.loggedIn}

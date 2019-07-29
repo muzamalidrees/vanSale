@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
-import EditDeviceModal from './sections/EditDeviceModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllDevices extends Component {
+class AllDriverRoutes extends Component {
     _isMounted = false
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllDevices')
+        fetch('/getAllDriverRoutes')
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
                 if (this._isMounted) {
-                    this.setState({ devices: json.data })
+                    this.setState({ driverRoutes: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -23,18 +22,29 @@ class AllDevices extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data;
+                let users = json.data
                 let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
                     this.setState({ drivers: drivers })
                 }
             })
             .catch((error) => console.log(error))
+        fetch('/getAllRoutes')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (this._isMounted) {
+                    this.setState({ routes: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
         this.state = {
-            devices: [],
+            driverRoutes: [],
+            drivers: [],
+            routes: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            drivers: '',
         }
     }
 
@@ -42,13 +52,6 @@ class AllDevices extends Component {
         this._isMounted = false
     }
 
-
-    handleEdit = (id) => (e) => {
-        this.refs.editDeviceModal.setState({
-            modalShow: true
-        })
-        this.refs.editDeviceModal.fetchData(id);
-    }
 
     handleDelete = (id) => (e) => {
         let el = e.target
@@ -63,18 +66,18 @@ class AllDevices extends Component {
         })
     }
 
-    deleteDevice = () => {
+    deleteDriverRoute = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
-        document.getElementById('devicesTable').deleteRow(rowToBeDeleted)
-        let device = { value: dRowValue }
+        document.getElementById('driverRouting').deleteRow(rowToBeDeleted)
+        let driverRoute = { value: dRowValue }
 
         var options = {
             method: 'DELETE',
-            body: JSON.stringify(device),
+            body: JSON.stringify(driverRoute),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/deleteDevice', options)
+        fetch('/deleteDriverRoute', options)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -85,32 +88,37 @@ class AllDevices extends Component {
 
 
     render() {
-        var { devices, drivers } = this.state;
+        var { drivers, routes, driverRoutes } = this.state;
         var rows = [];
         var index = 0;
 
-        devices.forEach((device) => {
+        driverRoutes.forEach((driverRoute) => {
 
             index = index + 1;
             let currentDriver;
+            let currentRoute;
             if (drivers !== '' && drivers !== null && drivers !== undefined) {
                 drivers.forEach(driver => {
-                    if (driver.id.toString() === device.driver_id) {
+                    if (driver.id.toString() === driverRoute.driver_id) {
                         currentDriver = driver.name
+                    }
+                });
+            }
+            if (routes !== '' && routes !== null && routes !== undefined) {
+                routes.forEach(route => {
+                    if (route.id.toString() === driverRoute.route_id) {
+                        currentRoute = route.name
                     }
                 });
             }
             rows.push(
                 {
                     index: index,
-                    IMEI: device.IMEI,
                     driver: currentDriver,
+                    route: currentRoute,
                     buttons: <React.Fragment>
-                        <Can I='update' a='device'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(device.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
-                        </Can>
-                        <Can I='delete' a='device'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(device.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                        <Can I='delete' a='driverRoute'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(driverRoute.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
                 }
@@ -119,8 +127,8 @@ class AllDevices extends Component {
 
         var data = {
             columns: [
-                { label: '#', field: 'index', }, { label: 'IMEI', field: 'IMEI' },
-                { label: 'Driver', field: 'driver', }, { label: 'Action', field: 'buttons' }
+                { label: '#', field: 'index', }, { label: 'Driver', field: 'driver' },
+                { label: 'Route', field: 'route', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -128,20 +136,17 @@ class AllDevices extends Component {
 
             <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    All Devices
+                    Customers' Price-Groups
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='devicesTable' striped small hover theadColor="dark"
+                    <MDBDataTable id='driverRouting' striped small hover theadColor="dark"
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    <EditDeviceModal
-                        ref='editDeviceModal'
-                    />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteDevice}
+                        deleteEntry={this.deleteDriverRoute}
                     />
                 </MDBCardBody>
             </MDBCard>
@@ -150,4 +155,4 @@ class AllDevices extends Component {
 
 }
 
-export default AllDevices
+export default AllDriverRoutes
