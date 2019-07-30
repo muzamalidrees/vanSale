@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import AllDrivers from './pages/AllDrivers';
 import { Redirect } from 'react-router'
+import AllPersons from '../misc/pages/AllPersons';
 
 
 class SecuredAllDrivers extends Component {
@@ -10,20 +10,17 @@ class SecuredAllDrivers extends Component {
     }
     constructor() {
         super()
-        this._isMounted = true;
-        fetch('/isAuth')
+        this.user = localStorage.getItem('ui')
+        // console.log(this.user);
 
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json);
-                if (this._isMounted === true) {
-
-                    this.setState({ loggedIn: json.loggedIn })
-                }
-            })
-            .catch((err => {
-                console.log(err);
-            }))
+        if (this.user !== null) {
+            // console.log('user not null');
+            this.loggedIn = true
+        }
+        else {
+            // console.log('user null 2');
+            this.loggedIn = false
+        }
     }
     componentWillUnmount() {
         this._isMounted = false;
@@ -35,7 +32,7 @@ class SecuredAllDrivers extends Component {
             return <Redirect to='/login' />
         }
         else {
-        return <AllDrivers />
+        return <AllPersons all={'Drivers'} />
         }
 
     }

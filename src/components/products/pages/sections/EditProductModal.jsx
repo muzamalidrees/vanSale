@@ -16,7 +16,7 @@ class EditProductModal extends Component {
             productCategory: '',
             name: '',
             description: '',
-            barCode: '',
+            barcode: '',
             productCategories: '',
             productCategoryOptions: [],
             notificationMessage: '',
@@ -28,14 +28,14 @@ class EditProductModal extends Component {
         fetch('/getSpecificProduct/' + id)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 let product = json.data
                 if (this._isMounted === true) {
                     this.setState({
                         productId: product.id,
                         name: product.name,
                         description: product.description,
-                        barCode: product.barCode,
+                        barcode: product.barcode,
                         productCategory_id: product.product_category_id,
 
                     })
@@ -45,8 +45,7 @@ class EditProductModal extends Component {
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
-
+                // console.log(json)
                 this.setProductCategoryOptions(json.data);
             })
             .catch((error) => console.log(error))
@@ -70,7 +69,7 @@ class EditProductModal extends Component {
         }));
         let currentProductCategory;
         productCategories.forEach(productCategory => {
-            if (productCategory.id.toString() === this.state.productCategory_id) {
+            if (productCategory.id === this.state.productCategory_id) {
                 currentProductCategory = { label: productCategory.name, value: productCategory.id }
             }
         });
@@ -102,12 +101,12 @@ class EditProductModal extends Component {
             return
         }
         else {
-            let { productId, name, description, barCode, productCategory } = this.state
-            console.log(productId, name, description, barCode, productCategory);
+            let { productId, name, description, barcode, productCategory } = this.state
+            console.log(productId, name, description, barcode, productCategory);
 
             let product = {
                 id: productId, name: name, description: description,
-                barCode: barCode, productCategory: productCategory.value
+                barcode: barcode, productCategory: productCategory.value
             }
 
             var options = {
@@ -121,17 +120,18 @@ class EditProductModal extends Component {
                     console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
-                        setTimeout(() => this.setState({ notificationShow: false }), 1502);
+                        setTimeout(() => {
+                            this.setState({ notificationShow: false })
+                        }, 1002);
                     }
-
                 })
                 .catch((error) => console.log(error))
-            //closing edit modal
-
-            this.toggle()
-
-            // refreshing all records table
-            window.location.reload();
+            setTimeout(() => {
+                //closing edit modal
+                this.toggle()
+                // refreshing all records table
+                window.location.reload();
+            }, 1402);
         }
     }
 
@@ -196,9 +196,9 @@ class EditProductModal extends Component {
                                         />
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.barCode}
-                                            label="Barcode"
-                                            name="barCode"
+                                            value={this.state.barcode}
+                                            label="barcode"
+                                            name="barcode"
                                             icon="barcode"
                                             group
                                             type="text"

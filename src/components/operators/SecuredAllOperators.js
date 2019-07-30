@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import AllRoles from './pages/AllRoles';
 import { Redirect } from 'react-router'
+import AllPersons from '../misc/pages/AllPersons';
 
 
-class SecuredAllRoles extends Component {
+class SecuredAllOperators extends Component {
     _isMounted = false
     state = {
         loggedIn: ''
@@ -32,7 +32,7 @@ class SecuredAllRoles extends Component {
             return <Redirect to='/login' />
         }
         else {
-            return <AllRoles />
+        return <AllPersons all={'Operators'} />
         }
 
     }
@@ -40,4 +40,4 @@ class SecuredAllRoles extends Component {
 
 
 
-export default SecuredAllRoles
+export default SecuredAllOperators

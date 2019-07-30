@@ -48,9 +48,9 @@ class SetProductPrices extends Component {
         this._isMounted = false
     }
 
-    handleSelectChange = selectedOption => {
+    handleSelectChange = name => selectedOption => {
         this.setState({
-            selectedOption
+            [name]: selectedOption
         })
     }
 
@@ -78,7 +78,7 @@ class SetProductPrices extends Component {
         else {
 
             let { priceGroup, product, sellPrice, buyBackPrice } = this.state
-            console.log(priceGroup, product, sellPrice, buyBackPrice);
+            // console.log(priceGroup, product, sellPrice, buyBackPrice);
 
             let prodcutPrice = {
                 priceGroupId: priceGroup.value, productId: product.value,
@@ -171,15 +171,15 @@ class SetProductPrices extends Component {
                                 <form onSubmit={this.handleSubmit} ref='newProductPriceForm' className='grey-text'>
                                     <MDBRow className='mb-5'>
                                         <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="user-alt" />
+                                            <MDBIcon icon="search-dollar" />
                                         </MDBCol>
                                         <MDBCol>
                                             <Select
-                                                styles={produtcStyles}
-                                                value={product}
-                                                onChange={this.handleSelectChange}
-                                                options={productOptions}
-                                                placeholder='Product'
+                                                styles={priceGroupStyles}
+                                                value={priceGroup}
+                                                onChange={this.handleSelectChange('priceGroup')}
+                                                options={priceGroupOptions}
+                                                placeholder='Price-Group'
                                                 isSearchable
                                                 isClearable
                                                 className='form-control-md px-0'
@@ -188,18 +188,19 @@ class SetProductPrices extends Component {
                                     </MDBRow>
                                     <MDBRow className='mb-5'>
                                         <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="search-dollar" />
+                                            <MDBIcon icon="user-alt" />
                                         </MDBCol>
                                         <MDBCol>
                                             <Select
-                                                styles={priceGroupStyles}
-                                                value={priceGroup}
-                                                onChange={this.handleSelectChange}
-                                                options={priceGroupOptions}
-                                                placeholder='Price-Group'
+                                                styles={produtcStyles}
+                                                value={product}
+                                                onChange={this.handleSelectChange('product')}
+                                                options={productOptions}
+                                                placeholder='Product'
                                                 isSearchable
                                                 isClearable
                                                 className='form-control-md px-0'
+                                                ref={el => this.product = el}
                                             />
                                         </MDBCol>
                                     </MDBRow>

@@ -16,10 +16,18 @@ class SetDriverRoutes extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data
-                let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
-                    this.setState({ drivers: drivers })
+                    this.setState({ users: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ roles: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -35,7 +43,8 @@ class SetDriverRoutes extends Component {
 
 
         this.state = {
-            drivers: [],
+            users: [],
+            roles: [],
             routes: [],
             driver: '',
             route: '',
@@ -48,9 +57,9 @@ class SetDriverRoutes extends Component {
         this._isMounted = false
     }
 
-    handleSelectChange = selectedOption => {
+    handleSelectChange = name => selectedOption => {
         this.setState({
-            selectedOption
+            [name]: selectedOption
         })
     }
 
@@ -97,7 +106,6 @@ class SetDriverRoutes extends Component {
                     }
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
-
                     }
                 })
                 .catch((error) => console.log(error))
@@ -106,7 +114,7 @@ class SetDriverRoutes extends Component {
 
     render() {
 
-        const { driver, route, drivers, routes } = this.state
+        const { driver, route, users, roles, routes } = this.state
 
         const driverStyles = {
             control: (base, state) => ({
@@ -134,13 +142,21 @@ class SetDriverRoutes extends Component {
                 borderRadius: 'none',
             })
         }
-        var driverOptions;
-        var routeOptions;
+        let roleId;
+        let driverOptions;
+        let routeOptions;
+
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
+        }
+        let drivers = users.filter(user => user.role_id === roleId)
         driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
         routeOptions = routes.map(route => ({ key: route.id, label: route.name, value: route.id }));
-        // if (showOptions) {
 
-        // }
 
 
         return (
@@ -164,7 +180,7 @@ class SetDriverRoutes extends Component {
                                             <Select
                                                 styles={driverStyles}
                                                 value={driver}
-                                                onChange={this.handleSelectChange}
+                                                onChange={this.handleSelectChange('driver')}
                                                 options={driverOptions}
                                                 placeholder='Driver'
                                                 isSearchable
@@ -181,7 +197,7 @@ class SetDriverRoutes extends Component {
                                             <Select
                                                 styles={routeStyles}
                                                 value={route}
-                                                onChange={this.handleSelectChange}
+                                                onChange={this.handleSelectChange('route')}
                                                 options={routeOptions}
                                                 placeholder='Route'
                                                 isSearchable
@@ -193,7 +209,7 @@ class SetDriverRoutes extends Component {
 
                                     <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
                                 </form>
-                                <Link to='/customerPricing/all'>All Drivers' Routes..</Link>
+                                <Link to='/driverRouting/all'>All Drivers' Routes..</Link>
                             </MDBCardBody>
                         </MDBCard>
                         {

@@ -105,14 +105,14 @@ class AllProductPrices extends Component {
             let currentPriceGroup;
             if (products !== '' && products !== null && products !== undefined) {
                 products.forEach(product => {
-                    if (product.id.toString() === productPrice.product_id) {
+                    if (product.id === productPrice.product_id) {
                         currentProduct = product.name
                     }
                 });
             }
             if (priceGroups !== '' && priceGroups !== null && priceGroups !== undefined) {
                 priceGroups.forEach(priceGroup => {
-                    if (priceGroup.id.toString() === productPrice.price_group_id) {
+                    if (priceGroup.id === productPrice.price_group_id) {
                         currentPriceGroup = priceGroup.name
                     }
                 });

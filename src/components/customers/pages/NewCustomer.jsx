@@ -95,12 +95,12 @@ class NewCustomer extends Component {
                 .then((json) => {
                     // console.log(json)
                     if (this._isMounted === true) {
-                        this.setState({ message: json.message, notificationShow: true })
+                        this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
                     if (json.success === true) {
 
                         this.setState({
-                            route_id: '',
+                            route: '',
                             name: '',
                             email: '',
                             cell: '',
@@ -137,7 +137,7 @@ class NewCustomer extends Component {
                 borderTop: 'none',
                 borderRight: 'none',
                 borderLeft: 'none',
-                borderRadius:'none'
+                borderRadius: 'none'
             })
         }
         var routeOptions;
@@ -149,17 +149,17 @@ class NewCustomer extends Component {
 
         return (
             // <Can I='create' a='customer'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
+            <MDBContainer className='' style={{ marginTop: '66px' }}>
                 <MDBRow center>
-                    <MDBCol>
+                    <MDBCol md='7'>
                         <MDBCard className=' py-2'>
                             <MDBCardHeader tag="h4" style={{ color: 'dark' }} className=" p-2 text-center font-weight-bold">
                                 New Customer
                             </MDBCardHeader>
-                            <MDBCardBody className='p-3'>
+                            <MDBCardBody className='py-0 px-3'>
 
                                 <form ref='newCustomerForm' onSubmit={this.handleSubmit} noValidate>
-                                    <MDBRow around className="grey-text">
+                                    <MDBRow around className="grey-text p-0 m-0">
                                         <MDBCol md="5">
                                             <MDBInput
                                                 onInput={this.handleInput}
@@ -271,7 +271,7 @@ class NewCustomer extends Component {
                                                 validate
                                             />
                                             <MDBRow className='mb-5'>
-                                                <MDBCol sm='1' className=''>
+                                                <MDBCol sm='2' className=''>
                                                     <MDBIcon icon="route" size='2x' />
                                                 </MDBCol>
                                                 <MDBCol className=''>
@@ -291,18 +291,18 @@ class NewCustomer extends Component {
                                                     {/* } */}
                                                 </MDBCol>
                                             </MDBRow>
+                                            {
+                                                this.state.notificationShow ?
+                                                    <Notification
+                                                        message={this.state.notificationMessage}
+                                                    /> : null
+                                            }
                                             <MDBBtn className='form-control py-0 font-weight-bold mt-4' size='lg' color="dark" outline type='submit'>Register</MDBBtn>
-                                        </MDBCol> 
+                                        </MDBCol>
                                     </MDBRow>
                                 </form>
                             </MDBCardBody>
                         </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>

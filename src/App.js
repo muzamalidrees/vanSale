@@ -17,15 +17,33 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      loggedIn: '',
+      roles: [],
     }
+
+    fetch('/getAllRoles')
+      .then((res) => res.json())
+      .then((json) => {
+        // console.log(json)
+        this.setState({ roles: json.data })
+      })
+      .catch((err => {
+        console.log(err);
+      }))
 
     fetch('/isAuth')
       .then((res) => res.json())
       .then((json) => {
         // console.log(json)
-        this.setState({ loggedIn: json.loggedIn })
-        // this.changeUser(json.user.role_id);
+        this.setState({ loggedIn: json.loggedIn }, function () {
+          if (json.loggedIn === false) {
+            if (localStorage.getItem('ui') || localStorage.getItem('uri')) {
+              localStorage.removeItem('ui')
+              localStorage.removeItem('uri')
+            }
+          }
+        })
+        this.changeUser(json.user.role_id);
       })
       .catch((err => {
         console.log(err);
@@ -52,22 +70,14 @@ class App extends React.Component {
   }
 
   changeUser = (x) => {
-    var user;
-    switch (x) {
-      // case '8':
-      //   user1 = 'superAdmin'
-      //   break;
-      case '1':
-        user = 'admin'
-        break;
-      case '2':
-        user = 'operator'
-        break;
-      // case '5':
-      //   user1 = 'endUser'
-      //   break;
-    }
-    const rules = defineRulesFor(user);
+    let userRole;
+    this.state.roles.forEach(role => {
+      if (role.id === x) {
+        userRole = role.name
+      }
+    });
+
+    const rules = defineRulesFor(userRole);
     ability.update(rules);
     this.setState({ loggedIn: true })
   }
@@ -79,9 +89,10 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <AbilityContext.Provider value={ability}>
+
           {this.state.loggedIn === false ? <Redirect to='/login' /> : null}
           <div
-            // style={{ marginLeft: '15%' }}
+          // style={{ marginLeft: '15%' }}
           >
             <Header
               loggedIn={this.state.loggedIn}

@@ -23,18 +23,28 @@ class AllDevices extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data;
-                let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
-                    this.setState({ drivers: drivers })
+                    this.setState({ users: json.data })
                 }
             })
             .catch((error) => console.log(error))
+
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ roles: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
         this.state = {
             devices: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            drivers: '',
+            users: [],
+            roles: [],
         }
     }
 
@@ -85,17 +95,25 @@ class AllDevices extends Component {
 
 
     render() {
-        var { devices, drivers } = this.state;
+        var { devices, users, roles } = this.state;
         var rows = [];
         var index = 0;
-
+        let roleId;
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
+        }
+        let drivers = users.filter(user => user.role_id === roleId)
         devices.forEach((device) => {
 
             index = index + 1;
             let currentDriver;
             if (drivers !== '' && drivers !== null && drivers !== undefined) {
                 drivers.forEach(driver => {
-                    if (driver.id.toString() === device.driver_id) {
+                    if (driver.id === device.driver_id) {
                         currentDriver = driver.name
                     }
                 });

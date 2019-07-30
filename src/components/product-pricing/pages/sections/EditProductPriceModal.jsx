@@ -77,7 +77,7 @@ class EditProductPriceModal extends Component {
         let priceGroupOptions = priceGroups.map(priceGroup => ({ key: priceGroup.id, label: priceGroup.name, value: priceGroup.id }));
         let currentPriceGroup;
         priceGroups.forEach(priceGroup => {
-            if (priceGroup.id.toString() === this.state.priceGroupId) {
+            if (priceGroup.id === this.state.priceGroupId) {
                 currentPriceGroup = { label: priceGroup.name, value: priceGroup.id }
             }
         });
@@ -90,7 +90,7 @@ class EditProductPriceModal extends Component {
         let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
         let currentProduct;
         products.forEach(product => {
-            if (product.id.toString() === this.state.productId) {
+            if (product.id === this.state.productId) {
                 currentProduct = { label: product.name, value: product.id }
             }
         });
@@ -132,7 +132,7 @@ class EditProductPriceModal extends Component {
 
 
             let productPrice = {
-                id: productPriceId, priceGroup: priceGroup.value, product: product.value,
+                id: productPriceId, priceGroupId: priceGroup.value, productId: product.value,
                 sellPrice: sellPrice, buyBackPrice: buyBackPrice
             }
 

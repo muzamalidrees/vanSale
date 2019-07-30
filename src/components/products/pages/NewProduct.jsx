@@ -26,7 +26,7 @@ class NewProduct extends Component {
         this.state = {
             name: '',
             description: '',
-            barCode: '',
+            barcode: '',
             productCategory: '',
             productCategories: '',
             showCategoryOptions: false,
@@ -57,17 +57,17 @@ class NewProduct extends Component {
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.productCategory === '' || this.productCategory.role === null) {
+        else if (this.state.productCategory === '' || this.state.productCategory === null) {
             this.setState({ productCategory: null })
             return
         }
         else {
-            let { name, description, barCode, productCategory } = this.state
+            let { name, description, barcode, productCategory } = this.state
 
-            console.log(name, description, barCode, productCategory, productCategory.value);
+            console.log(name, description, barcode, productCategory, productCategory.value);
             let product = {
-                name: name, description: description, barCode: barCode,
-                productCategory: productCategory.value
+                name: name, description: description, barcode: barcode,
+                productCategoryId: productCategory.value
             }
 
             var options = {
@@ -120,7 +120,7 @@ class NewProduct extends Component {
             })
         }
         var CategoryOptions;
-        console.log(productCategories);
+        // console.log(productCategories);
         
         if (showCategoryOptions) {
             CategoryOptions = productCategories.map(productCategory => ({
@@ -172,9 +172,9 @@ class NewProduct extends Component {
                                         />
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.barCode}
+                                            value={this.state.barcode}
                                             label="Barcode"
-                                            name="barCode"
+                                            name="barcode"
                                             icon="barcode"
                                             group
                                             type="text"

@@ -22,10 +22,18 @@ class AllDriverRoutes extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data
-                let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
-                    this.setState({ drivers: drivers })
+                    this.setState({ users: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ roles: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -41,7 +49,8 @@ class AllDriverRoutes extends Component {
 
         this.state = {
             driverRoutes: [],
-            drivers: [],
+            users: [],
+            roles: [],
             routes: [],
             rowToBeDeleted: '',
             dRowValue: '',
@@ -88,9 +97,18 @@ class AllDriverRoutes extends Component {
 
 
     render() {
-        var { drivers, routes, driverRoutes } = this.state;
+        var { users, roles, routes, driverRoutes } = this.state;
         var rows = [];
         var index = 0;
+        let roleId;
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
+        }
+        let drivers = users.filter(user => user.role_id === roleId)
 
         driverRoutes.forEach((driverRoute) => {
 
@@ -99,14 +117,14 @@ class AllDriverRoutes extends Component {
             let currentRoute;
             if (drivers !== '' && drivers !== null && drivers !== undefined) {
                 drivers.forEach(driver => {
-                    if (driver.id.toString() === driverRoute.driver_id) {
+                    if (driver.id === driverRoute.driver_id) {
                         currentDriver = driver.name
                     }
                 });
             }
             if (routes !== '' && routes !== null && routes !== undefined) {
                 routes.forEach(route => {
-                    if (route.id.toString() === driverRoute.route_id) {
+                    if (route.id === driverRoute.route_id) {
                         currentRoute = route.name
                     }
                 });
@@ -136,7 +154,7 @@ class AllDriverRoutes extends Component {
 
             <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Customers' Price-Groups
+                    Drivers' Routes
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
 

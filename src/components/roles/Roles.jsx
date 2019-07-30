@@ -19,11 +19,7 @@ class Roles extends Component {
 
 
         return (
-            // <div>
-            //     <h1 style={{ marginTop: '80px' }}>
-            //         Roles Page
-            //     </h1>
-            // </div>
+            
             <Switch>
                 <Route path="/roles/new" component={SecuredNewRole} />
                 <Route path="/roles/all" component={SecuredAllRoles} />

@@ -15,21 +15,30 @@ class NewDevice extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data;
-                let drivers = users.filter(user => user.role_id === 3)
                 if (this._isMounted) {
-                    this.setState({ drivers: drivers })
+                    this.setState({ users: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ roles: json.data })
                 }
             })
             .catch((error) => console.log(error))
 
 
 
+
         this.state = {
             driver: '',
             IMEI: '',
-            drivers: '',
-            showOptions: false,
+            users: [],
+            roles: [],
             notificationMessage: '',
             notificationShow: false
         };
@@ -100,7 +109,7 @@ class NewDevice extends Component {
 
     render() {
 
-        const { driver, drivers, showOptions } = this.state
+        const { users, roles, driver } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
@@ -114,10 +123,17 @@ class NewDevice extends Component {
                 borderRadius: 'none'
             })
         }
-        var driverOptions;
-        if (showOptions) {
-            driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
+        let roleId;
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
         }
+        let drivers = users.filter(user => user.role_id === roleId)
+        var driverOptions;
+        driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
 
 
         return (

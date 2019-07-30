@@ -81,7 +81,7 @@ class EditCustomerModal extends Component {
         let routeOptions = routes.map(route => ({ key: route.id, label: route.name, value: route.id }));
         let currentRoute;
         routes.forEach(route => {
-            if (route.id.toString() === this.state.route_id) {
+            if (route.id === this.state.route_id) {
                 currentRoute = { label: route.name, value: route.id }
             }
         });
@@ -115,14 +115,14 @@ class EditCustomerModal extends Component {
         }
         else {
             let { customerId, name, email, cell, address, shopName, postCode, customer_id,
-                driverMessage, invoiceMessage, route_id } = this.state
+                driverMessage, invoiceMessage, route } = this.state
 
-            console.log(customerId, name, email, cell, address, shopName, postCode, customer_id, driverMessage, invoiceMessage, route_id);
+            console.log(customerId, name, email, cell, address, shopName, postCode, customer_id, driverMessage, invoiceMessage, route);
 
             let customer = {
                 id: customerId, name: name, email: email, cell: cell, address: address, shopName: shopName,
                 postCode: postCode, customer_id: customer_id, driverMessage: driverMessage,
-                invoiceMessage: invoiceMessage, route_id: route_id
+                invoiceMessage: invoiceMessage, routeId: route.value
             }
 
             var options = {
@@ -136,17 +136,20 @@ class EditCustomerModal extends Component {
                     console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
-                        setTimeout(() => this.setState({ notificationShow: false }), 1502);
+                        setTimeout(() => this.setState({ notificationShow: false }), 1002);
                     }
 
                 })
                 .catch((error) => console.log(error))
-            //closing edit modal
 
-            this.toggle()
+            setTimeout(() => {
 
-            // refreshing all records table
-            window.location.reload();
+                //closing edit modal
+                this.toggle()
+                // refreshing all records table
+                window.location.reload();
+
+            }, 1502);
         }
     }
 
@@ -163,7 +166,7 @@ class EditCustomerModal extends Component {
                     '#ddd' : route !== null ?
                         '#ddd' : 'red',
                 fontWeight: 370,
-                borderRadius:'0px',
+                borderRadius: '0px',
                 borderTop: 'none',
                 borderRight: 'none',
                 borderLeft: 'none',
@@ -178,8 +181,8 @@ class EditCustomerModal extends Component {
                         Edit Customer Details
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <MDBCard className=' py-5'>
-                            <MDBCardBody className='p-5'>
+                        <MDBCard className='m-0 p-0'>
+                            <MDBCardBody className='m-0 '>
                                 <form ref='updateCustomerForm' onSubmit={this.handleSubmit} noValidate>
                                     <MDBRow around className="grey-text">
                                         <MDBCol md="5">

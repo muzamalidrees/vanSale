@@ -159,7 +159,7 @@ class Header extends React.Component {
                                 <MDBDropdown>
                                     <MDBDropdownToggle nav caret>
                                         <MDBIcon icon="user-tie" > </MDBIcon>  Drivers
-                                </MDBDropdownToggle>
+                                    </MDBDropdownToggle>
                                     <MDBDropdownMenu className="text-white">
                                         {/* <Can I='create' a='driver'> */}
                                         <MDBDropdownItem>
@@ -191,8 +191,25 @@ class Header extends React.Component {
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>
+                            <MDBNavItem>
+                                <MDBDropdown>
+                                    <MDBDropdownToggle nav caret>
+                                        <MDBIcon icon="user-tie" > </MDBIcon>  Operators
+                                    </MDBDropdownToggle>
+                                    <MDBDropdownMenu className="text-white">
+                                        {/* <Can I='create' a='operator'> */}
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/operators/new"><MDBIcon icon="plus" /> Create new Operator</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        {/* </Can> */}
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/operators/all"><MDBIcon icon="eye" /> View Operators</MDBNavLink>
+                                        </MDBDropdownItem>
+                                    </MDBDropdownMenu>
+                                </MDBDropdown>
+                            </MDBNavItem>
                             {/* </Can> */}
-                            {/* <Can I='read' a='user'> */}
+                            {/* <Can I='read' a='inventory'> */}
                             <MDBNavItem>
                                 <MDBDropdown>
                                     <MDBDropdownToggle nav caret>

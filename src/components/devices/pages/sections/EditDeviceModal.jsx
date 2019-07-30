@@ -13,9 +13,9 @@ class EditDeviceModal extends Component {
             modalShow: false,
             deviceId: '',
             IMEI: '',
-            driver_id: '',
+            driverId: '',
             driver: '',
-            drivers: '',
+            users: [],
             driverOptions: [],
             notificationMessage: '',
             notificationShow: false
@@ -31,7 +31,7 @@ class EditDeviceModal extends Component {
                 if (this._isMounted === true) {
                     this.setState({
                         deviceId: device.id,
-                        driver_id: device.driver_id,
+                        driverId: device.driver_id,
                         IMEI: device.IMEI,
                     })
                 }
@@ -41,9 +41,18 @@ class EditDeviceModal extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                let users = json.data;
-                let drivers = users.filter(user => user.role_id === 3)
-                this.setDriverOptions(drivers);
+                if (this._isMounted) {
+                    this.setState({ users: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                this.setDriverOptions(json.data);
+
             })
             .catch((error) => console.log(error))
 
@@ -60,16 +69,27 @@ class EditDeviceModal extends Component {
         });
     }
 
-    setDriverOptions = (drivers) => {
-        let driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
+    setDriverOptions = (roles) => {
+        let roleId;
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
+        }
+        let drivers = this.state.users.filter(user => user.role_id === roleId)
+        let driverOptions;
         let currentDriver;
+        driverOptions = drivers.map(driver => ({ key: driver.id, label: driver.name, value: driver.id }));
         drivers.forEach(driver => {
-            if (driver.id.toString() === this.state.driver_id) {
+            if (driver.id === this.state.driverId) {
                 currentDriver = { label: driver.name, value: driver.id }
             }
         });
         this.setState({
-            driverOptions: driverOptions, driver: currentDriver,
+            driverOptions: driverOptions,
+            driver: currentDriver
         })
     }
 
@@ -113,17 +133,20 @@ class EditDeviceModal extends Component {
                     console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
-                        setTimeout(() => this.setState({ notificationShow: false }), 1502);
+                        setTimeout(() => this.setState({ notificationShow: false }), 1002);
                     }
 
                 })
                 .catch((error) => console.log(error))
-            //closing edit modal
+            setTimeout(() => {
+                //closing edit modal
+                this.toggle()
 
-            this.toggle()
+                // refreshing all records table
+                window.location.reload();
 
-            // refreshing all records table
-            window.location.reload();
+            }, 1502);
+
         }
     }
 
@@ -132,7 +155,7 @@ class EditDeviceModal extends Component {
 
 
     render() {
-        const { driver, driverOptions } = this.state
+        const { driverOptions, driver, IMEI } = this.state
         const customStyles = {
             control: (base, state) => ({
                 ...base,
@@ -148,6 +171,7 @@ class EditDeviceModal extends Component {
         }
 
 
+
         return (
             <MDBContainer>
                 <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='md' centered>
@@ -161,7 +185,7 @@ class EditDeviceModal extends Component {
                                     <div className="grey-text">
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.IMEI}
+                                            value={IMEI}
                                             label="IMEI"
                                             name="IMEI"
                                             inputRef={el => { this.IMEI = el }}
@@ -203,7 +227,7 @@ class EditDeviceModal extends Component {
                             {
                                 this.state.notificationShow ?
                                     <Notification
-                                        message={this.state.message}
+                                        message={this.state.notificationMessage}
                                     />
                                     : null
                             }

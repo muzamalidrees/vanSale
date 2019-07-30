@@ -93,7 +93,7 @@ class AllPriceGroups extends Component {
             let currentProductCategory;
             if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
                 productCategories.forEach(productCategory => {
-                    if (productCategory.id.toString() === priceGroup.product_category_id) {
+                    if (productCategory.id === priceGroup.product_category_id) {
                         currentProductCategory = productCategory.name
                     }
                 });

@@ -93,7 +93,7 @@ class AllCustomers extends Component {
             let currentRoute;
             if (routes !== '' && routes !== null && routes !== undefined) {
                 routes.forEach(route => {
-                    if (route.id.toString() === customer.route_id) {
+                    if (route.id === customer.route_id) {
                         currentRoute = route.name
                     }
                 });

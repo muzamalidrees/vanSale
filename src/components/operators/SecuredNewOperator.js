@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import AllRoles from './pages/AllRoles';
 import { Redirect } from 'react-router'
+import NewPerson from '../misc/pages/NewPerson';
 
 
-class SecuredAllRoles extends Component {
+class SecuredNewOperator extends Component {
     _isMounted = false
     state = {
         loggedIn: ''
     }
     constructor() {
         super()
+        this._isMounted = true;
         this.user = localStorage.getItem('ui')
         // console.log(this.user);
 
@@ -32,7 +33,7 @@ class SecuredAllRoles extends Component {
             return <Redirect to='/login' />
         }
         else {
-            return <AllRoles />
+        return <NewPerson  new={'Operator'}/>
         }
 
     }
@@ -40,4 +41,4 @@ class SecuredAllRoles extends Component {
 
 
 
-export default SecuredAllRoles
+export default SecuredNewOperator

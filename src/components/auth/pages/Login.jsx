@@ -39,7 +39,7 @@ class LoginForm extends React.Component {
         fetch('/auth', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json);
+                // console.log(json);
                 let message = json.message;
                 this.refs.loginLabel.innerHTML = message;
                 if (message === 'incorrect password') {

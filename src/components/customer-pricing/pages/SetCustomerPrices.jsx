@@ -46,9 +46,9 @@ class SetCustomerPrices extends Component {
         this._isMounted = false
     }
 
-    handleSelectChange = selectedOption => {
+    handleSelectChange = name => selectedOption => {
         this.setState({
-            selectedOption
+            [name]: selectedOption
         })
     }
 
@@ -161,7 +161,7 @@ class SetCustomerPrices extends Component {
                                             <Select
                                                 styles={customerStyles}
                                                 value={customer}
-                                                onChange={this.handleSelectChange}
+                                                onChange={this.handleSelectChange('customer')}
                                                 options={customerOptions}
                                                 placeholder='Customer'
                                                 isSearchable
@@ -178,12 +178,13 @@ class SetCustomerPrices extends Component {
                                             <Select
                                                 styles={priceGroupStyles}
                                                 value={priceGroup}
-                                                onChange={this.handleSelectChange}
+                                                onChange={this.handleSelectChange('priceGroup')}
                                                 options={priceGroupOptions}
                                                 placeholder='Price-Group'
                                                 isSearchable
                                                 isClearable
                                                 className='form-control-lg px-0'
+                                                ref={el => this.priceGroup = el}
                                             />
                                         </MDBCol>
                                     </MDBRow>

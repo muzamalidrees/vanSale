@@ -93,7 +93,7 @@ class AllProducts extends Component {
             let currentProductCategory;
             if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
                 productCategories.forEach(productCategory => {
-                    if (productCategory.id.toString() === product.product_category_id) {
+                    if (productCategory.id === product.product_category_id) {
                         currentProductCategory = productCategory.name
                     }
                 });
@@ -103,7 +103,7 @@ class AllProducts extends Component {
                     index: index,
                     name: product.name,
                     description: product.description,
-                    barCode: product.barCode,
+                    barcode: product.barcode,
                     productCategory: currentProductCategory,
                     buttons: <React.Fragment>
                         <Can I='update' a='product'>
@@ -120,7 +120,7 @@ class AllProducts extends Component {
         var data = {
             columns: [
                 { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Description', field: 'description', }, { label: 'Barcode', field: 'barCode', },
+                { label: 'Description', field: 'description', }, { label: 'Barcode', field: 'barcode', },
                 { label: 'Product-Category', field: 'productCategory', },
                 { label: 'Action', field: 'buttons' }
             ],
