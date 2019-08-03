@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
+import ViewInventoryModal from '../sections/ViewInventoryModal';
 import EditPersonModal from '../sections/EditPersonModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
@@ -13,7 +14,7 @@ class AllPersons extends Component {
         fetch('/getAllUsers')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ users: json.data })
                 }
@@ -39,6 +40,14 @@ class AllPersons extends Component {
 
     componentWillUnmount = () => {
         this._isMounted = false
+    }
+
+    handleViewInventory = (id) => (e) => {
+
+        this.refs.viewInventoryModal.setState({
+            modalShow: true
+        })
+        this.refs.viewInventoryModal.fetchData(id);
     }
 
 
@@ -175,6 +184,9 @@ class AllPersons extends Component {
                             // password: user.password,
                             dailyMessage: driver.daily_message,
                             buttons: <React.Fragment>
+                                <Can I='read' a='driverInventory'>
+                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(driver.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
+                                </Can>
                                 <Can I='update' a='driver'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(driver.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                                 </Can>
@@ -218,6 +230,9 @@ class AllPersons extends Component {
                             // password: user.password,
                             location: operator.location,
                             buttons: <React.Fragment>
+                                <Can I='read' a='operatorInventory'>
+                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(operator.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
+                                </Can>
                                 <Can I='update' a='operator'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(operator.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                                 </Can>
@@ -256,6 +271,9 @@ class AllPersons extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
+                    <ViewInventoryModal
+                        ref='viewInventoryModal'
+                    />
                     <EditPersonModal
                         ref='editPersonModal'
                         edit={this.defineEditProp()}

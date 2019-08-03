@@ -115,9 +115,9 @@ class Header extends React.Component {
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/productcategories/all"><MDBIcon icon="eye" />View Product-Categories</MDBNavLink>
                                         </MDBDropdownItem>
-                                        <MDBDropdownItem>
+                                        {/* <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/productPricing/new"><MDBIcon icon="eye" /> Product-Pricing</MDBNavLink>
-                                        </MDBDropdownItem>
+                                        </MDBDropdownItem> */}
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>
@@ -218,19 +218,17 @@ class Header extends React.Component {
                                     <MDBDropdownMenu className="text-white">
                                         {/* <Can I='create' a='user'> */}
                                         <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/users/new"><MDBIcon icon="plus" /> Create new User</MDBNavLink>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/inventory/new"><MDBIcon icon="plus" /> Allocate new Inventory</MDBNavLink>
                                         </MDBDropdownItem>
                                         {/* </Can> */}
                                         <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/users/all"><MDBIcon icon="eye" /> View Users</MDBNavLink>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/inventory/return"><MDBIcon icon="arrow-left" /> Return Inventories</MDBNavLink>
                                         </MDBDropdownItem>
-                                        {/* <Can I='create' a='role'> */}
                                         <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/roles/new"><MDBIcon icon="plus" /> Create new Role</MDBNavLink>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/inventory/all"><MDBIcon icon="eye" /> View Inventories</MDBNavLink>
                                         </MDBDropdownItem>
-                                        {/* </Can> */}
                                         <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/roles/all"><MDBIcon icon="eye" /> User's Roles</MDBNavLink>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/inventory/history"><MDBIcon icon="history" /> View Inventory History</MDBNavLink>
                                         </MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>

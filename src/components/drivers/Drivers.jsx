@@ -17,11 +17,6 @@ class Drivers extends Component {
 
 
         return (
-            // <div>
-            //     <h1 style={{ marginTop: '80px' }}>
-            //         Users Page
-            //     </h1>
-            // </div>
             <Switch>
                 <Route path="/drivers/new" component={SecuredNewDriver} />
                 <Route path="/drivers/all" component={SecuredAllDrivers} />

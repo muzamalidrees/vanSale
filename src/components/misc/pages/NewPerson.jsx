@@ -109,7 +109,7 @@ class NewPerson extends Component {
                 name: name, email: email, cell: cell, address: address, username: username, password: password,
                 roleId: role.value, location: location, dailyMessage: dailyMessage
             }
-            console.log(user);
+            // console.log(user);
 
             var options = {
                 method: 'POST',

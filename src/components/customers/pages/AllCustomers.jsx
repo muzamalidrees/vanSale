@@ -86,6 +86,7 @@ class AllCustomers extends Component {
         var { customers, routes } = this.state;
         var rows = [];
         var index = 0;
+console.log(customers);
 
         customers.forEach((customer) => {
 

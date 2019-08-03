@@ -19,6 +19,15 @@ class AllPriceGroups extends Component {
                 }
             })
             .catch((error) => console.log(error))
+        fetch('/getAllProducts')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ products: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
@@ -32,7 +41,8 @@ class AllPriceGroups extends Component {
             priceGroups: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            productCategories: [],
+            products: [],
+            productCategories: []
         }
     }
 
@@ -41,12 +51,12 @@ class AllPriceGroups extends Component {
     }
 
 
-    // handleEdit = (id) => (e) => {
-    //     this.refs.editPriceGroupModal.setState({
-    //         modalShow: true
-    //     })
-    //     this.refs.editPriceGroupModal.fetchData(id);
-    // }
+    handleEdit = (id) => (e) => {
+        this.refs.editPriceGroupModal.setState({
+            modalShow: true
+        })
+        this.refs.editPriceGroupModal.fetchData(id);
+    }
 
     handleDelete = (id) => (e) => {
         let el = e.target
@@ -83,14 +93,21 @@ class AllPriceGroups extends Component {
 
 
     render() {
-        var { priceGroups, productCategories } = this.state;
+        var { priceGroups, products, productCategories } = this.state;
         var rows = [];
         var index = 0;
 
         priceGroups.forEach((priceGroup) => {
 
             index = index + 1;
-            let currentProductCategory;
+            let currentProduct, currentProductCategory;
+            if (products !== '' && products !== null && products !== undefined) {
+                products.forEach(product => {
+                    if (product.id === priceGroup.product_id) {
+                        currentProduct = product.name
+                    }
+                });
+            }
             if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
                 productCategories.forEach(productCategory => {
                     if (productCategory.id === priceGroup.product_category_id) {
@@ -102,11 +119,14 @@ class AllPriceGroups extends Component {
                 {
                     index: index,
                     name: priceGroup.name,
-                    productCategory: currentProductCategory,
+                    category: currentProductCategory,
+                    product: currentProduct,
+                    sellPrice: priceGroup.sell_price,
+                    buyBackPrice: priceGroup.buy_back_price,
                     buttons: <React.Fragment>
-                        {/* <Can I='update' a='PriceGroup'>
+                        <Can I='update' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(priceGroup.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
-                        </Can> */}
+                        </Can>
                         <Can I='delete' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(priceGroup.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
@@ -117,8 +137,13 @@ class AllPriceGroups extends Component {
 
         var data = {
             columns: [
-                { label: '#', field: 'index', }, { label: 'Name', field: 'name' },
-                { label: 'Product-Category', field: 'productCategory', }, { label: 'Action', field: 'buttons' }
+                { label: '#', field: 'index', },
+                { label: 'Name', field: 'name' },
+                { label: 'Product-Category', field: 'category', },
+                { label: 'Product', field: 'product', },
+                { label: 'Selling-Price', field: 'sellPrice', },
+                { label: 'Buying-back-Price', field: 'buyBackPrice', },
+                { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
@@ -134,9 +159,9 @@ class AllPriceGroups extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    {/* <EditPriceGroupModal
+                    <EditPriceGroupModal
                         ref='editPriceGroupModal'
-                    /> */}
+                    />
                     <DeleteModal
                         ref='deleteModal'
                         deleteEntry={this.deletePriceGroup}

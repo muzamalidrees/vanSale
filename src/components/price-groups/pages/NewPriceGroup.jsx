@@ -16,20 +16,32 @@ class NewPriceGroup extends Component {
             .then((json) => {
                 console.log(json)
                 if (this._isMounted) {
-                    this.setState({ productCategories: json.data, showCategoryOptions: true })
+                    this.setState({ productCategories: json.data })
                 }
             })
             .catch((error) => console.log(error))
 
-
+        fetch('/getAllProducts')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (this._isMounted) {
+                    this.setState({ products: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
 
         this.state = {
+            products: [],
             name: '',
+            product: '',
+            sellPrice: '',
+            buyBackPrice: '',
+            isDisabled: true,
             productCategory: '',
             productCategories: [],
-            showCategoryOptions: false,
             notificationMessage: '',
-            notificationShow: false
+            notificationShow: false,
         };
     }
 
@@ -37,10 +49,28 @@ class NewPriceGroup extends Component {
         this._isMounted = false
     }
 
-    handleSelectChange = selectedOption => {
-        this.setState({
-            productCategory: selectedOption
-        })
+    handleSelectChange = name => selectedOption => {
+        if (name === 'category') {
+            if (selectedOption !== null) {
+                let products = this.state.products.filter(product => product.product_category_id === selectedOption.value)
+                this.setState({
+                    productCategory: selectedOption,
+                    products: products,
+                    isDisabled: false
+                })
+            }
+            else {
+                this.setState({
+                    productCategory: selectedOption,
+                    isDisabled: true
+                })
+            }
+        }
+        else {
+            this.setState({
+                product: selectedOption
+            })
+        }
     }
 
     handleInput = e => {
@@ -59,16 +89,18 @@ class NewPriceGroup extends Component {
             this.setState({ productCategory: null })
             return
         }
+        else if (this.state.product === '' || this.state.product === null) {
+            this.setState({ product: null })
+            return
+        }
         else {
 
-            let {
-                name, productCategory,
-            } = this.state
+            let { name, productCategory, product, sellPrice, buyBackPrice } = this.state
 
-            console.log(name, productCategory);
+            console.log(name, productCategory, product, sellPrice, buyBackPrice);
 
             let priceGroup = {
-                name: name, productCategory: productCategory.value,
+                name: name, productCategoryId: productCategory.value, productId: product.value, sellPrice: sellPrice, buyBackPrice: buyBackPrice
             }
 
             var options = {
@@ -87,6 +119,10 @@ class NewPriceGroup extends Component {
 
                         this.setState({
                             name: '',
+                            product: '',
+                            sellPrice: '',
+                            buyBackPrice: '',
+                            isDisabled: true,
                             productCategory: '',
                         })
                     }
@@ -104,8 +140,8 @@ class NewPriceGroup extends Component {
 
     render() {
 
-        const { productCategory, productCategories, showCategoryOptions } = this.state
-        const customStyles = {
+        const { productCategory, productCategories, product, products, sellPrice, buyBackPrice, isDisabled } = this.state
+        const categoryStyles = {
             control: (base, state) => ({
                 ...base,
                 borderBottomColor: state.isFocused ?
@@ -118,13 +154,22 @@ class NewPriceGroup extends Component {
                 borderRadius: 'none',
             })
         }
-        var CategoryOptions;
-        console.log(productCategories);
-
-        if (showCategoryOptions) {
-
-            CategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
+        const productStyles = {
+            control: (base, state) => ({
+                ...base,
+                borderBottomColor: state.isFocused ?
+                    '#ddd' : product !== null ?
+                        '#ddd' : 'red',
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
+            })
         }
+
+        let CategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
+        let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
 
 
         return (
@@ -154,16 +199,15 @@ class NewPriceGroup extends Component {
                                             success="right"
                                             required
                                         />
-                                        {/* {showCategoryOptions ? */}
                                         <MDBRow className='mb-5 grey-text'>
                                             <MDBCol sm='1' className=''>
                                                 <MDBIcon icon="th" size='2x' />
                                             </MDBCol>
                                             <MDBCol>
                                                 <Select
-                                                    styles={customStyles}
+                                                    styles={categoryStyles}
                                                     value={productCategory}
-                                                    onChange={this.handleSelectChange}
+                                                    onChange={this.handleSelectChange('category')}
                                                     options={CategoryOptions}
                                                     placeholder='Product-Category'
                                                     isSearchable
@@ -172,7 +216,51 @@ class NewPriceGroup extends Component {
                                                 />
                                             </MDBCol>
                                         </MDBRow>
-                                        {/* : null} */}
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="th" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    ref={el => this.product = el}
+                                                    styles={productStyles}
+                                                    value={product}
+                                                    onChange={this.handleSelectChange('product')}
+                                                    options={productOptions}
+                                                    placeholder='Product'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md px-0'
+                                                    isDisabled={isDisabled}
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={sellPrice}
+                                            label="Selling Price"
+                                            name="sellPrice"
+                                            icon="dollar-sign"
+                                            group
+                                            type="number"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                            required
+                                        />
+                                        <MDBInput
+                                            onInput={this.handleInput}
+                                            value={buyBackPrice}
+                                            label="Buying-back Price"
+                                            name="buyBackPrice"
+                                            icon="dollar-sign"
+                                            group
+                                            type="number"
+                                            validate
+                                            error="wrong"
+                                            success="right"
+                                            required
+                                        />
                                     </div>
                                     <div className="text-center">
                                         <MDBBtn size='sm' color="dark" outline type='submit'>Submit</MDBBtn>

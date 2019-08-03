@@ -46,7 +46,7 @@ class App extends React.Component {
         this.changeUser(json.user.role_id);
       })
       .catch((err => {
-        console.log(err);
+        // console.log(err);
       }))
   }
 

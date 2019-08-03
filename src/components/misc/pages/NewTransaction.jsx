@@ -56,7 +56,6 @@ class NewTransaction extends Component {
             qty: '',
             product: '',
             products: [],
-            showOptions: false,
             customerPrices: [],
             priceGroups: [],
             productPrices: [],
@@ -66,6 +65,20 @@ class NewTransaction extends Component {
 
     componentWillUnmount() {
         this._isMounted = false
+    }
+
+    //enabling add product button and setting validating label empty
+    enableAddProductBtn = () => {
+        this.message.innerHTML = ''
+        this.addProductBtn.disabled = false
+        this.addProductBtn.classList.remove('disabled')
+    }
+
+    //disabling add product button and setting validating label value
+    disableAddProductBtn = () => {
+        this.message.innerHTML = 'Please select customer first.'
+        this.addProductBtn.disabled = true
+        this.addProductBtn.classList.add('disabled')
     }
 
     //handling changing inputs
@@ -81,7 +94,10 @@ class NewTransaction extends Component {
         this.setState({
             product: selectedOption
         })
-        this.setProductRate(selectedOption.value)
+
+        if (selectedOption !== null) {
+            this.setProductRate(selectedOption.value)
+        }
     }
 
     //assuring only numbers allowed in input type=number s.
@@ -98,39 +114,48 @@ class NewTransaction extends Component {
     setProductRate = (pId) => {
         let { customerId, tableId } = this.props
         let { customerPrices, products, priceGroups, productPrices } = this.state
+
         //checking if customer is selected or not
         if (customerId === '') {
             this.message.innerHTML = 'Please select a customer first.'
-            document.getElementById('addProductbtn').disabled = true
+            this.setState({ product: '' })
         }
         else {
             let customerPriceGroups = [];
             let productCategory
+
             //finding all price-groups assidned to customer
             let customerAllPrices = customerPrices
-                .filter(customerPrice => customerPrice.customer_id.toString() === customerId);
-            //getting customer's all price-groups
+                .filter(customerPrice => customerPrice.customer_id === customerId);
+
+            //getting customer's price-groups' data
             customerAllPrices.forEach(customerPrice => {
-                customerPriceGroups.push(priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id))
+                let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
+                let priceGroup = a.shift()
+                customerPriceGroups.push(priceGroup)
             });
+
             //finding selected product's category
             products.forEach(product => {
-                if (product.id.toString() === pId) {
+                if (product.id === pId) {
                     productCategory = product.product_category_id;
                 }
             });
 
-            //finding price-group that holds this productCategory
+            //finding price-group that holds this productCategory from customer's price-groups
             let desiredPriceGroup = customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategory)
+            console.log(desiredPriceGroup);
+
             //finding prices
             let productPrice = productPrices.filter(productPrice =>
                 productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId
             )
-            //setting selling rate
+            console.log(productPrice);
+
+            //setting selling and returning rates
             if (tableId === 'saleProductsTable') {
                 this.setState({ rate: productPrice.sell_price })
             }
-            //setting returning rate
             else {
                 this.setState({ rate: productPrice.buy_back_price })
             }
@@ -308,13 +333,15 @@ class NewTransaction extends Component {
                                         <MDBCol size='lg' className=''>
                                             <label style={{ color: 'red' }} className='mb-0 p-0' ref={el => this.message = el}></label>
                                             <MDBBtn
-                                                id='addProductbtn'
+                                                // id='addProductbtn'
+                                                innerRef={el => this.addProductBtn = el}
                                                 size='sm'
                                                 color="dark"
                                                 className='font-weight-bold form-control ml-0 '
                                                 style={{ fontSize: '13px', borderRadius: '5px', marginTop: '1px' }}
                                                 type='submit'
                                                 outline
+                                                disabled
                                             >
                                                 Add Product
                                             </MDBBtn>

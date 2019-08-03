@@ -11,16 +11,20 @@ class EditPriceGroupModal extends Component {
         super(props);
         this.state = {
             modalShow: false,
-            priceGroupId: '',
-            productCategory_id: '',
-            productCategory: '',
             name: '',
+            product: '',
             sellPrice: '',
             buyBackPrice: '',
-            productCategories: [],
-            productCategoryOptions: [],
+            productCategory: '',
+            isDisabled: false,
             notificationMessage: '',
-            notificationShow: false
+            notificationShow: false,
+            priceGroupId: '',
+            productId: '',
+            productCategoryId: '',
+            products: [],
+            productOptions: [],
+            productCategoryOptions: [],
         }
     }
 
@@ -35,9 +39,10 @@ class EditPriceGroupModal extends Component {
                     this.setState({
                         priceGroupId: priceGroup.id,
                         name: priceGroup.name,
-                        productCategory_id: priceGroup.product_category_id,
+                        productId: priceGroup.product_id,
                         sellPrice: priceGroup.sell_price,
                         buyBackPrice: priceGroup.buy_back_price,
+                        productCategoryId: priceGroup.product_category_id,
                     })
                 }
             })
@@ -47,7 +52,21 @@ class EditPriceGroupModal extends Component {
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
-                this.setProductCategoryOptions(json.data);
+                this.setProductCategoryOptions(json.data)
+
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getAllProducts')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (this._isMounted === true) {
+                    this.setState({
+                        products: json.data
+                    })
+                }
+                this.setProductOptions(json.data)
             })
             .catch((error) => console.log(error))
     }
@@ -67,12 +86,25 @@ class EditPriceGroupModal extends Component {
         let productCategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
         let currentProductCategory;
         productCategories.forEach(productCategory => {
-            if (productCategory.id.toString() === this.state.productCategory_id) {
+            if (productCategory.id === this.state.productCategoryId) {
                 currentProductCategory = { label: productCategory.name, value: productCategory.id }
             }
         });
         this.setState({
             productCategoryOptions: productCategoryOptions, productCategory: currentProductCategory,
+        })
+    }
+
+    setProductOptions = (products) => {
+        let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
+        let currentProduct;
+        products.forEach(product => {
+            if (product.id === this.state.productId) {
+                currentProduct = { label: product.name, value: product.id }
+            }
+        });
+        this.setState({
+            productOptions: productOptions, product: currentProduct,
         })
     }
 
@@ -82,11 +114,29 @@ class EditPriceGroupModal extends Component {
         })
     }
 
-    handleSelectChange = selectedOption => {
-        this.setState({
-            productCategory: selectedOption
-        })
-
+    handleSelectChange = name => selectedOption => {
+        if (name === 'category') {
+            if (selectedOption !== null) {
+                let products = this.state.products.filter(product => product.product_category_id === selectedOption.value)
+                let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
+                this.setState({
+                    productCategory: selectedOption,
+                    productOptions: productOptions,
+                    isDisabled: false
+                })
+            }
+            else {
+                this.setState({
+                    productCategory: selectedOption,
+                    isDisabled: true
+                })
+            }
+        }
+        else {
+            this.setState({
+                product: selectedOption
+            })
+        }
     }
 
     handleSubmit = (e) => {
@@ -99,13 +149,17 @@ class EditPriceGroupModal extends Component {
             this.setState({ productCategory: null })
             return
         }
+        else if (this.state.product === '' || this.state.product === null) {
+            this.setState({ product: null })
+            return
+        }
         else {
-            let { priceGroupId, name, productCategory, sellPrice, buyBackPrice } = this.state
+            let { priceGroupId, name, productCategory, product, sellPrice, buyBackPrice } = this.state
 
-            console.log(priceGroupId, name, productCategory, sellPrice, buyBackPrice);
+            console.log(priceGroupId, name, productCategory, product, sellPrice, buyBackPrice);
 
             let priceGroup = {
-                id: priceGroupId, name: name, productCategory: productCategory.value,
+                id: priceGroupId, name: name, productId: product.value, productCategoryId: productCategory.value,
                 sellPrice: sellPrice, buyBackPrice: buyBackPrice
             }
 
@@ -138,12 +192,25 @@ class EditPriceGroupModal extends Component {
 
 
     render() {
-        const { productCategory, productCategoryOptions } = this.state
-        const customStyles = {
+        const { productCategory, productCategoryOptions, product, productOptions, name, sellPrice, buyBackPrice,isDisabled } = this.state
+        const categoryStyles = {
             control: (base, state) => ({
                 ...base,
                 borderBottomColor: state.isFocused ?
                     '#ddd' : productCategory !== null ?
+                        '#ddd' : 'red',
+                fontWeight: 370,
+                borderTop: 'none',
+                borderRight: 'none',
+                borderLeft: 'none',
+                borderRadius: 'none',
+            })
+        }
+        const productStyles = {
+            control: (base, state) => ({
+                ...base,
+                borderBottomColor: state.isFocused ?
+                    '#ddd' : product !== null ?
                         '#ddd' : 'red',
                 fontWeight: 370,
                 borderTop: 'none',
@@ -167,7 +234,7 @@ class EditPriceGroupModal extends Component {
                                     <div className="grey-text">
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.name}
+                                            value={name}
                                             label="Name"
                                             name='name'
                                             icon="pen-nib"
@@ -178,28 +245,45 @@ class EditPriceGroupModal extends Component {
                                             success="right"
                                             required
                                         />
-                                        {/* {showCategoryOptions ? */}
                                         <MDBRow className='mb-5 grey-text'>
-                                            <MDBCol sm='2' className='pr-0 mr-0'>
-                                                <MDBIcon icon="file-alt" size='2x' />
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="th" size='2x' />
                                             </MDBCol>
-                                            <MDBCol className='ml-0 pl-0'>
+                                            <MDBCol >
                                                 <Select
-                                                    styles={customStyles}
+                                                    styles={categoryStyles}
                                                     value={productCategory}
-                                                    onChange={this.handleSelectChange}
+                                                    onChange={this.handleSelectChange('category')}
                                                     options={productCategoryOptions}
                                                     placeholder='Product-Category'
                                                     isSearchable
                                                     isClearable
-                                                    className='form-control-md'
+                                                    className='form-control-md px-0'
                                                 />
                                             </MDBCol>
                                         </MDBRow>
-                                        {/* : null} */}
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="th" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    ref={el => this.product = el}
+                                                    styles={productStyles}
+                                                    value={product}
+                                                    onChange={this.handleSelectChange('product')}
+                                                    options={productOptions}
+                                                    placeholder='Product'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md px-0'
+                                                    isDisabled={isDisabled}
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.sellPrice}
+                                            value={sellPrice}
                                             label="Selling Price"
                                             name="sellPrice"
                                             icon="dollar-sign"
@@ -212,7 +296,7 @@ class EditPriceGroupModal extends Component {
                                         />
                                         <MDBInput
                                             onInput={this.handleInput}
-                                            value={this.state.buyBackPrice}
+                                            value={buyBackPrice}
                                             label="Buying-back Price"
                                             name="buyBackPrice"
                                             icon="dollar-sign"

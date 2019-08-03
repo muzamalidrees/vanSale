@@ -19,11 +19,24 @@ class NewSales extends Component {
         this.addProductToTbl = this.addProductToTbl.bind(this)
     }
 
-    componentDidMount = () => {
-        let customerId = this.refs.invoiceDetails.state.customer.value
-        {
-            !customerId === undefined ? this.setState({ customerId }) : console.log();
+    // setting customer id and enabling add product button
+    customerSelected = (selectedCustomer) => {
+        if (selectedCustomer === null) {
+            this.refs.saleProducts.disableAddProductBtn();
         }
+        else {
+            this.setState({
+                customerId: selectedCustomer.value
+            })
+            this.refs.saleProducts.enableAddProductBtn();
+        }
+    }
+    
+    // setting last invoice id
+    lastInvoiceIdFetched = (invoiceId) => {
+        this.setState({
+            invoiceId: invoiceId
+        })
     }
 
     componentWillUnmount = () => {
@@ -174,7 +187,9 @@ class NewSales extends Component {
             <React.Fragment>
                 <div style={{ marginTop: '72px', paddingTop: '20px' }}>
                     <InvoiceDetails
-                        ref='invoiceDetails' />
+                        ref='invoiceDetails'
+                        customerSelected={this.customerSelected}
+                        lastInvoiceIdFetched={this.lastInvoiceIdFetched} />
                     < NewTransaction
                         ref='saleProducts'
                         tableId={'saleProductsTable'}

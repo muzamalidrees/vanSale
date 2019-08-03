@@ -25,10 +25,9 @@ class InvoiceDetails extends Component {
 
 
         this.state = {
-            trDate: '',
+            trDate: new Date(),
             customer: '',
             customers: [],
-            showOptions: false,
             total: 0,
             invoiceId: 1
         }
@@ -47,10 +46,9 @@ class InvoiceDetails extends Component {
     handleSelectChange = selectedOption => {
 
         this.setState({
-            selectedOption
+            customer: selectedOption
         })
-        document.getElementById('addProductbtn').disabled = false
-
+        this.props.customerSelected(selectedOption)
     }
 
     minusTotalValue = (value) => {
@@ -81,37 +79,40 @@ class InvoiceDetails extends Component {
                 if (json.data.length !== 0 && this._isMounted) {
                     let lastInvoiceID = json.data.shift();
                     let id = lastInvoiceID.id;
-                    currentComponent.setState({ invoiceId: id + 1 })
+                    let invoiceId = id + 1
+                    currentComponent.setState({ invoiceId: invoiceId })
+                    currentComponent.props.lastInvoiceIdFetched(invoiceId)
                 }
             })
             .catch((error) => console.log(error));
     }
 
     saveInvoice = () => {
-        let { trDate, total, customer } = this.state
+        console.log('invoice saved');
 
-        let invoice = { date: trDate, total: total, customerId: customer.value, driverId: this.props.driverId }
-        var options = {
-            method: 'POST',
-            body: JSON.stringify(invoice),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewInvoice', options)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
+        // let { trDate, total, customer } = this.state
 
-        this.setState({
-            trDate: '', customer: '', total: 0
-        })
+        // let invoice = { date: trDate, total: total, customerId: customer.value, driverId: this.props.driverId }
+        // var options = {
+        //     method: 'POST',
+        //     body: JSON.stringify(invoice),
+        //     headers: { 'Content-Type': 'application/json' }
+        // }
+        // fetch('/addNewInvoice', options)
+        //     .then((res) => res.json())
+        //     .then((json) => {
+        //         console.log(json)
+        //     })
+        //     .catch((error) => console.log(error))
+
+        // this.setState({
+        //     trDate: '', customer: '', total: 0
+        // })
     }
 
 
     render() {
-        var { invoiceId, trDate, customer, customers,
-            driver, drivers, showOptions, total } = this.state
+        var { trDate, customer, customers, total } = this.state
         const customerStyles = {
             control: (base, state) => ({
                 ...base,
@@ -124,8 +125,7 @@ class InvoiceDetails extends Component {
 
 
         var customerOptions;
-        if (showOptions) {
-
+        if (customers !== '' || customers !== null || customers !== undefined) {
             customerOptions = customers.map(customer => ({
                 key: customer.id, label: customer.name, value: customer.id
             }));
@@ -151,9 +151,7 @@ class InvoiceDetails extends Component {
                         autoComplete='off'
                         required
                     />
-                    {/* <MDBInput style={{ display: 'none' }} value={invoiceId} className='m-0' disabled /> */}
                 </MDBCol>
-                {/* <Can I='am' a='driver'> */}
                 <MDBCol lg='3' className='mb-3' middle >
                     <Select
                         styles={customerStyles}
