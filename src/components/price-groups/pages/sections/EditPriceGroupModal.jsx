@@ -12,19 +12,15 @@ class EditPriceGroupModal extends Component {
         this.state = {
             modalShow: false,
             name: '',
-            product: '',
-            sellPrice: '',
-            buyBackPrice: '',
-            productCategory: '',
-            isDisabled: false,
             notificationMessage: '',
             notificationShow: false,
             priceGroupId: '',
-            productId: '',
             productCategoryId: '',
             products: [],
-            productOptions: [],
-            productCategoryOptions: [],
+            productCategories: [],
+            notificationMessage: '',
+            notificationShow: false,
+            productOptions: []
         }
     }
 
@@ -33,15 +29,12 @@ class EditPriceGroupModal extends Component {
         fetch('/getSpecificPriceGroup/' + id)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 let priceGroup = json.data
                 if (this._isMounted === true) {
                     this.setState({
                         priceGroupId: priceGroup.id,
                         name: priceGroup.name,
-                        productId: priceGroup.product_id,
-                        sellPrice: priceGroup.sell_price,
-                        buyBackPrice: priceGroup.buy_back_price,
                         productCategoryId: priceGroup.product_category_id,
                     })
                 }
@@ -51,22 +44,36 @@ class EditPriceGroupModal extends Component {
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
-                this.setProductCategoryOptions(json.data)
-
+                // console.log(json)
+                if (this._isMounted === true) {
+                    this.setState({
+                        productCategories: json.data
+                    })
+                }
             })
             .catch((error) => console.log(error))
 
         fetch('/getAllProducts')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted === true) {
                     this.setState({
                         products: json.data
                     })
                 }
-                this.setProductOptions(json.data)
+            })
+            .catch((error) => console.log(error))
+
+        fetch('/getSpecificProductPrices/' + id)
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                let productOptions = json.data.map((PP, index) =>
+                    ({ index: index, id: PP.id, productId: PP.product_id, sellPrice: PP.sell_price, buyBackPrice: PP.buy_back_price }));
+                this.setState({
+                    productOptions: productOptions
+                })
             })
             .catch((error) => console.log(error))
     }
@@ -82,62 +89,18 @@ class EditPriceGroupModal extends Component {
         });
     }
 
-    setProductCategoryOptions = (productCategories) => {
-        let productCategoryOptions = productCategories.map(productCategory => ({ key: productCategory.id, label: productCategory.name, value: productCategory.id }));
-        let currentProductCategory;
-        productCategories.forEach(productCategory => {
-            if (productCategory.id === this.state.productCategoryId) {
-                currentProductCategory = { label: productCategory.name, value: productCategory.id }
-            }
-        });
-        this.setState({
-            productCategoryOptions: productCategoryOptions, productCategory: currentProductCategory,
-        })
-    }
-
-    setProductOptions = (products) => {
-        let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
-        let currentProduct;
-        products.forEach(product => {
-            if (product.id === this.state.productId) {
-                currentProduct = { label: product.name, value: product.id }
-            }
-        });
-        this.setState({
-            productOptions: productOptions, product: currentProduct,
-        })
-    }
-
     handleInput = e => {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
-    handleSelectChange = name => selectedOption => {
-        if (name === 'category') {
-            if (selectedOption !== null) {
-                let products = this.state.products.filter(product => product.product_category_id === selectedOption.value)
-                let productOptions = products.map(product => ({ key: product.id, label: product.name, value: product.id }));
-                this.setState({
-                    productCategory: selectedOption,
-                    productOptions: productOptions,
-                    isDisabled: false
-                })
-            }
-            else {
-                this.setState({
-                    productCategory: selectedOption,
-                    isDisabled: true
-                })
-            }
-        }
-        else {
-            this.setState({
-                product: selectedOption
-            })
-        }
+    handlePricingInput = index => e => {
+        var stateCopy = Object.assign({}, this.state);
+        stateCopy.productOptions[index][e.target.name] = e.target.value;
+        this.setState(stateCopy);
     }
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -145,29 +108,22 @@ class EditPriceGroupModal extends Component {
         if (form.checkValidity() === false) {
             form.classList.add('was-validated');
         }
-        else if (this.state.productCategory === '' || this.state.productCategory === null) {
-            this.setState({ productCategory: null })
-            return
-        }
-        else if (this.state.product === '' || this.state.product === null) {
-            this.setState({ product: null })
-            return
-        }
         else {
-            let { priceGroupId, name, productCategory, product, sellPrice, buyBackPrice } = this.state
 
-            console.log(priceGroupId, name, productCategory, product, sellPrice, buyBackPrice);
+            let { name, productCategoryId, productOptions, priceGroupId } = this.state
+            console.log(name, productCategoryId, productOptions);
 
             let priceGroup = {
-                id: priceGroupId, name: name, productId: product.value, productCategoryId: productCategory.value,
-                sellPrice: sellPrice, buyBackPrice: buyBackPrice
+                id: priceGroupId, name: name, productCategoryId: productCategoryId
             }
 
-            var options = {
+            let options = {
                 method: 'PUT',
                 body: JSON.stringify(priceGroup),
                 headers: { 'Content-Type': 'application/json' }
             }
+            console.log(priceGroup);
+
             fetch('/updatePriceGroup', options)
                 .then((res) => res.json())
                 .then((json) => {
@@ -176,14 +132,43 @@ class EditPriceGroupModal extends Component {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
                     }
+                    if (json.success === true) {
+
+                        this.setState({
+                            name: '',
+                            productOptions: [],
+                            productCategoryId: '',
+                        })
+                        this.toggle()
+                        window.location.reload()
+                    }
+                    else {
+                        this.name.focus();
+                        return
+                    }
                 })
                 .catch((error) => console.log(error))
-            //closing edit modal
 
-            this.toggle()
+            productOptions.forEach(product => {
 
-            // refreshing all records table
-            window.location.reload();
+                let productPrice = {
+                    id: product.id, priceGroupId: priceGroupId, productId: product.productId,
+                    sellPrice: product.sellPrice, buyBackPrice: product.buyBackPrice
+                }
+                let options = {
+                    method: 'PUT',
+                    body: JSON.stringify(productPrice),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+                console.log(productPrice);
+
+                fetch('/updateProductPrice', options)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        console.log(json)
+                    })
+                    .catch((error) => console.log(error))
+            })
         }
     }
 
@@ -192,138 +177,137 @@ class EditPriceGroupModal extends Component {
 
 
     render() {
-        const { productCategory, productCategoryOptions, product, productOptions, name, sellPrice, buyBackPrice,isDisabled } = this.state
-        const categoryStyles = {
-            control: (base, state) => ({
-                ...base,
-                borderBottomColor: state.isFocused ?
-                    '#ddd' : productCategory !== null ?
-                        '#ddd' : 'red',
-                fontWeight: 370,
-                borderTop: 'none',
-                borderRight: 'none',
-                borderLeft: 'none',
-                borderRadius: 'none',
-            })
-        }
-        const productStyles = {
-            control: (base, state) => ({
-                ...base,
-                borderBottomColor: state.isFocused ?
-                    '#ddd' : product !== null ?
-                        '#ddd' : 'red',
-                fontWeight: 370,
-                borderTop: 'none',
-                borderRight: 'none',
-                borderLeft: 'none',
-                borderRadius: 'none',
-            })
+        let currentComponent = this
+        let { productCategoryId, productCategories, productOptions, products, name } = this.state
+
+        let currentProductCategory;
+        if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
+            productCategories.forEach(productCategory => {
+                if (productCategory.id === productCategoryId) {
+                    currentProductCategory = { label: productCategory.name, value: productCategory.id }
+                }
+            });
         }
 
+        let productViews = []
+        productOptions.forEach((option) => {
+            let currentProduct;
+            if (products !== '' && products !== null && products !== undefined) {
+                products.forEach(product => {
+                    if (product.id === option.productId) {
+                        currentProduct = product.name
+                    }
+                });
+            }
+            productViews.push(productView(option.index, option.id, currentProduct, option.sellPrice, option.buyBackPrice))
+        }
+        )
+
+        function productView(index, id, name, sellPrice, buyBackPrice) {
+            return <React.Fragment key={id}>
+                <MDBCol md='6'>
+                    <MDBRow>
+                        <MDBCol md className='mx-2'>
+                            <MDBInput
+                                value={name}
+                                label="Name"
+                                name='name'
+                                type="text"
+                                validate
+                                error="wrong"
+                                success="right"
+                                disabled
+                            />
+                        </MDBCol>
+                        <MDBCol md className='mx-2'>
+                            <MDBInput
+                                onInput={currentComponent.handlePricingInput(index)}
+                                value={sellPrice}
+                                label="Selling-Price"
+                                name='sellPrice'
+                                type="number"
+                                validate
+                                error="wrong"
+                                success="right"
+                                required
+                            />
+                        </MDBCol>
+                        <MDBCol md className='mx-2'>
+                            <MDBInput
+                                onInput={currentComponent.handlePricingInput(index)}
+                                value={buyBackPrice}
+                                label="Buying-back-Price"
+                                name='buyBackPrice'
+                                type="number"
+                                validate
+                                error="wrong"
+                                success="right"
+                                required
+                            />
+                        </MDBCol>
+                    </MDBRow>
+                </MDBCol>
+            </React.Fragment>
+        }
 
         return (
             <MDBContainer>
-                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='md' centered>
+                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='lg' centered>
                     <MDBModalHeader toggle={this.toggle}>
                         Edit Price-Group Details
                     </MDBModalHeader>
                     <MDBModalBody>
-                        <MDBCard className=' p-5'>
-                            <MDBCardBody className='p-2'>
-                                <form ref='updatePriceGroupForm' onSubmit={this.handleSubmit} noValidate>
-                                    <div className="grey-text">
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={name}
-                                            label="Name"
-                                            name='name'
-                                            icon="pen-nib"
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                        />
-                                        <MDBRow className='mb-5 grey-text'>
-                                            <MDBCol sm='1' className=''>
-                                                <MDBIcon icon="th" size='2x' />
-                                            </MDBCol>
-                                            <MDBCol >
-                                                <Select
-                                                    styles={categoryStyles}
-                                                    value={productCategory}
-                                                    onChange={this.handleSelectChange('category')}
-                                                    options={productCategoryOptions}
-                                                    placeholder='Product-Category'
-                                                    isSearchable
-                                                    isClearable
-                                                    className='form-control-md px-0'
-                                                />
-                                            </MDBCol>
-                                        </MDBRow>
-                                        <MDBRow className='mb-5 grey-text'>
-                                            <MDBCol sm='1' className=''>
-                                                <MDBIcon icon="th" size='2x' />
-                                            </MDBCol>
-                                            <MDBCol>
-                                                <Select
-                                                    ref={el => this.product = el}
-                                                    styles={productStyles}
-                                                    value={product}
-                                                    onChange={this.handleSelectChange('product')}
-                                                    options={productOptions}
-                                                    placeholder='Product'
-                                                    isSearchable
-                                                    isClearable
-                                                    className='form-control-md px-0'
-                                                    isDisabled={isDisabled}
-                                                />
-                                            </MDBCol>
-                                        </MDBRow>
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={sellPrice}
-                                            label="Selling Price"
-                                            name="sellPrice"
-                                            icon="dollar-sign"
-                                            group
-                                            type="number"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={buyBackPrice}
-                                            label="Buying-back Price"
-                                            name="buyBackPrice"
-                                            icon="dollar-sign"
-                                            group
-                                            type="number"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                        />
-
-                                    </div>
-
-                                </form>
-
-                                <div className='text-center'>
-                                    <MDBBtn size='sm' className='font-weight-bold' color="dark" onClick={this.toggle}>Close</MDBBtn>
-                                    <MDBBtn size='sm' className='font-weight-bold' onClick={this.handleSubmit} outline color="dark">Save updates</MDBBtn>
-                                </div>
-                            </MDBCardBody>
-                            {
-                                this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    />
-                                    : null
-                            }
-                        </MDBCard>
+                        <MDBRow center>
+                            <MDBCol md="11">
+                                <MDBCard className='p-3'>
+                                    <MDBCardBody className='px-5'>
+                                        <form ref='updatePriceGroupForm' onSubmit={this.handleSubmit} noValidate>
+                                            <MDBRow center className="grey-text">
+                                                <MDBCol md='4' middle>
+                                                    <MDBInput
+                                                        onInput={this.handleInput}
+                                                        value={name}
+                                                        label="Name"
+                                                        name='name'
+                                                        group
+                                                        type="text"
+                                                        validate
+                                                        error="wrong"
+                                                        success="right"
+                                                        required
+                                                        outline
+                                                    />
+                                                </MDBCol>
+                                                <MDBCol md='4' middle>
+                                                    <MDBRow className='mb-3 grey-text'>
+                                                        <MDBCol>
+                                                            <Select
+                                                                value={currentProductCategory}
+                                                                isDisabled={true}
+                                                                className='form-control-md px-0'
+                                                            />
+                                                        </MDBCol>
+                                                    </MDBRow>
+                                                </MDBCol>
+                                            </MDBRow>
+                                            <MDBRow>
+                                                {productViews}
+                                            </MDBRow>
+                                            <div className="text-center">
+                                                <MDBBtn size='sm' color="dark" onClick={this.toggle} >Close</MDBBtn>
+                                                <MDBBtn size='sm' color="dark" outline type='submit'>Save updates</MDBBtn>
+                                            </div>
+                                        </form>
+                                    </MDBCardBody>
+                                </MDBCard>
+                                {
+                                    this.state.notificationShow ?
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                        /> : null
+                                }
+                            </MDBCol>
+                        </MDBRow>
                     </MDBModalBody>
                 </MDBModal>
             </MDBContainer >

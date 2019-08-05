@@ -4,6 +4,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCardBody, MDBCardHead
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
+import { func } from 'prop-types';
+import { promises } from 'dns';
+import { Promise } from 'q';
 
 
 
@@ -35,6 +38,7 @@ class SetCustomerPrices extends Component {
         this.state = {
             customers: [],
             priceGroups: [],
+            customerPrices: [],
             customer: '',
             priceGroup: '',
             notificationMessage: '',
@@ -64,41 +68,90 @@ class SetCustomerPrices extends Component {
             return
         }
         else {
-            let customerId = this.state.customer.value
-            let priceGroupId = this.state.priceGroup.value
+            let { customer, priceGroup, priceGroups } = this.state
+            let customerId = customer.value
+            let priceGroupId = priceGroup.value
+            // console.log(customerId, priceGroupId);
 
-
-            console.log(customerId, priceGroupId);
-            let customerPrice = { customerId: customerId, priceGroupId: priceGroupId }
-
-            var options = {
-                method: 'POST',
-                body: JSON.stringify(customerPrice),
-                headers: { 'Content-Type': 'application/json' }
-            }
-            fetch('/addNewCustomerPrice', options)
+            //validating that customer have not that product's price already
+            let customerPriceGroups = [];
+            let productId, customerAllPrices, create = true;
+            let promise = fetch('/getAllCustomerPrices')
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json)
-                    if (this._isMounted === true) {
-                        this.setState({ notificationMessage: json.message, notificationShow: true })
-                    }
-                    if (json.success === true) {
-
-                        this.setState({
-                            customer: '',
-                            priceGroup: '',
-                        })
-                    }
-                    else {
-                        this.priceGroup.focus();
-                    }
-                    if (this._isMounted === true) {
-                        setTimeout(() => this.setState({ notificationShow: false }), 1502);
-
-                    }
+                    // console.log(json)
+                    this.setState({ customerPrices: json.data })
                 })
                 .catch((error) => console.log(error))
+
+            Promise.all([promise]).then(() => {
+
+                //finding all price-groups assidned to customer
+                customerAllPrices = this.state.customerPrices
+                    .filter(customerPrice => customerPrice.customer_id === customerId);
+
+                //getting customer's price-groups' data
+                customerAllPrices.forEach(customerPrice => {
+                    let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
+                    let priceGroup = a.shift()
+                    customerPriceGroups.push(priceGroup)
+                });
+
+                //finding coming price-group's product-id
+                priceGroups.forEach(priceGroup => {
+                    if (priceGroup.id === priceGroupId) {
+                        productId = priceGroup.product_id
+                    }
+                })
+
+                //validating that customer have not that price-group already
+                customerPriceGroups.forEach(existedPriceGroup => {
+                    if (existedPriceGroup.id === priceGroupId) {
+                        if (this._isMounted === true) {
+                            this.setState({ notificationMessage: 'Customer already have that price-group', notificationShow: true })
+                            setTimeout(() => { this.setState({ notificationShow: false }) }, 1600)
+                        }
+                        create = false
+                        return;
+                    }
+                    else if (existedPriceGroup.product_id === productId) {
+                        if (this._isMounted === true) {
+                            this.setState({ notificationMessage: `Customer already have that product's price.`, notificationShow: true })
+                            setTimeout(() => { this.setState({ notificationShow: false }) }, 1600)
+                        }
+                        create = false
+                        return;
+                    }
+                })
+
+                if (create) {
+                    let customerPrice = { customerId: customerId, priceGroupId: priceGroupId }
+                    var options = {
+                        method: 'POST',
+                        body: JSON.stringify(customerPrice),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/addNewCustomerPrice', options)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            console.log(json)
+                            if (this._isMounted === true) {
+                                this.setState({ notificationMessage: json.message, notificationShow: true })
+                            }
+                            if (json.success === true) {
+
+                                this.setState({
+                                    customer: '',
+                                    priceGroup: '',
+                                })
+                            }
+                            else {
+                                this.priceGroup.focus();
+                            }
+                        })
+                        .catch((error) => console.log(error))
+                }
+            })
         }
     }
 
@@ -198,7 +251,8 @@ class SetCustomerPrices extends Component {
                             this.state.notificationShow ?
                                 <Notification
                                     message={this.state.notificationMessage}
-                                /> : null
+                                />
+                                : null
                         }
                     </MDBCol>
                 </MDBRow>

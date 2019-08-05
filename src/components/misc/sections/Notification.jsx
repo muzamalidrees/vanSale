@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MDBNotification } from "mdbreact";
 
 class Notification extends Component {
-    
+
     render() {
         return (
 
@@ -10,10 +10,12 @@ class Notification extends Component {
                 show
                 fade
                 labelcolor="#2BBBAD"
-                title="Van Sales"
+                title="New Message"
                 closeClassName="blue-grey-text"
                 message={this.props.message}
                 autohide={1500}
+                icon="bell"
+                iconClassName="green-text"
                 style={{
                     // position: "absolute",
                     // left: 50,
@@ -21,6 +23,7 @@ class Notification extends Component {
                     // float:'right'
                 }}
                 bodyClassName="p-2 font-weight-bold"
+                text="just now"
             />
         );
     }

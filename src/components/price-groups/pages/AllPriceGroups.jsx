@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
 import EditPriceGroupModal from './sections/EditPriceGroupModal';
+import ViewPriceGroupModal from './sections/ViewPriceGroupModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
@@ -19,15 +20,7 @@ class AllPriceGroups extends Component {
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllProducts')
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json)
-                if (this._isMounted) {
-                    this.setState({ products: json.data })
-                }
-            })
-            .catch((error) => console.log(error))
+
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
@@ -41,7 +34,6 @@ class AllPriceGroups extends Component {
             priceGroups: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            products: [],
             productCategories: []
         }
     }
@@ -50,6 +42,13 @@ class AllPriceGroups extends Component {
         this._isMounted = false
     }
 
+    handleView = (id) => (e) => {
+        
+        this.refs.viewPriceGroupModal.fetchData(id);
+        this.refs.viewPriceGroupModal.setState({
+            modalShow: true
+        })
+    }
 
     handleEdit = (id) => (e) => {
         this.refs.editPriceGroupModal.setState({
@@ -93,21 +92,14 @@ class AllPriceGroups extends Component {
 
 
     render() {
-        var { priceGroups, products, productCategories } = this.state;
+        var { priceGroups, productCategories } = this.state;
         var rows = [];
         var index = 0;
 
         priceGroups.forEach((priceGroup) => {
 
             index = index + 1;
-            let currentProduct, currentProductCategory;
-            if (products !== '' && products !== null && products !== undefined) {
-                products.forEach(product => {
-                    if (product.id === priceGroup.product_id) {
-                        currentProduct = product.name
-                    }
-                });
-            }
+            let currentProductCategory;
             if (productCategories !== '' && productCategories !== null && productCategories !== undefined) {
                 productCategories.forEach(productCategory => {
                     if (productCategory.id === priceGroup.product_category_id) {
@@ -120,10 +112,10 @@ class AllPriceGroups extends Component {
                     index: index,
                     name: priceGroup.name,
                     category: currentProductCategory,
-                    product: currentProduct,
-                    sellPrice: priceGroup.sell_price,
-                    buyBackPrice: priceGroup.buy_back_price,
                     buttons: <React.Fragment>
+                        <Can I='read' a='PriceGroup'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(priceGroup.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
+                        </Can>
                         <Can I='update' a='PriceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(priceGroup.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         </Can>
@@ -140,9 +132,6 @@ class AllPriceGroups extends Component {
                 { label: '#', field: 'index', },
                 { label: 'Name', field: 'name' },
                 { label: 'Product-Category', field: 'category', },
-                { label: 'Product', field: 'product', },
-                { label: 'Selling-Price', field: 'sellPrice', },
-                { label: 'Buying-back-Price', field: 'buyBackPrice', },
                 { label: 'Action', field: 'buttons' }
             ],
             rows: rows
@@ -161,6 +150,9 @@ class AllPriceGroups extends Component {
                     </MDBDataTable>
                     <EditPriceGroupModal
                         ref='editPriceGroupModal'
+                    />
+                    <ViewPriceGroupModal
+                        ref='viewPriceGroupModal'
                     />
                     <DeleteModal
                         ref='deleteModal'

@@ -83,7 +83,6 @@ class NewProduct extends Component {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
                     if (json.success === true) {
-
                         this.setState({
                             productCategory: '',
                             name: '',

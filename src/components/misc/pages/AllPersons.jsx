@@ -185,7 +185,7 @@ class AllPersons extends Component {
                             dailyMessage: driver.daily_message,
                             buttons: <React.Fragment>
                                 <Can I='read' a='driverInventory'>
-                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(driver.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
+                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(driver.id)} className='m-1 py-1 px-2' outline color='secondary' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
                                 </Can>
                                 <Can I='update' a='driver'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(driver.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
