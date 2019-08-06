@@ -115,9 +115,6 @@ class Header extends React.Component {
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/productcategories/all"><MDBIcon icon="eye" />View Product-Categories</MDBNavLink>
                                         </MDBDropdownItem>
-                                        {/* <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/productPricing/new"><MDBIcon icon="eye" /> Product-Pricing</MDBNavLink>
-                                        </MDBDropdownItem> */}
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>

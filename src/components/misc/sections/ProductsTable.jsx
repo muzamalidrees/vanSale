@@ -63,29 +63,32 @@ class ProductsTable extends Component {
         // document.getElementById('returnProductsContainer').style.display = 'none'
         let salesTable = document.getElementById('saleProductsTable')
         let returnsTable = document.getElementById('returnProductsTable')
-        if (salesTable.rows.length > 1) {
-            for (let index = 1; index < salesTable.rows.length; index++) {
-                const pId = salesTable.rows[index].cells[1].innerHTML;
-                const pRate = salesTable.rows[index].cells[3].innerHTML;
-                const pQty = salesTable.rows[index].cells[4].innerHTML;
-                const pPrice = salesTable.rows[index].cells[5].innerHTML;
+        let salesTableLength = salesTable.rows.length;
+        let returnsTableLength = returnsTable.rows.length;
+
+        if (salesTableLength > 1) {
+            for (var index = salesTableLength - 1; index > 0; index--) {
+                var pId = salesTable.rows[index].cells[1].innerHTML;
+                var pRate = salesTable.rows[index].cells[3].innerHTML;
+                var pQty = salesTable.rows[index].cells[4].innerHTML;
+                var pPrice = salesTable.rows[index].cells[5].innerHTML;
+                // console.log(pId, pRate, pQty, pPrice);
                 this.props.saveSales(pId, pRate, pQty, pPrice);
                 this.props.deleteProductFrmTbl(pPrice, index, 'saleProductsTable', 'saleProductsContainer')
             }
         }
-        if (returnsTable.rows.length > 1) {
-            for (let index = 1; index < returnsTable.rows.length; index++) {
+
+        if (returnsTableLength > 1) {
+            for (var index = returnsTableLength - 1; index > 0; index--) {
                 const pId = returnsTable.rows[index].cells[1].innerHTML;
                 const pRate = returnsTable.rows[index].cells[3].innerHTML;
                 const pQty = returnsTable.rows[index].cells[4].innerHTML;
                 const pPrice = returnsTable.rows[index].cells[5].innerHTML;
                 this.props.saveReturns(pId, pRate, pQty, pPrice);
                 this.props.deleteProductFrmTbl(pPrice, index, 'returnProductsTable', 'returnProductsContainer')
-
             }
         }
         this.props.saveInvoice()
-
     }
 
 

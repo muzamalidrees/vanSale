@@ -31,7 +31,7 @@ class NewSales extends Component {
             this.refs.saleProducts.enableAddProductBtn();
         }
     }
-    
+
     // setting last invoice id
     lastInvoiceIdFetched = (invoiceId) => {
         this.setState({
@@ -44,7 +44,7 @@ class NewSales extends Component {
     }
 
     addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, ) => {
-        console.log(tableId, pId, pName, pRate, pQTY, pPrice);
+        // console.log(tableId, pId, pName, pRate, pQTY, pPrice);
 
         if (tableId === 'saleProductsTable') {
             this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice);
@@ -86,17 +86,18 @@ class NewSales extends Component {
     }
 
     minusFromTotal = (pPrice) => {
-
         this.refs.invoiceDetails.minusTotalValue(pPrice);
     }
 
     addToTotal = (pPrice) => {
-
         this.refs.invoiceDetails.addTotalValue(pPrice);
     }
 
     displayOtherSection = (value) => {
         this.setState({ displayReturnsSection: value })
+        this.refs.returnProducts.setState({
+            disableAddProductBtn: !value
+        })
     }
 
     displaySubmitButton = (value) => {
@@ -104,13 +105,14 @@ class NewSales extends Component {
     }
 
     saveSales = (pId, pRate, pQty, pPrice) => {
-        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
-
-        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+        let { trDate } = this.refs.invoiceDetails.state
+        let { invoiceId, customerId } = this.state
+        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
 
         let sales = {
-            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
+            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
+            invoiceId: invoiceId, customerId: customerId,
+            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -130,7 +132,7 @@ class NewSales extends Component {
             body: JSON.stringify(sales),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/updateSalesItemQty', options2)
+        fetch('/decreaseDriverInventory', options2)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -139,14 +141,14 @@ class NewSales extends Component {
     }
 
     saveReturns = (pId, pRate, pQty, pPrice) => {
-
-        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
-
-        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+        let { trDate } = this.refs.invoiceDetails.state
+        let { invoiceId, customerId } = this.state
+        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
 
         let returns = {
-            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
+            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
+            invoiceId: invoiceId, customerId: customerId,
+            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -166,7 +168,7 @@ class NewSales extends Component {
             body: JSON.stringify(returns),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/updateReturnsItemQty', options2)
+        fetch('/addNewDriverInventory', options2)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -175,9 +177,7 @@ class NewSales extends Component {
     }
 
     saveInvoice = () => {
-        console.log(this.refs.invoiceDetails.state.invoiceId);
         this.refs.invoiceDetails.saveInvoice();
-
     }
 
 

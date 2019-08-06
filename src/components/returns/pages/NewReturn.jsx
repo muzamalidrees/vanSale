@@ -19,11 +19,24 @@ class NewReturn extends Component {
         this.addProductToTbl = this.addProductToTbl.bind(this)
     }
 
-    componentDidMount = () => {
-        let customerId = this.refs.invoiceDetails.state.customer.value
-        {
-            !customerId === undefined ? this.setState({ customerId }) : console.log();
+    // setting customer id and enabling add product button
+    customerSelected = (selectedCustomer) => {
+        if (selectedCustomer === null) {
+            this.refs.returnProducts.disableAddProductBtn();
         }
+        else {
+            this.setState({
+                customerId: selectedCustomer.value
+            })
+            this.refs.returnProducts.enableAddProductBtn();
+        }
+    }
+
+    // setting last invoice id
+    lastInvoiceIdFetched = (invoiceId) => {
+        this.setState({
+            invoiceId: invoiceId
+        })
     }
 
     componentWillUnmount = () => {
@@ -31,11 +44,11 @@ class NewReturn extends Component {
     }
 
     addProductToTbl = (tableId, pId, pName, pRate, pQTY, pPrice, ) => {
-        console.log(tableId, pId, pName, pRate, pQTY, pPrice);
+        // console.log(tableId, pId, pName, pRate, pQTY, pPrice);
 
         if (tableId === 'returnProductsTable') {
             this.refs.returnProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice);
-            this.refs.invoiceDetails.addTotalValue(pPrice);
+            this.refs.invoiceDetails.minusTotalValue(pPrice);
             {
                 this.state.displaySalesSection ?
                     console.log()
@@ -45,17 +58,16 @@ class NewReturn extends Component {
         }
         else {
             this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice)
-            this.refs.invoiceDetails.minusTotalValue(pPrice);
-            // this.refs.saleProductsTable.setState({ askOtherSection: true })
+            this.refs.invoiceDetails.addTotalValue(pPrice);
         }
     }
 
     deleteProductFrmTbl = (price, i, tableId, containerId) => {
         if (tableId === 'returnProductsTable') {
-            this.refs.invoiceDetails.minusTotalValue(price)
+            this.refs.invoiceDetails.addTotalValue(price)
         }
         else {
-            this.refs.invoiceDetails.addTotalValue(price)
+            this.refs.invoiceDetails.minusTotalValue(price)
         }
         let table = document.getElementById(`${tableId}`);
         table.deleteRow(i);
@@ -73,17 +85,18 @@ class NewReturn extends Component {
     }
 
     minusFromTotal = (pPrice) => {
-
         this.refs.invoiceDetails.minusTotalValue(pPrice);
     }
 
     addToTotal = (pPrice) => {
-
         this.refs.invoiceDetails.addTotalValue(pPrice);
     }
 
     displayOtherSection = (value) => {
         this.setState({ displaySalesSection: value })
+        this.refs.saleProducts.setState({
+            disableAddProductBtn: !value
+        })
     }
 
     displaySubmitButton = (value) => {
@@ -91,13 +104,14 @@ class NewReturn extends Component {
     }
 
     saveSales = (pId, pRate, pQty, pPrice) => {
-        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
-
-        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+        let { trDate } = this.refs.invoiceDetails.state
+        let { invoiceId, customerId } = this.state
+        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
 
         let sales = {
-            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
+            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
+            invoiceId: invoiceId, customerId: customerId,
+            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -117,7 +131,7 @@ class NewReturn extends Component {
             body: JSON.stringify(sales),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/updateSalesItemQty', options2)
+        fetch('/decreaseDriverInventory', options2)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -126,14 +140,14 @@ class NewReturn extends Component {
     }
 
     saveReturns = (pId, pRate, pQty, pPrice) => {
-
-        let { trDate, invoiceId, customer, } = this.refs.invoiceDetails.state
-
-        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customer.value);
+        let { trDate } = this.refs.invoiceDetails.state
+        let { invoiceId, customerId } = this.state
+        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
 
         let returns = {
-            pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, trDate: trDate,
-            invoiceId: invoiceId, customerId: customer.value, driverId: this.props.driverId
+            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
+            invoiceId: invoiceId, customerId: customerId,
+            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -153,7 +167,7 @@ class NewReturn extends Component {
             body: JSON.stringify(returns),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/updateReturnsItemQty', options2)
+        fetch('/addNewDriverInventory', options2)
             .then((res) => res.json())
             .then((json) => {
                 console.log(json)
@@ -162,9 +176,7 @@ class NewReturn extends Component {
     }
 
     saveInvoice = () => {
-        console.log(this.refs.invoiceDetails.state.invoiceId);
         this.refs.invoiceDetails.saveInvoice();
-
     }
 
 
@@ -174,7 +186,9 @@ class NewReturn extends Component {
             <React.Fragment>
                 <div style={{ marginTop: '72px', paddingTop: '20px' }}>
                     <InvoiceDetails
-                        ref='invoiceDetails' />
+                        ref='invoiceDetails'
+                        customerSelected={this.customerSelected}
+                        lastInvoiceIdFetched={this.lastInvoiceIdFetched} />
                     < NewTransaction
                         ref='returnProducts'
                         tableId={'returnProductsTable'}
@@ -225,6 +239,5 @@ class NewReturn extends Component {
         );
     }
 }
-
 
 export default NewReturn

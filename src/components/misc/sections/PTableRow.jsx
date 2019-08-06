@@ -28,7 +28,7 @@ class PTableRow extends Component {
     handleBlur = name => e => {
         let { pPrice } = this.state
         let { tableId } = this.props
-        console.log(tableId, pPrice);
+        // console.log(tableId, pPrice);
 
         { tableId === 'saleProductsTable' ? this.props.minusFromTotal(pPrice) : this.props.addToTotal(pPrice) }
 
@@ -39,7 +39,7 @@ class PTableRow extends Component {
             let pPrice = [state.pRate * state.pQTY]
             return { pPrice }
         }, function () {
-            console.log(tableId, this.state.pPrice);
+            // console.log(tableId, this.state.pPrice);
             {
                 this.props.tableId === 'saleProductsTable' ? this.props.addToTotal(parseInt(this.state.pPrice)) :
                     this.props.minusFromTotal(parseInt(this.state.pPrice))

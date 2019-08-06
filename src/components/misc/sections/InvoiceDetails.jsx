@@ -76,7 +76,7 @@ class InvoiceDetails extends Component {
             .then((res) => res.json())
             .then(function (json) {
                 // console.log(json)
-                if (json.data.length !== 0 && this._isMounted) {
+                if (json.data.length !== 0 && currentComponent._isMounted) {
                     let lastInvoiceID = json.data.shift();
                     let id = lastInvoiceID.id;
                     let invoiceId = id + 1
@@ -88,26 +88,30 @@ class InvoiceDetails extends Component {
     }
 
     saveInvoice = () => {
-        console.log('invoice saved');
+        let { trDate, total, customer } = this.state
 
-        // let { trDate, total, customer } = this.state
+        let invoice = {
+            trDate: trDate, total: total, customerId: customer.value,
+            driverId: 7  //  driverId :Number(localStorage.getItem('ui'))
+        }
 
-        // let invoice = { date: trDate, total: total, customerId: customer.value, driverId: this.props.driverId }
-        // var options = {
-        //     method: 'POST',
-        //     body: JSON.stringify(invoice),
-        //     headers: { 'Content-Type': 'application/json' }
-        // }
-        // fetch('/addNewInvoice', options)
-        //     .then((res) => res.json())
-        //     .then((json) => {
-        //         console.log(json)
-        //     })
-        //     .catch((error) => console.log(error))
+        var options = {
+            method: 'POST',
+            body: JSON.stringify(invoice),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/addNewInvoice', options)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+            .catch((error) => console.log(error))
 
-        // this.setState({
-        //     trDate: '', customer: '', total: 0
-        // })
+        this.setState({
+            trDate: new Date(),
+            customer: '',
+            // total: 0
+        })
     }
 
 

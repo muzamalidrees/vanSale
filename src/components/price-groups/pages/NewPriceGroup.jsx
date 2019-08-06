@@ -39,8 +39,11 @@ class NewPriceGroup extends Component {
             productCategories: [],
             notificationMessage: '',
             notificationShow: false,
-            productOptions: []
+            productOptions: [],
+            labelRow: false
         };
+
+        this.handleSelectChange = this.handleSelectChange.bind(this)
     }
 
     componentWillUnmount() {
@@ -55,13 +58,16 @@ class NewPriceGroup extends Component {
                 this.setState({
                     productCategory: selectedOption,
                     productOptions: productOptions,
+                    labelRow: true
                 })
             }
             else {
                 this.setState({
                     productCategory: selectedOption,
-                    selectedProducts: []
+                    selectedProducts: [],
+                    labelRow: false
                 })
+
             }
         }
     }
@@ -171,48 +177,46 @@ class NewPriceGroup extends Component {
         productOptions.forEach(product => productViews.push(productView(product.index, product.id, product.name, product.sellPrice, product.buyBackPrice)))
         function productView(index, id, name, sellPrice, buyBackPrice) {
             return <React.Fragment key={id}>
-                <MDBCol md='6'>
-                    <MDBRow>
-                        <MDBCol md className='mx-2'>
-                            <MDBInput
-                                value={name}
-                                label="Name"
-                                name='name'
-                                type="text"
-                                validate
-                                error="wrong"
-                                success="right"
-                                disabled
-                            />
-                        </MDBCol>
-                        <MDBCol md className='mx-2'>
-                            <MDBInput
-                                onInput={currentComponent.handlePricingInput(index)}
-                                value={sellPrice}
-                                label="Selling-Price"
-                                name='sellPrice'
-                                type="number"
-                                validate
-                                error="wrong"
-                                success="right"
-                                required
-                            />
-                        </MDBCol>
-                        <MDBCol md className='mx-2'>
-                            <MDBInput
-                                onInput={currentComponent.handlePricingInput(index)}
-                                value={buyBackPrice}
-                                label="Buying-back-Price"
-                                name='buyBackPrice'
-                                type="number"
-                                validate
-                                error="wrong"
-                                success="right"
-                                required
-                            />
-                        </MDBCol>
-                    </MDBRow>
-                </MDBCol>
+                <MDBRow>
+                    <MDBCol lg='4' className='mx-2 text-center'>
+                        <MDBInput
+                            value={name}
+                            name='name'
+                            type="text"
+                            validate
+                            error="wrong"
+                            success="right"
+                            disabled
+                            outline
+                        />
+                    </MDBCol>
+                    <MDBCol lg='3' className='mx-2 text-center'>
+                        <MDBInput
+                            onInput={currentComponent.handlePricingInput(index)}
+                            value={sellPrice}
+                            name='sellPrice'
+                            type="number"
+                            validate
+                            error="wrong"
+                            success="right"
+                            required
+                            outline
+                        />
+                    </MDBCol>
+                    <MDBCol lg='4' className='mx-2 text-center'>
+                        <MDBInput
+                            onInput={currentComponent.handlePricingInput(index)}
+                            value={buyBackPrice}
+                            name='buyBackPrice'
+                            type="number"
+                            validate
+                            error="wrong"
+                            success="right"
+                            required
+                            outline
+                        />
+                    </MDBCol>
+                </MDBRow>
             </React.Fragment>
         }
 
@@ -227,7 +231,7 @@ class NewPriceGroup extends Component {
                             </MDBCardHeader>
                             <MDBCardBody className='px-5'>
                                 <form ref='newPriceGroupForm' onSubmit={this.handleSubmit} noValidate>
-                                    <MDBRow center className="grey-text">
+                                    <MDBRow className="grey-text ">
                                         <MDBCol md='4' middle>
                                             <MDBInput
                                                 onInput={this.handleInput}
@@ -260,12 +264,30 @@ class NewPriceGroup extends Component {
                                             </MDBRow>
                                         </MDBCol>
                                     </MDBRow>
-                                    <MDBRow>
-                                        {productViews}
+                                    {this.state.labelRow ?
+                                        <MDBRow >
+                                            <MDBCol lg='8'>
+                                                <MDBRow>
+                                                    <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
+                                                        <label>Product</label>
+                                                    </MDBCol>
+                                                    <MDBCol lg='3' className='mx-2 text-center font-weight-bold'>
+                                                        <label>Selling-Price</label>
+                                                    </MDBCol>
+                                                    <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
+                                                        <label>Buying-back-Price</label>
+                                                    </MDBCol>
+                                                </MDBRow>
+                                                {productViews}
+                                            </MDBCol>
+                                        </MDBRow>
+                                        :
+                                        null}
+                                    <MDBRow >
+                                        <MDBCol md='3'>
+                                            <MDBBtn className='py-0 font-weight-bold form-control' color="dark" outline type='submit'>Submit</MDBBtn>
+                                        </MDBCol>
                                     </MDBRow>
-                                    <div className="text-center">
-                                        <MDBBtn size='sm' color="dark" outline type='submit'>Submit</MDBBtn>
-                                    </div>
                                 </form>
                             </MDBCardBody>
                         </MDBCard>

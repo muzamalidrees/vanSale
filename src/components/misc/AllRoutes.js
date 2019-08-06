@@ -10,7 +10,6 @@ import ProductCategories from '../product-categories/ProductCategories';
 import Customers from '../customers/Customers';
 import PriceGroups from '../price-groups/PriceGroups';
 import CustomerPricing from '../customer-pricing/CustomerPricing';
-import ProductPricing from '../product-pricing/ProductPricing';
 import DriverRouting from '../driver-routing/DriverRouting';
 import Drivers from '../drivers/Drivers';
 import Operators from '../operators/Operators';
@@ -62,7 +61,6 @@ class AllRoutes extends Component {
                         <Route path="/customers" component={Customers} />
                         <Route path="/priceGroups" component={PriceGroups} />
                         <Route path="/customerPricing" component={CustomerPricing} />
-                        <Route path="/productPricing" component={ProductPricing} />
                         <Route path="/driverRouting" component={DriverRouting} />
                         <Route path="/drivers" component={Drivers} />
                         <Route path="/operators" component={Operators} />

@@ -59,6 +59,7 @@ class NewTransaction extends Component {
             customerPrices: [],
             priceGroups: [],
             productPrices: [],
+            disableAddProductBtn: true
         }
         this.handleProductSubmit = this.handleProductSubmit.bind(this)
     }
@@ -70,15 +71,14 @@ class NewTransaction extends Component {
     //enabling add product button and setting validating label empty
     enableAddProductBtn = () => {
         this.message.innerHTML = ''
-        this.addProductBtn.disabled = false
-        this.addProductBtn.classList.remove('disabled')
+        this.setState({ disableAddProductBtn: false })
     }
 
     //disabling add product button and setting validating label value
     disableAddProductBtn = () => {
         this.message.innerHTML = 'Please select customer first.'
-        this.addProductBtn.disabled = true
-        this.addProductBtn.classList.add('disabled')
+        this.setState({ disableAddProductBtn: true })
+
     }
 
     //handling changing inputs
@@ -97,6 +97,9 @@ class NewTransaction extends Component {
 
         if (selectedOption !== null) {
             this.setProductRate(selectedOption.value)
+        }
+        else {
+            this.setState({ rate: '', qty: '' })
         }
     }
 
@@ -121,11 +124,10 @@ class NewTransaction extends Component {
             this.setState({ product: '' })
         }
         else {
-            let customerPriceGroups = [];
-            let productCategory
+            let customerAllPrices, customerPriceGroups = [], productCategoryId, desiredPriceGroup, productPrice
 
             //finding all price-groups assidned to customer
-            let customerAllPrices = customerPrices
+            customerAllPrices = customerPrices
                 .filter(customerPrice => customerPrice.customer_id === customerId);
 
             //getting customer's price-groups' data
@@ -138,19 +140,17 @@ class NewTransaction extends Component {
             //finding selected product's category
             products.forEach(product => {
                 if (product.id === pId) {
-                    productCategory = product.product_category_id;
+                    productCategoryId = product.product_category_id;
                 }
             });
 
-            //finding price-group that holds this productCategory from customer's price-groups
-            let desiredPriceGroup = customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategory)
-            console.log(desiredPriceGroup);
+            //finding price-group from customer's price-groups that holds this productCategory
+            desiredPriceGroup = (customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategoryId)).shift()
 
             //finding prices
-            let productPrice = productPrices.filter(productPrice =>
-                productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId
+            productPrice = (productPrices.filter(productPrice =>
+                (productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId)).shift()
             )
-            console.log(productPrice);
 
             //setting selling and returning rates
             if (tableId === 'saleProductsTable') {
@@ -162,7 +162,7 @@ class NewTransaction extends Component {
         }
     }
 
-    //adding product to table
+    //handling product submission
     handleProductSubmit = (e) => {
 
         //preventing default behaviour of form submit
@@ -184,10 +184,13 @@ class NewTransaction extends Component {
 
         //checking product's qty in stock
         else if (this.props.tableId === 'saleProductsTable') {
-            let driver = this.props.driverId
-            let checkQty = { driver: driver, product: this.state.product.value }
+            // let driverId = Number(localStorage.getItem('ui'))
+            let driverId = 7
+            let checkQty = { driverId: driverId, productId: this.state.product.value }
+            // console.log(checkQty);
+
             let options = {
-                method: 'GET',
+                method: 'POST',
                 body: JSON.stringify(checkQty),
                 headers: { 'Content-Type': 'application/json' }
             }
@@ -198,37 +201,44 @@ class NewTransaction extends Component {
                     let stock = json.qty;
                     if (this.state.qty > stock) {
                         alert("Maximum Available Qty of " + this.state.product.label + " is: " + stock)
-                        this.refs.qty.focus();
+                        this.qty.focus();
                         return;
+                    }
+                    else {
+                        this.addProductToTable()
                     }
                 })
                 .catch((error) => console.log(error))
         }
-
-        // adding product to table
         else {
-            let pId = this.state.product.value;
-            let pName = this.state.product.label;
-            let pRate = this.state.rate;
-            let pQTY = this.state.qty
-            let pPrice = this.price.value;
-            let tableId = this.props.tableId
-            // console.log(pId, pRate, pQTY, pPrice, trDate);
-
-            this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice);
-
-            //setting table display.
-            document.getElementById(`${this.props.containerId}`).style.display = '';
-
-            // setting form again empty
-            this.setState({
-                product: '',
-                rate: '',
-                qty: '',
-            })
+            this.addProductToTable()
         }
+
     }
 
+    addProductToTable = () => {
+        // adding product to table
+        let { product, rate, qty, } = this.state
+        let pId = product.value;
+        let pName = product.label;
+        let pRate = rate;
+        let pQTY = qty
+        let pPrice = this.price.value;
+        let tableId = this.props.tableId
+        // console.log(pId, pName, pRate, pQTY, pPrice, tableId);
+
+        this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice);
+
+        // setting table display.
+        document.getElementById(`${this.props.containerId}`).style.display = '';
+
+        // setting form again empty
+        this.setState({
+            product: '',
+            rate: '',
+            qty: '',
+        })
+    }
 
 
     render() {
@@ -304,6 +314,7 @@ class NewTransaction extends Component {
                                                 onInput={this.handleInput}
                                                 outline required
                                                 onKeyPress={this.onKeyPress}
+                                                disabled
                                             />
 
                                         </MDBCol>
@@ -313,7 +324,7 @@ class NewTransaction extends Component {
                                                 value={qty}
                                                 label='Qty.'
                                                 name='qty'
-                                                ref='qty'
+                                                inputRef={el => this.qty = el}
                                                 onInput={this.handleInput}
                                                 outline required
                                                 onKeyPress={this.onKeyPress}
@@ -333,15 +344,13 @@ class NewTransaction extends Component {
                                         <MDBCol size='lg' className=''>
                                             <label style={{ color: 'red' }} className='mb-0 p-0' ref={el => this.message = el}></label>
                                             <MDBBtn
-                                                // id='addProductbtn'
-                                                innerRef={el => this.addProductBtn = el}
                                                 size='sm'
                                                 color="dark"
                                                 className='font-weight-bold form-control ml-0 '
                                                 style={{ fontSize: '13px', borderRadius: '5px', marginTop: '1px' }}
                                                 type='submit'
                                                 outline
-                                                disabled
+                                                disabled={this.state.disableAddProductBtn}
                                             >
                                                 Add Product
                                             </MDBBtn>
