@@ -55,6 +55,7 @@ class NewReturn extends Component {
                     :
                     this.refs.returnProductsTable.setState({ askOtherSection: true })
             }
+
         }
         else {
             this.refs.saleProductsTable.addProductToTbl(pId, pName, pRate, pQTY, pPrice)
@@ -62,12 +63,14 @@ class NewReturn extends Component {
         }
     }
 
-    deleteProductFrmTbl = (price, i, tableId, containerId) => {
+    deleteProductFrmTbl = (price, i, tableId, containerId, pId) => {
         if (tableId === 'returnProductsTable') {
             this.refs.invoiceDetails.addTotalValue(price)
+            this.refs.returnProducts.setAlreadyAddedProducts(pId)
         }
         else {
             this.refs.invoiceDetails.minusTotalValue(price)
+            this.refs.saleProducts.setAlreadyAddedProducts(pId)
         }
         let table = document.getElementById(`${tableId}`);
         table.deleteRow(i);
@@ -125,18 +128,6 @@ class NewReturn extends Component {
                 console.log(json)
             })
             .catch((error) => console.log(error))
-
-        var options2 = {
-            method: 'PUT',
-            body: JSON.stringify(sales),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/decreaseDriverInventory', options2)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
     }
 
     saveReturns = (pId, pRate, pQty, pPrice) => {
@@ -161,22 +152,15 @@ class NewReturn extends Component {
                 console.log(json)
             })
             .catch((error) => console.log(error))
-
-        var options2 = {
-            method: 'PUT',
-            body: JSON.stringify(returns),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewDriverInventory', options2)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
     }
 
     saveInvoice = () => {
+        this.setState({
+            customerId: '',
+            invoiceId: this.state.invoiceId + 1
+        })
         this.refs.invoiceDetails.saveInvoice();
+        this.refs.returnProducts.setAlreadyAddedProducts(null)
     }
 
 
@@ -188,7 +172,8 @@ class NewReturn extends Component {
                     <InvoiceDetails
                         ref='invoiceDetails'
                         customerSelected={this.customerSelected}
-                        lastInvoiceIdFetched={this.lastInvoiceIdFetched} />
+                        lastInvoiceIdFetched={this.lastInvoiceIdFetched}
+                    />
                     < NewTransaction
                         ref='returnProducts'
                         tableId={'returnProductsTable'}

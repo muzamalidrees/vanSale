@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon, MDBNavLink } from 'mdbreact';
-// import ViewInvoiceModal from './sections/ViewInvoiceModal';
-// import EditInvoiceModal from './sections/EditInvoiceModal';
+import ViewInvoiceModal from './sections/ViewInvoiceModal';
+import EditInvoiceModal from './sections/EditInvoiceModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from '../../../configs/Ability-context'
 
@@ -14,14 +14,45 @@ class AllInvoices extends Component {
         fetch('/getAllInvoices')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ invoices: json.data })
                 }
             })
             .catch((error) => console.log(error))
+        fetch('/getAllCustomers')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ customers: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+        fetch('/getAllUsers')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ users: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+        fetch('/getAllRoles')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ roles: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
+
         this.state = {
             invoices: [],
+            customers: [],
+            users: [],
+            roles: [],
             rowToBeDeleted: '',
             dRowValue: ''
         }
@@ -75,18 +106,95 @@ class AllInvoices extends Component {
                 console.log(json)
             })
             .catch((error) => console.log(error))
+
+        let sales, returns,
+            a = fetch('/getSpecificSales/' + dRowValue)
+                .then((res) => res.json())
+                .then((json) => {
+                    // console.log(json)
+                    sales = json.data
+                })
+                .catch((error) => console.log(error)),
+
+            b = fetch('/getSpecificReturns/' + dRowValue)
+                .then((res) => res.json())
+                .then((json) => {
+                    // console.log(json)
+                    returns = json.data
+                })
+                .catch((error) => console.log(error))
+
+        Promise.all([a, b])
+            .then(() => {
+                sales.forEach(sale => {
+                    let Sale = { value: sale.id }
+                    let options = {
+                        method: 'DELETE',
+                        body: JSON.stringify(Sale),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/deleteSale', options)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            console.log(json)
+                        })
+                        .catch((error) => console.log(error))
+                })
+
+                returns.forEach(Return => {
+                    let _return = { value: Return.id }
+                    let options = {
+                        method: 'DELETE',
+                        body: JSON.stringify(_return),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/deleteReturn', options)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            console.log(json)
+                        })
+                        .catch((error) => console.log(error))
+                })
+            })
     }
 
 
 
     render() {
-        var { invoices } = this.state;
+        var { invoices, customers, users, roles } = this.state;
+
         var rows = [];
         var index = 0;
+        let roleId;
+
+        if (roles !== '' && roles !== null && roles !== undefined) {
+            roles.forEach(role => {
+                if (role.name === 'driver') {
+                    roleId = role.id
+                }
+            })
+        }
+        let drivers = users.filter(user => user.role_id === roleId)
+
         invoices.forEach((invoice) => {
 
             index = index + 1;
-            let invoiceDate;
+            let currentCustomer, invoiceDate, currentDriver
+            if (customers !== '' && customers !== null && customers !== undefined) {
+                customers.forEach(customer => {
+                    if (customer.id === invoice.customer_id) {
+                        currentCustomer = customer.name
+                    }
+                });
+            }
+            if (drivers !== '' && drivers !== null && drivers !== undefined) {
+                drivers.forEach(driver => {
+                    if (driver.id === invoice.driver_id) {
+                        currentDriver = driver.name
+                    }
+                });
+            }
+
             if (invoice.date === null) {
                 invoiceDate = '';
             }
@@ -97,11 +205,13 @@ class AllInvoices extends Component {
                 {
                     index: index,
                     date: invoiceDate,
-                    customer: invoice.customer_id,
-                    driver: invoice.driver_id,
+                    customer: currentCustomer,
+                    driver: currentDriver,
                     total: invoice.total,
                     buttons: <React.Fragment>
+                        {/* <Can I='read' a='invoice'> */}
                         <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(invoice.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
+                        {/* </Can> */}
                         {/* <Can I='update' a='invoice'> */}
                         <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(invoice.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                         {/* </Can> */}
@@ -131,15 +241,15 @@ class AllInvoices extends Component {
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
                     <MDBDataTable id='invoicesTable' striped small hover theadColor="dark"
-                        bordered btn entries={15} entriesOptions={[10, 20, 35, 55, 70, 100, 135]} responsive
+                        bordered btn entries={10} entriesOptions={[10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
-                    {/* <ViewInvoiceModal
+                    <ViewInvoiceModal
                         ref='viewInvoiceModal'
                     />
                     <EditInvoiceModal
                         ref='editInvoiceModal'
-                    /> */}
+                    />
                     <DeleteModal
                         ref='deleteModal'
                         deleteEntry={this.deleteInvoice}

@@ -22,13 +22,16 @@ class DeleteModal extends Component {
     render() {
         return (
             <MDBContainer>
-                <MDBModal modalStyle="danger" className="text-white" size="sm" centered backdrop={false} isOpen={this.state.modalShow}
+                <MDBModal modalStyle="danger" className="text-white" size="md" centered backdrop={true} isOpen={this.state.modalShow}
                     toggle={this.toggle}>
                     <MDBModalHeader className="text-center" titleClass="w-100" tag="p" toggle={this.toggle}>
-                        Are you sure?
+                        <b>
+                            Are you sure?
+                        </b><br></br>
+                        Record will be deleted permanently.
                     </MDBModalHeader>
                     <MDBModalBody className="text-center">
-                        <MDBIcon icon="times" size="4x" className="animated rotateIn" />
+                        <MDBIcon icon="times" size="6x" className="animated rotateIn" />
                     </MDBModalBody>
                     <MDBModalFooter className="justify-content-center">
                         <MDBBtn color="danger" onClick={this.deleteEntry}>Yes</MDBBtn>

@@ -110,7 +110,7 @@ class InvoiceDetails extends Component {
         this.setState({
             trDate: new Date(),
             customer: '',
-            // total: 0
+            total: 0
         })
     }
 
@@ -142,7 +142,6 @@ class InvoiceDetails extends Component {
             <MDBRow className='m-0 p-0' center>
                 <MDBCol lg='2' className='mb-3' middle >
                     <DatePicker
-                        id='datePicker'
                         selected={trDate}
                         placeholderText='Date'
                         onChange={this.handleDateChange}

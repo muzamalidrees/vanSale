@@ -217,6 +217,16 @@ class InventoryHistory extends Component {
                         bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                         data={data} theadTextWhite >
                     </MDBDataTable>
+                    <b> FTO :</b> factory to operator&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> OTD :</b> operator to driver&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> R.DTO :</b> Return driver to operator&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> R.OTF :</b> Return operator to factory&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> R.New :</b> new return customer to driver&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> R.Update :</b> customer's return update&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> R.Delete :</b> customer's return deleted&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> S.New :</b> new sale driver to customer&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> S.Update :</b> driver's sale update&nbsp;&nbsp;&nbsp;&nbsp;
+                    <b> S.Delete :</b> driver's sale deleted
                     <DeleteModal
                         ref='deleteModal'
                         deleteEntry={this.deleteInventoryHistory}

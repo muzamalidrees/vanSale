@@ -137,7 +137,7 @@ class NewInventory extends Component {
                     productId: product.value, qty: qty, flag: 'OTD'
                 }
 
-                console.log(history);
+                // console.log(history);
 
                 var historyOptions = {
                     method: 'POST',
@@ -322,7 +322,7 @@ class NewInventory extends Component {
                                 </MDBRow>
                                 <MDBRow className='mb-5'>
                                     <MDBCol sm='1' className=''>
-                                        <MDBIcon icon="user-tie" size='2x' />
+                                        <MDBIcon icon="box-open" size='2x' />
                                     </MDBCol>
                                     <MDBCol className=''>
                                         {/* {showOptions ? */}

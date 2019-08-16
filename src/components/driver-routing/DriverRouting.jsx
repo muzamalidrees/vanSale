@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 // import { Can } from "../../configs/Ability-context";
 import SecuredSetDriverRoutes from './SecuredSetDriverRoutes';
-import AllDriverRoutes from './pages/AllDriverRoutes';
+import SecuredAllDriverRoutes from './SecuredAllDriverRoutes';
 
 
 
@@ -25,7 +25,7 @@ class DriverRouting extends Component {
             // </div>
             <Switch>
                 <Route path="/driverRouting/new" component={SecuredSetDriverRoutes} />
-                <Route path="/driverRouting/all" component={AllDriverRoutes} />
+                <Route path="/driverRouting/all" component={SecuredAllDriverRoutes} />
             </Switch>
 
         )

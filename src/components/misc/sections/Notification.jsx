@@ -13,15 +13,8 @@ class Notification extends Component {
                 title="New Message"
                 closeClassName="blue-grey-text"
                 message={this.props.message}
-                autohide={1500}
-                icon="bell"
-                iconClassName="green-text"
-                style={{
-                    // position: "absolute",
-                    // left: 50,
-                    // right: 50,
-                    // float:'right'
-                }}
+                icon={`${this.props.icon}`}
+                iconClassName="text-info"
                 bodyClassName="p-2 font-weight-bold"
                 text="just now"
             />

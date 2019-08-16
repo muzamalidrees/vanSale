@@ -19,9 +19,10 @@ class App extends React.Component {
     this.state = {
       loggedIn: '',
       roles: [],
+      user: ''
     }
 
-    fetch('/getAllRoles')
+    let a = fetch('/getAllRoles')
       .then((res) => res.json())
       .then((json) => {
         // console.log(json)
@@ -31,11 +32,11 @@ class App extends React.Component {
         console.log(err);
       }))
 
-    fetch('/isAuth')
+    let b = fetch('/isAuth')
       .then((res) => res.json())
       .then((json) => {
         // console.log(json)
-        this.setState({ loggedIn: json.loggedIn }, function () {
+        this.setState({ loggedIn: json.loggedIn, user: json.user }, function () {
           if (json.loggedIn === false) {
             if (localStorage.getItem('ui') || localStorage.getItem('uri')) {
               localStorage.removeItem('ui')
@@ -43,11 +44,18 @@ class App extends React.Component {
             }
           }
         })
-        this.changeUser(json.user.role_id);
       })
       .catch((err => {
         // console.log(err);
       }))
+
+    Promise.all([a, b]).then(() => {
+
+      let { user } = this.state
+      if (user !== undefined && user !== null) {
+        this.changeUser(user.role_id);
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -71,6 +79,7 @@ class App extends React.Component {
 
   changeUser = (x) => {
     let userRole;
+
     this.state.roles.forEach(role => {
       if (role.id === x) {
         userRole = role.name

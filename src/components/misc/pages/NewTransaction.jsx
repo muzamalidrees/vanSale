@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { MDBInput, MDBBtn, MDBRow, MDBCol, MDBContainer, MDBCard, MDBCardBody, MDBCardHeader } from 'mdbreact';
 import Select from 'react-select';
 import { Can } from '../../../configs/Ability-context'
+import ScanProductModal from '../sections/ScanProductModal'
+import Notification from '../sections/Notification'
 
 
 
@@ -59,7 +61,10 @@ class NewTransaction extends Component {
             customerPrices: [],
             priceGroups: [],
             productPrices: [],
-            disableAddProductBtn: true
+            disableAddProductBtn: true,
+            notificationMessage: '',
+            notificationShow: false,
+            alreadyAdded: []
         }
         this.handleProductSubmit = this.handleProductSubmit.bind(this)
     }
@@ -110,7 +115,29 @@ class NewTransaction extends Component {
 
     //handling scanning products
     handleScanProduct = () => {
+        this.refs.scanProductModal.setState({
+            modalShow: true
+        })
+    }
 
+    //selecting product using barcode
+    productScanned = (barcode) => {
+        let { products } = this.state
+        let product = products.filter(product => product.barcode === barcode).shift()
+        if (product !== undefined && product !== null) {
+            this.handleSelectChange({ label: product.name, value: product.id })
+        }
+        else {
+            this.setState({
+                notificationMessage: 'Product against that barcode not found.',
+                notificationShow: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    notificationShow: false
+                })
+            }, 1602);
+        }
     }
 
     //setting product rate on selecting products
@@ -124,6 +151,7 @@ class NewTransaction extends Component {
             this.setState({ product: '' })
         }
         else {
+            this.message.innerHTML = ''
             let customerAllPrices, customerPriceGroups = [], productCategoryId, desiredPriceGroup, productPrice
 
             //finding all price-groups assidned to customer
@@ -218,7 +246,7 @@ class NewTransaction extends Component {
 
     addProductToTable = () => {
         // adding product to table
-        let { product, rate, qty, } = this.state
+        let { product, rate, qty, alreadyAdded } = this.state
         let pId = product.value;
         let pName = product.label;
         let pRate = rate;
@@ -227,10 +255,30 @@ class NewTransaction extends Component {
         let tableId = this.props.tableId
         // console.log(pId, pName, pRate, pQTY, pPrice, tableId);
 
+        //checking if product already exists in table
+        let found = alreadyAdded.find(function (element) {
+            return element === pId;
+        });
+        if (found) {
+            this.message.innerHTML = 'You already added this product, please only update the quantity.'
+            this.product.focus()
+            return
+        }
+
         this.props.addProductToTbl(tableId, pId, pName, pRate, pQTY, pPrice);
 
         // setting table display.
-        document.getElementById(`${this.props.containerId}`).style.display = '';
+        if (this.props.containerId !== null) {
+            document.getElementById(`${this.props.containerId}`).style.display = '';
+        }
+
+        //push this product to already added products
+        this.setState(state => {
+            var alreadyAdded = [...state.alreadyAdded, pId]
+            return {
+                alreadyAdded
+            };
+        });
 
         // setting form again empty
         this.setState({
@@ -238,6 +286,24 @@ class NewTransaction extends Component {
             rate: '',
             qty: '',
         })
+
+        //setting message value empty if not
+        this.message.innerHTML = ''
+    }
+
+    setAlreadyAddedProducts = (pId) => {
+        if (pId === null) {
+            this.setState({
+                alreadyAdded: []
+            })
+        }
+        else {
+            this.setState({
+                alreadyAdded: this.state.alreadyAdded.filter(function (element) {
+                    return element !== pId;
+                })
+            });
+        }
     }
 
 
@@ -260,7 +326,7 @@ class NewTransaction extends Component {
         if (showOptions) {
 
             productOptions = products.map(product => ({
-                key: product.id, label: product.name, value: product.id
+                key: product.id, label: product.name, value: product.id,
             }));
         }
 
@@ -280,6 +346,8 @@ class NewTransaction extends Component {
                                         <legend className='legend-border'></legend> */}
                                     <MDBRow className=' p-0'>
                                         <MDBCol lg='3' className='3' middle >
+                                            {this.state.notificationShow ?
+                                                <Notification message={this.state.notificationMessage} icon='bell' /> : null}
                                             <Select
                                                 styles={productStyles}
                                                 value={product}
@@ -289,6 +357,7 @@ class NewTransaction extends Component {
                                                 isSearchable
                                                 isClearable
                                                 className='form-control-md'
+                                                ref={el => this.product = el}
                                             >
                                             </Select>
                                         </MDBCol>
@@ -359,6 +428,10 @@ class NewTransaction extends Component {
                                     {/* </fieldset> */}
                                 </form >
                             </MDBCardBody>
+                            <ScanProductModal
+                                ref='scanProductModal'
+                                selectProduct={this.productScanned}
+                            />
                         </MDBCard>
                     </MDBCol>
                 </MDBRow>

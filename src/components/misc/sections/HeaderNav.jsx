@@ -88,6 +88,16 @@ class Header extends React.Component {
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/roles/all"><MDBIcon icon="eye" /> User's Roles</MDBNavLink>
                                         </MDBDropdownItem>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/permissions/new"><MDBIcon icon="plus" /> Create new Permission</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        {/* </Can> */}
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/permissions/all"><MDBIcon icon="eye" /> Roles' Permissions</MDBNavLink>
+                                        </MDBDropdownItem>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/rolePermissioning/new"><MDBIcon icon="pencil-alt" /> Role Permissioning</MDBNavLink>
+                                        </MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBNavItem>
@@ -144,7 +154,7 @@ class Header extends React.Component {
                                         </MDBDropdownItem>
                                         {/* <Can I='set' a='customer-price'> */}
                                         <MDBDropdownItem>
-                                            <MDBNavLink style={{ color: '#000000' }} to="/customerPricing/new"><MDBIcon icon="eye" /> Customer-Pricing</MDBNavLink>
+                                            <MDBNavLink style={{ color: '#000000' }} to="/customerPricing/new"><MDBIcon icon="pencil-alt" /> Customer-Pricing</MDBNavLink>
                                         </MDBDropdownItem>
                                         {/* </Can> */}
                                     </MDBDropdownMenu>

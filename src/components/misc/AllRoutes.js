@@ -5,12 +5,14 @@ import SecuredLogin from '../auth/SecuredLogin';
 import SecuredHome from '../home/SecuredHome';
 import Users from '../users/Users';
 import Roles from '../roles/Roles';
+import Permissions from '../permissions/Permissions';
 import Products from '../products/Products';
 import ProductCategories from '../product-categories/ProductCategories';
 import Customers from '../customers/Customers';
 import PriceGroups from '../price-groups/PriceGroups';
 import CustomerPricing from '../customer-pricing/CustomerPricing';
 import DriverRouting from '../driver-routing/DriverRouting';
+import RolePermissioning from '../rolePermissioning/RolePermissioning';
 import Drivers from '../drivers/Drivers';
 import Operators from '../operators/Operators';
 import Inventory from '../inventory/Inventory';
@@ -56,6 +58,8 @@ class AllRoutes extends Component {
                         <Route path="/home" component={SecuredHome} />
                         <Route path="/users" component={Users} />
                         <Route path="/roles" component={Roles} />
+                        <Route path="/permissions" component={Permissions} />
+                        <Route path="/rolePermissioning" component={RolePermissioning} />RolePermissioning
                         <Route path="/products" component={Products} />
                         <Route path="/productCategories" component={ProductCategories} />
                         <Route path="/customers" component={Customers} />

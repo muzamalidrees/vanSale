@@ -15,13 +15,13 @@ class PTableRow extends Component {
     }
 
     deleteRowfn(e) {
-        let { tableId, containerId } = this.props
+        let { tableId, containerId, id } = this.props
         let el = e.target
         let row = el.closest('tr')
 
         let i = row.rowIndex;
         let price = row.cells[5].innerHTML;
-        this.props.deleteProductFrmTbl(price, i, tableId, containerId);
+        this.props.deleteProductFrmTbl(price, i, tableId, containerId, id);
 
     }
 
@@ -58,7 +58,7 @@ class PTableRow extends Component {
     render() {
 
 
-        let { index, pId, pName, pRate, pQTY, } = this.props
+        let { index, pId, pName, pRate, pQTY,id } = this.props
 
         return (
 
@@ -72,6 +72,7 @@ class PTableRow extends Component {
                 <td>
                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.deleteRowfn.bind(this)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                 </td>
+                <td style={{ display: 'none' }}>{id}</td>
             </tr >
         );
     }

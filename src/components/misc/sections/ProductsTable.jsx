@@ -15,6 +15,7 @@ class ProductsTable extends Component {
     }
 
     addProductToTbl = (pId, pName, pRate, pQTY, pPrice, ) => {
+
         var row = [];
         let index = this.state.Rows.length + 1;
         row.push(
@@ -26,7 +27,7 @@ class ProductsTable extends Component {
                 pQTY={pQTY}
                 pPrice={pPrice}
                 key={Math.random()}
-                id={Math.random()}
+                id={pId}
                 tableId={this.props.tableId}
                 containerId={this.props.containerId}
                 deleteProductFrmTbl={this.props.deleteProductFrmTbl}
@@ -34,6 +35,7 @@ class ProductsTable extends Component {
                 addToTotal={this.props.addToTotal}
             />
         );
+
         this.setState(state => {
             var Rows = [...state.Rows, row]
             return {
