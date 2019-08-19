@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PTableRow from './PTableRow';
 import { MDBTable, MDBTableHead, MDBTableBody, MDBCol, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBRow, MDBContainer } from 'mdbreact';
+import PrintInvoiceModal from './PrintInvoiceModal'
 
 
 class ProductsTable extends Component {
@@ -10,6 +11,8 @@ class ProductsTable extends Component {
         this.state = {
             Rows: [],
             askOtherSection: false,
+            sales: [],
+            returns: []
         }
         this.addProductToTbl = this.addProductToTbl.bind(this);
     }
@@ -59,8 +62,7 @@ class ProductsTable extends Component {
 
 
     handleSubmit = () => {
-        this.props.displayOtherSection(false);
-        this.props.displaySubmitButton(false);
+        let sales = [], returns = [];
         // document.getElementById('saleProductsContainer').style.display = 'none'
         // document.getElementById('returnProductsContainer').style.display = 'none'
         let salesTable = document.getElementById('saleProductsTable')
@@ -75,8 +77,9 @@ class ProductsTable extends Component {
                 var pQty = salesTable.rows[index].cells[4].innerHTML;
                 var pPrice = salesTable.rows[index].cells[5].innerHTML;
                 // console.log(pId, pRate, pQty, pPrice);
-                this.props.saveSales(pId, pRate, pQty, pPrice);
-                this.props.deleteProductFrmTbl(pPrice, index, 'saleProductsTable', 'saleProductsContainer')
+                let sale = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, index: index }
+                sales.push(sale)
+                // console.log(sales);
             }
         }
 
@@ -86,10 +89,38 @@ class ProductsTable extends Component {
                 const pRate = returnsTable.rows[index].cells[3].innerHTML;
                 const pQty = returnsTable.rows[index].cells[4].innerHTML;
                 const pPrice = returnsTable.rows[index].cells[5].innerHTML;
-                this.props.saveReturns(pId, pRate, pQty, pPrice);
-                this.props.deleteProductFrmTbl(pPrice, index, 'returnProductsTable', 'returnProductsContainer')
+                let Return = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, index: index }
+                returns.push(Return)
+                // console.log(returns);
             }
         }
+        this.setState({
+            sales: sales,
+            returns: returns
+        })
+        
+        let invoiceDetails = this.props.fetchInvoiceDetails();
+
+        this.refs.printInvoiceModal.setState({
+            sales: sales,
+            returns: returns,
+            invoiceDetails: invoiceDetails,
+            modalShow: true,
+        })
+    }
+
+    saveData = () => {
+        let { sales, returns } = this.state
+        sales.forEach(sale => {
+            this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice);
+            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer')
+        })
+        returns.forEach(Return => {
+            this.props.saveSales(Return.pId, Return.pRate, Return.pQty, Return.pPrice);
+            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer')
+        })
+        this.props.displaySubmitButton(false);
+        this.props.displayOtherSection(false);
         this.props.saveInvoice()
     }
 
@@ -155,6 +186,10 @@ class ProductsTable extends Component {
                                         Submit
                                     </MDBBtn>
                                 </div>
+                                <PrintInvoiceModal
+                                    ref='printInvoiceModal'
+                                    saveData={this.saveData}
+                                />
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

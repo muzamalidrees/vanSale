@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import { Can } from '../../../configs/Ability-context'
+import Notification from './Notification'
 
 
 
@@ -29,7 +30,9 @@ class InvoiceDetails extends Component {
             customer: '',
             customers: [],
             total: 0,
-            invoiceId: 1
+            invoiceId: 1,
+            notificationMessage: '',
+            notificationShow: false
         }
     }
 
@@ -44,7 +47,18 @@ class InvoiceDetails extends Component {
     }
 
     handleSelectChange = selectedOption => {
-
+        if (selectedOption !== null) {
+            this.setState({
+                notificationMessage: selectedOption.message,
+                notificationShow: true
+            })
+            setTimeout(() => this.setState({ notificationShow: false }), 15002);
+        }
+        else {
+            this.setState({
+                notificationShow: false
+            })
+        }
         this.setState({
             customer: selectedOption
         })
@@ -131,7 +145,8 @@ class InvoiceDetails extends Component {
         var customerOptions;
         if (customers !== '' || customers !== null || customers !== undefined) {
             customerOptions = customers.map(customer => ({
-                key: customer.id, label: customer.name, value: customer.id
+                key: customer.id, label: customer.name, value: customer.id, message: customer.driver_message,
+                invoiceMessage: customer.invoice_message, shop: customer.shop_name, cell: customer.cell, address: customer.address
             }));
         }
 
@@ -168,6 +183,13 @@ class InvoiceDetails extends Component {
                         ref='customerSelect'
                     >
                     </Select>
+                    {
+                        this.state.notificationShow ?
+                            <Notification
+                                message={this.state.notificationMessage}
+                                icon={"envelope"}
+                            /> : null
+                    }
                 </MDBCol>
                 <MDBCol lg='2' className='mb-3' >
                     <MDBInput

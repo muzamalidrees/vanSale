@@ -23,6 +23,9 @@ class NewSales extends Component {
     customerSelected = (selectedCustomer) => {
         if (selectedCustomer === null) {
             this.refs.saleProducts.disableAddProductBtn();
+            this.setState({
+                customerId: ''
+            })
         }
         else {
             this.setState({
@@ -162,6 +165,15 @@ class NewSales extends Component {
         this.refs.saleProducts.setAlreadyAddedProducts(null)
     }
 
+    fetchInvoiceDetails = () => {
+        let trDate = this.refs.invoiceDetails.state.trDate
+        let total = this.refs.invoiceDetails.state.total
+        let customer = this.refs.invoiceDetails.state.customer
+        let invoiceId = this.refs.invoiceDetails.state.invoiceId
+        let invoiceDetails = { total: total, invoiceId: invoiceId, customer: customer, trDate: trDate }
+        return invoiceDetails
+    }
+
 
     render() {
 
@@ -193,6 +205,7 @@ class NewSales extends Component {
                         saveReturns={this.saveReturns}
                         saveSales={this.saveSales}
                         saveInvoice={this.saveInvoice}
+                        fetchInvoiceDetails={this.fetchInvoiceDetails}
                     />
                 </div>
                 <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
@@ -217,6 +230,7 @@ class NewSales extends Component {
                         saveInvoice={this.saveInvoice}
                         displayOtherSection={this.displayOtherSection}
                         displaySubmitButton={this.displaySubmitButton}
+                        fetchInvoiceDetails={this.fetchInvoiceDetails}
                     />
                 </div>
             </React.Fragment>
