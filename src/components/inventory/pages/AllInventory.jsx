@@ -86,7 +86,7 @@ class AllInventory extends Component {
         this.refs.editInventoryModal.setState({
             modalShow: true,
         })
-        this.refs.editInventoryModal.fetchData(id,canA);
+        this.refs.editInventoryModal.fetchData(id, canA);
     }
 
     handleDelete = (id) => (e) => {
@@ -234,7 +234,7 @@ class AllInventory extends Component {
                     All {showWise}s Inventories
                 </MDBCardHeader>
                 <MDBCardBody className='p-2'>
-                    <MDBBtn size='sm' style={{ fontSize: '13px' }} className='mx-0 px-2' color='info' onClick={this.toggle} >
+                    <MDBBtn size='sm' style={{ fontSize: '13px', letterSpacing: '3px' }} className='mx-0 px-2' color='info' onClick={this.toggle} >
                         {showWise === 'Driver' ? 'Location wise' : 'Driver wise'} Inventories
                     </MDBBtn>
                     <MDBDataTable id={tableId} striped small hover theadColor="dark"

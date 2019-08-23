@@ -280,7 +280,7 @@ class AllPersons extends Component {
                     />
                     <DeleteModal
                         ref='deleteModal'
-                        deleteEntry={this.deleteUser}
+                        deleteEntry={this.deletePerson}
                     />
                 </MDBCardBody>
             </MDBCard>

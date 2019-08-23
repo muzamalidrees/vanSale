@@ -357,11 +357,11 @@ class ReturnInventory extends Component {
                                     required
                                 />
                                 <div className="text-center">
-                                    <MDBBtn size='sm' color="dark" type='submit'>Return</MDBBtn>
+                                    <MDBBtn size='sm' color="dark" type='submit' style={{letterSpacing:'3px'}}>Return</MDBBtn>
                                 </div>
                                 {/* <Can I='' a=''> */}
                                 <MDBCol className='text-center'>
-                                    <MDBBtn size='sm' className='' color='info ' onClick={this.toggle} >
+                                    <MDBBtn size='sm' className='' color='info ' onClick={this.toggle} style={{letterSpacing:'3px'}}>
                                         Click here to return back inventory from {from === 'Driver' ? 'Operator' : 'Driver'}
                                     </MDBBtn>
                                 </MDBCol>

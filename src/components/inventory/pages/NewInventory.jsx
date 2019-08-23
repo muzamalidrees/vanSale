@@ -354,11 +354,11 @@ class NewInventory extends Component {
                                     required
                                 />
                                 <div className="text-center">
-                                    <MDBBtn size='sm' color="dark" type='submit'>Allocate</MDBBtn>
+                                    <MDBBtn size='sm' color="dark" type='submit' style={{letterSpacing:'3px'}}>Allocate</MDBBtn>
                                 </div>
                                 {/* <Can I='' a=''> */}
                                 <MDBCol className='text-center'>
-                                    <MDBBtn size='sm' className='' color='info ' onClick={this.toggle} >
+                                    <MDBBtn size='sm' style={{letterSpacing:'3px'}} className='' color='info ' onClick={this.toggle} >
                                         Click here to allocate inventory to {to === 'Driver' ? 'Operator' : 'Driver'}
                                     </MDBBtn>
                                 </MDBCol>
