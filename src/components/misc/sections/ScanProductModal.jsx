@@ -47,9 +47,17 @@ class ScanProductModal extends Component {
     }
 
     scanProduct = () => {
-        let barcode
+        // Android.scanProduct()
+        window.Android.showToast("webAppinterface working normally.")
+        let barcode = window.Android.scanProduct();
         this.setState({ barcode: barcode })
+        this.props.selectProduct(barcode)
+        this.setState({
+            barcode: ''
+        })
+        this.toggle()
     }
+
 
     render() {
 

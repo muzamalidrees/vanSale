@@ -4,6 +4,8 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 
+var totalSales = 0
+var totalReturns = 0
 class PrintInvoiceModal extends Component {
 
     _isMounted = false;
@@ -40,20 +42,68 @@ class PrintInvoiceModal extends Component {
         });
     }
     saveAndPrint = () => {
-        let content = document.getElementById('invoiceContent')
-        html2canvas(content)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                // pdf.addImage(imgData, 'PNG', 15, 40, 180, 180);
-                pdf.addImage(imgData, 'PNG', 0, 0);
-                // pdf.output('dataurlnewwindow');
-                pdf.save("download.pdf");
-                // pdf.autoPrint()
+        let { invoiceDetails, sales, returns, products } = this.state
+        let customer = invoiceDetails.customer
+        let company = 'vansales', address1 = 'abc', address2 = 'xyz', phone = '555-555-555'
+        let cShop = customer.shop, cAddress = customer.address, cCell = customer.cell
+        let invoiceId = invoiceDetails.invoiceId.toString(), date = invoiceDetails.trDate.toLocaleDateString()
+        let currentProduct
+        let tSales = totalSales, tReturns = totalReturns, nTotal = totalSales - totalReturns, invoiceMessage = customer.invoiceMessage,
+            globalMessage = 'Thank you for shopping with us.'
+
+        // console.log(company, address1, address2, phone, cShop, cAddress, cCell, invoiceId.toString(), date);
+        // console.log(tSales.toString(), tReturns.toString(), nTotal.toString(), invoiceMessage, globalMessage);
+
+
+        //sending printing command to webview
+        window.Android.printHeader(company, address1, address2, phone, cShop, cAddress, cCell, invoiceId, date);
+        if (sales) {
+            window.Android.printSalesHeader();
+            sales.forEach(sale => {
+                if (products !== [] && products !== null && products !== undefined) {
+                    products.forEach(product => {
+                        if (product.id === Number(sale.pId)) {
+                            currentProduct = product.name
+                        }
+                    });
+                }
+                // console.log(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
+                window.Android.printProductLine(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
             })
-            ;
-        // this.props.saveData();
-        // this.toggle();
+        }
+        if (returns) {
+            window.Android.printReturnsHeader();
+            returns.forEach(Return => {
+                if (products !== [] && products !== null && products !== undefined) {
+                    products.forEach(product => {
+                        if (product.id === Number(Return.pId)) {
+                            currentProduct = product.name
+                        }
+                    });
+                }
+                // console.log(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
+                window.Android.printProductLine(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
+            })
+        }
+        window.Android.printFooter(tSales.toString(), tReturns.toString(), nTotal.toString(), invoiceMessage, globalMessage)
+
+        //To save pdf
+        // let content = document.getElementById('invoiceContent')
+        // html2canvas(content)
+        //     .then((canvas) => {
+        //         const imgData = canvas.toDataURL('image/png');
+        //         const pdf = new jsPDF();
+        //         // pdf.addImage(imgData, 'PNG', 15, 40, 180, 180);
+        //         pdf.addImage(imgData, 'PNG', 0, 0);
+        //         // pdf.output('dataurlnewwindow');
+        //         pdf.save("download.pdf");
+        //         // pdf.autoPrint()
+        //     })
+        //     ;
+
+        // save to DB
+        this.props.saveData();
+        this.toggle();
     }
 
     //assuring only numbers allowed in input type=number s.
@@ -71,7 +121,8 @@ class PrintInvoiceModal extends Component {
     render() {
         let { sales, returns, invoiceDetails, products, dueAmount, paidAmount } = this.state
 
-        let name, shop, address, cell, invoiceMessage, globalMessage, invoiceId, date, saleRows = [], returnRows = [], currentProduct, totalSales = 0, totalReturns = 0
+        let name, shop, address, cell, invoiceMessage, globalMessage, invoiceId, date, saleRows = [], returnRows = [], currentProduct
+        // , totalSales = 0, totalReturns = 0
         if (invoiceDetails.customer !== {} && invoiceDetails.customer !== undefined && invoiceDetails.customer !== null) {
             name = invoiceDetails.customer.label
             shop = invoiceDetails.customer.shop
@@ -184,7 +235,7 @@ class PrintInvoiceModal extends Component {
                             </h5>
                             <table className='table table-borderless table-sm'>
                                 <caption>Total Returns: {totalReturns}</caption>
-                                <thead className='thead-light'>
+                                {/* <thead className='thead-light'>
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Item</th>
@@ -192,7 +243,7 @@ class PrintInvoiceModal extends Component {
                                         <th scope="col">Qty.</th>
                                         <th scope="col">Price</th>
                                     </tr>
-                                </thead>
+                                </thead> */}
                                 <tbody>
                                     {returnRows}
                                 </tbody>
