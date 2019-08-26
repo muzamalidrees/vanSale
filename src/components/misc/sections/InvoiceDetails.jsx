@@ -90,7 +90,7 @@ class InvoiceDetails extends Component {
             .then((res) => res.json())
             .then(function (json) {
                 // console.log(json)
-                if (json.data.length !== 0 && currentComponent._isMounted) {
+                if (json.data && json.data.length !== 0 && currentComponent._isMounted) {
                     let lastInvoiceID = json.data.shift();
                     let id = lastInvoiceID.id;
                     let invoiceId = id + 1
@@ -106,7 +106,8 @@ class InvoiceDetails extends Component {
 
         let invoice = {
             trDate: trDate, total: total, customerId: customer.value,
-            driverId: 7  //  driverId :Number(localStorage.getItem('ui'))
+            // driverId: 7
+            driverId: Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -117,7 +118,7 @@ class InvoiceDetails extends Component {
         fetch('/addNewInvoice', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
 
@@ -143,7 +144,7 @@ class InvoiceDetails extends Component {
 
 
         var customerOptions;
-        if (customers !== '' || customers !== null || customers !== undefined) {
+        if (customers !== '' && customers !== null && customers !== undefined) {
             customerOptions = customers.map(customer => ({
                 key: customer.id, label: customer.name, value: customer.id, message: customer.driver_message,
                 invoiceMessage: customer.invoice_message, shop: customer.shop_name, cell: customer.cell, address: customer.address

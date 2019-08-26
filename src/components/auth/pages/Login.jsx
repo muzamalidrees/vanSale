@@ -56,8 +56,8 @@ class LoginForm extends React.Component {
                         user: json.user
                     }, function () {
                         if (typeof (Storage) !== "undefined") {
-                            localStorage.setItem('uri', JSON.stringify(json.user.id))
-                            localStorage.setItem('ui', JSON.stringify(json.user.role_id))
+                            localStorage.setItem('ui', JSON.stringify(json.user.id))
+                            localStorage.setItem('uri', JSON.stringify(json.user.role_id))
                         }
                         else {
                             alert('Please use another browser to get it working correctly.')
@@ -65,7 +65,6 @@ class LoginForm extends React.Component {
                     })
                     // console.log(json.user.role_id);
                     let user = json.user.role_id
-
                     this.props.changeUser(user);
 
                 }
@@ -136,7 +135,7 @@ class LoginForm extends React.Component {
                                     </div>
                                     </MDBInput>
                                 </div>
-                                <label ref='loginLabel' style={{ color: 'red' }}></label>
+                                <label ref='loginLabel' style={{ fontFamily: 'monospace', color: 'red' }}></label>
                                 <div className="text-center">
                                     <MDBBtn color='dark' type="submit">Login</MDBBtn>
                                 </div>

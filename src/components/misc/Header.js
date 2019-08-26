@@ -30,7 +30,7 @@ class Header extends React.Component {
         <header>
           <MDBNavbar color="black" dark expand="lg" scrolling fixed="top">
             <MDBNavbarBrand>
-              <strong className="white-text">Bucket Orders Management</strong>
+              <strong style={{marginLeft:'15px', letterSpacing: '3px' }} className="white-text">VanSales</strong>
             </MDBNavbarBrand>
             <MDBNavbarToggler onClick={this.onClick} />
             <HeaderNav loggingOut={this.props.loggingOut} loggedIn={this.props.loggedIn} collapse={this.state.collapse} />

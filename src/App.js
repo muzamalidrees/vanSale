@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/misc/Header';
 import Footer from './components/misc/Footer';
+import { MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBBtn } from 'mdbreact'
 import AllRoutes from "./components/misc/AllRoutes";
 import { BrowserRouter, Redirect } from 'react-router-dom';
 import { AbilityContext } from "./configs/Ability-context";
@@ -19,7 +20,8 @@ class App extends React.Component {
     this.state = {
       loggedIn: '',
       roles: [],
-      user: ''
+      user: '',
+      modalShow: false,
     }
 
     let a = fetch('/getAllRoles')
@@ -68,7 +70,8 @@ class App extends React.Component {
       .then((json) => {
         // console.log(json)
         this.setState({
-          loggedIn: false
+          loggedIn: false,
+          modalShow: false
         }, function () {
           localStorage.removeItem('ui')
           localStorage.removeItem('uri')
@@ -79,16 +82,29 @@ class App extends React.Component {
 
   changeUser = (x) => {
     let userRole;
-
-    this.state.roles.forEach(role => {
-      if (role.id === x) {
-        userRole = role.name
+    if (this.state.roles) {
+      this.state.roles.forEach(role => {
+        if (role.id === x) {
+          userRole = role.name
+        }
+      });
+      if (userRole === 'driver') {
+        this.setState({
+          modalShow: true
+        })
       }
-    });
+    }
 
     const rules = defineRulesFor(userRole);
     ability.update(rules);
     this.setState({ loggedIn: true })
+  }
+
+  toggle = () => {
+    this.setState({
+      modalShow: !this.state.modalShow,
+
+    });
   }
 
 
@@ -107,6 +123,21 @@ class App extends React.Component {
               loggedIn={this.state.loggedIn}
               loggingOut={this.loggingOut}
             />
+
+            {/* Displaying driver's daily message.  */}
+            <MDBModal ref='driverDailyMessage' modalStyle="info" className="text-white" size="sm" centered backdrop={true}
+              isOpen={this.state.modalShow} toggle={() => { }}>
+              <MDBModalHeader className="text-center" titleClass="w-100" tag="p">
+                Message from admin...
+              </MDBModalHeader>
+              <MDBModalBody className="text-center">
+                {this.state.user ? this.state.user.daily_message : null}
+              </MDBModalBody>
+              <MDBModalFooter className="justify-content-center">
+                <MDBBtn size='sm' color="info" onClick={this.toggle}>OK</MDBBtn>
+              </MDBModalFooter>
+            </MDBModal>
+
             <AllRoutes
               changeUser={this.changeUser}
             />

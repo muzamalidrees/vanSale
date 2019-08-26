@@ -7,8 +7,8 @@ import html2canvas from 'html2canvas';
 var totalSales = 0
 var totalReturns = 0
 class PrintInvoiceModal extends Component {
-
     _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,13 +20,15 @@ class PrintInvoiceModal extends Component {
             paidAmount: 0,
             // dueAmount: 0,
         }
-
+        this._isMounted = true
         fetch('/getAllProducts')
             .then((res) => res.json())
             .then(json => {
-                this.setState({
-                    products: json.data
-                })
+                if (this._isMounted) {
+                    this.setState({
+                        products: json.data
+                    })
+                }
             })
     }
 
@@ -36,10 +38,12 @@ class PrintInvoiceModal extends Component {
     }
 
     toggle = () => {
-        this.setState({
-            modalShow: !this.state.modalShow,
+        if (this._isMounted) {
+            this.setState({
+                modalShow: !this.state.modalShow,
 
-        });
+            });
+        }
     }
     saveAndPrint = () => {
         let { invoiceDetails, sales, returns, products } = this.state
@@ -56,36 +60,38 @@ class PrintInvoiceModal extends Component {
 
 
         //sending printing command to webview
-        window.Android.printHeader(company, address1, address2, phone, cShop, cAddress, cCell, invoiceId, date);
-        if (sales) {
-            window.Android.printSalesHeader();
-            sales.forEach(sale => {
-                if (products !== [] && products !== null && products !== undefined) {
-                    products.forEach(product => {
-                        if (product.id === Number(sale.pId)) {
-                            currentProduct = product.name
-                        }
-                    });
-                }
-                // console.log(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
-                window.Android.printProductLine(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
-            })
+        if (window.Android !== undefined) {
+            window.Android.printHeader(company, address1, address2, phone, cShop, cAddress, cCell, invoiceId, date);
+            if (sales) {
+                window.Android.printSalesHeader();
+                sales.forEach(sale => {
+                    if (products !== [] && products !== null && products !== undefined) {
+                        products.forEach(product => {
+                            if (product.id === Number(sale.pId)) {
+                                currentProduct = product.name
+                            }
+                        });
+                    }
+                    // console.log(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
+                    window.Android.printProductLine(sale.index.toString(), currentProduct, sale.pRate, sale.pQty, sale.pPrice);
+                })
+            }
+            if (returns) {
+                window.Android.printReturnsHeader();
+                returns.forEach(Return => {
+                    if (products !== [] && products !== null && products !== undefined) {
+                        products.forEach(product => {
+                            if (product.id === Number(Return.pId)) {
+                                currentProduct = product.name
+                            }
+                        });
+                    }
+                    // console.log(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
+                    window.Android.printProductLine(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
+                })
+            }
+            window.Android.printFooter(tSales.toString(), tReturns.toString(), nTotal.toString(), invoiceMessage, globalMessage)
         }
-        if (returns) {
-            window.Android.printReturnsHeader();
-            returns.forEach(Return => {
-                if (products !== [] && products !== null && products !== undefined) {
-                    products.forEach(product => {
-                        if (product.id === Number(Return.pId)) {
-                            currentProduct = product.name
-                        }
-                    });
-                }
-                // console.log(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
-                window.Android.printProductLine(Return.index.toString(), currentProduct, Return.pRate, Return.pQty, Return.pPrice);
-            })
-        }
-        window.Android.printFooter(tSales.toString(), tReturns.toString(), nTotal.toString(), invoiceMessage, globalMessage)
 
         //To save pdf
         // let content = document.getElementById('invoiceContent')
@@ -235,7 +241,7 @@ class PrintInvoiceModal extends Component {
                             </h5>
                             <table className='table table-borderless table-sm'>
                                 <caption>Total Returns: {totalReturns}</caption>
-                                {/* <thead className='thead-light'>
+                                <thead className='thead-light'>
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Item</th>
@@ -243,7 +249,7 @@ class PrintInvoiceModal extends Component {
                                         <th scope="col">Qty.</th>
                                         <th scope="col">Price</th>
                                     </tr>
-                                </thead> */}
+                                </thead>
                                 <tbody>
                                     {returnRows}
                                 </tbody>

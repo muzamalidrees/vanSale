@@ -60,15 +60,10 @@ class ProductsTable extends Component {
 
     }
 
-
-    handleSubmit = () => {
-        let sales = [], returns = [];
-        // document.getElementById('saleProductsContainer').style.display = 'none'
-        // document.getElementById('returnProductsContainer').style.display = 'none'
+    fetchSalesTableData = () => {
+        let sales = [];
         let salesTable = document.getElementById('saleProductsTable')
-        let returnsTable = document.getElementById('returnProductsTable')
         let salesTableLength = salesTable.rows.length;
-        let returnsTableLength = returnsTable.rows.length;
 
         if (salesTableLength > 1) {
             for (var index = salesTableLength - 1; index > 0; index--) {
@@ -82,6 +77,13 @@ class ProductsTable extends Component {
                 // console.log(sales);
             }
         }
+        return sales;
+    }
+
+    fetchReturnsTableData = () => {
+        let returns = [];
+        let returnsTable = document.getElementById('returnProductsTable')
+        let returnsTableLength = returnsTable.rows.length;
 
         if (returnsTableLength > 1) {
             for (var index = returnsTableLength - 1; index > 0; index--) {
@@ -94,11 +96,18 @@ class ProductsTable extends Component {
                 // console.log(returns);
             }
         }
+        return returns
+    }
+
+    handleSubmit = () => {
+        let sales = this.fetchSalesTableData(),
+            returns = this.fetchReturnsTableData();
+
         this.setState({
             sales: sales,
             returns: returns
         })
-        
+
         let invoiceDetails = this.props.fetchInvoiceDetails();
 
         this.refs.printInvoiceModal.setState({
@@ -113,17 +122,29 @@ class ProductsTable extends Component {
         let { sales, returns } = this.state
         sales.forEach(sale => {
             this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice);
-            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer')
+            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
         })
         returns.forEach(Return => {
             this.props.saveSales(Return.pId, Return.pRate, Return.pQty, Return.pPrice);
-            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer')
+            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
         })
         this.props.displaySubmitButton(false);
         this.props.displayOtherSection(false);
         this.props.saveInvoice()
     }
 
+    makeTablesEmpty = () => {
+        let sales = this.fetchSalesTableData(),
+            returns = this.fetchReturnsTableData();
+        sales.forEach(sale => {
+            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
+        })
+        returns.forEach(Return => {
+            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+        })
+        this.props.displaySubmitButton(false);
+        this.props.displayOtherSection(false);
+    }
 
 
     render() {
@@ -176,6 +197,7 @@ class ProductsTable extends Component {
                                     </MDBTableBody>
                                 </MDBTable>
                                 <div style={{ display: `${isDisplaySubmitButton ? '' : 'none'}` }} className='text-right'>
+                                    <label style={{ color: 'red' }} className='mb-0 p-0 mr-2' ref={el => this.submitMessage = el}></label>
                                     <MDBBtn
                                         size='sm'
                                         color="dark"

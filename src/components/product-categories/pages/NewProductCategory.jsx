@@ -35,7 +35,7 @@ class NewProductCategory extends Component {
         }
         else {
             let { name, description } = this.state
-            console.log(name, description);
+            // console.log(name, description);
 
             let productCategory = { name: name, description: description }
 
@@ -47,7 +47,7 @@ class NewProductCategory extends Component {
             fetch('/addNewProductCategory', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json)
+                    // console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                     }

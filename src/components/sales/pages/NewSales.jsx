@@ -26,6 +26,8 @@ class NewSales extends Component {
             this.setState({
                 customerId: ''
             })
+            // this.refs.returnProductsTable.makeTablesEmpty();
+            this.refs.saleProductsTable.makeTablesEmpty();
         }
         else {
             this.setState({
@@ -116,7 +118,8 @@ class NewSales extends Component {
         let sales = {
             productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
             invoiceId: invoiceId, customerId: customerId,
-            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
+            // driverId: 7  
+            driverId: Number(localStorage.getItem('ui'))
         }
 
         var options = {
@@ -140,7 +143,8 @@ class NewSales extends Component {
         let returns = {
             productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
             invoiceId: invoiceId, customerId: customerId,
-            driverId: 7   //  driverId :Number(localStorage.getItem('ui'))
+            // driverId: 7  
+            driverId: Number(localStorage.getItem('ui'))
         }
 
         var options = {

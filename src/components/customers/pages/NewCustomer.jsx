@@ -79,7 +79,7 @@ class NewCustomer extends Component {
             let driverMessage = this.state.driverMessage
             let invoiceMessage = this.state.invoiceMessage
 
-            console.log(name, email, cell, address, shopName, routeId, postCode, customer_id, driverMessage, invoiceMessage);
+            // console.log(name, email, cell, address, shopName, routeId, postCode, customer_id, driverMessage, invoiceMessage);
             let customer = {
                 name: name, email: email, cell: cell, address: address, shopName: shopName, postCode: postCode,
                 routeId: routeId, customer_id: customer_id, driverMessage: driverMessage, invoiceMessage: invoiceMessage

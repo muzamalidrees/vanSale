@@ -99,60 +99,9 @@ class NewInventory extends Component {
                 return
             }
             else {
-                let { driver, product, qty } = this.state
-                // console.log(driver, operator, to, product, qty);
-
-                let driverInventory = {
-                    driverId: driver.value, productId: product.value, qty: qty
-                }
-
-                var options = {
-                    method: 'POST',
-                    body: JSON.stringify(driverInventory),
-                    headers: { 'Content-Type': 'application/json' }
-                }
-                fetch('/addNewDriverInventory', options)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                        if (this._isMounted === true) {
-                            this.setState({ notificationMessage: json.message, notificationShow: true })
-                        }
-                        if (json.success === true) {
-
-                            this.setState({
-                                driver: '',
-                                product: '',
-                                qty: ''
-                            })
-                        }
-                        if (this._isMounted === true) {
-                            setTimeout(() => this.setState({ notificationShow: false }), 1502);
-                        }
-                    })
-                    .catch((error) => console.log(error))
-
-                let history = {
-                    customerId: 0, driverId: driver.value, operatorId: Number(localStorage.getItem('ui')),
-                    productId: product.value, qty: qty, flag: 'OTD'
-                }
-
-                // console.log(history);
-
-                var historyOptions = {
-                    method: 'POST',
-                    body: JSON.stringify(history),
-                    headers: { 'Content-Type': 'application/json' }
-                }
-                fetch('/addNewInventoryHistory', historyOptions)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                    })
-                    .catch((error) => console.log(error))
+                this.checkQty(this.state.product, this.state.qty);
             }
         }
-
         else if (this.state.to === 'Operator') {
             if (this.state.operator === '' || this.state.operator === null) {
                 this.setState({ operator: null })
@@ -165,7 +114,6 @@ class NewInventory extends Component {
             else {
                 let { operator, product, qty } = this.state
                 // console.log(driver, operator, to, product, qty);
-
                 let operatorInventory = {
                     operatorId: operator.value, productId: product.value, qty: qty
                 }
@@ -183,7 +131,6 @@ class NewInventory extends Component {
                             this.setState({ notificationMessage: json.message, notificationShow: true })
                         }
                         if (json.success === true) {
-
                             this.setState({
                                 operator: '',
                                 product: '',
@@ -215,6 +162,97 @@ class NewInventory extends Component {
         }
     }
 
+    checkQty = (product, qty) => {
+        let operatorId = Number(localStorage.getItem('ui'))
+        let checkQty = { operatorId: operatorId, productId: product.value }
+        // console.log(checkQty);
+
+        let options = {
+            method: 'POST',
+            body: JSON.stringify(checkQty),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/checkLocationItemQty', options)
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                let stock = json.qty;
+                if (qty > stock) {
+                    alert("Maximum Available Qty of " + product.label + " is: " + stock)
+                    this.qty.focus();
+                    return;
+                }
+                else {
+                    this.addNewDriverInventory();
+                }
+            })
+            .catch((error) => console.log(error))
+    }
+
+    addNewDriverInventory = () => {
+        let { driver, product, qty } = this.state
+        let driverInventory = {
+            driverId: driver.value, productId: product.value, qty: qty
+        }
+
+        var options = {
+            method: 'POST',
+            body: JSON.stringify(driverInventory),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/addNewDriverInventory', options)
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted === true) {
+                    this.setState({ notificationMessage: json.message, notificationShow: true })
+                }
+                if (json.success === true) {
+                    this.setState({
+                        driver: '',
+                        product: '',
+                        qty: ''
+                    })
+                }
+                if (this._isMounted === true) {
+                    setTimeout(() => this.setState({ notificationShow: false }), 1502);
+                }
+            })
+            .catch((error) => console.log(error))
+
+
+        let operatorInventory = {
+            operatorId: Number(localStorage.getItem('ui')), productId: product.value, qty: qty
+        }
+        let options2 = {
+            method: 'PUT',
+            body: JSON.stringify(operatorInventory),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/decreaseLocationInventory', options2)
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+            })
+            .catch((error) => console.log(error))
+
+            
+        let history = {
+            customerId: 0, driverId: driver.value, operatorId: Number(localStorage.getItem('ui')),
+            productId: product.value, qty: qty, flag: 'OTD'
+        }
+        let historyOptions = {
+            method: 'POST',
+            body: JSON.stringify(history),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        fetch('/addNewInventoryHistory', historyOptions)
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+            })
+            .catch((error) => console.log(error))
+    }
 
     render() {
         let { users, roles, products, driver, operator, product, to } = this.state
@@ -348,17 +386,18 @@ class NewInventory extends Component {
                                     name="qty"
                                     icon="sort-numeric-down"
                                     group
+                                    inputRef={el => this.qty = el}
                                     onKeyPress={this.onKeyPress}
                                     type="number"
                                     validate
                                     required
                                 />
                                 <div className="text-center">
-                                    <MDBBtn size='sm' color="dark" type='submit' style={{letterSpacing:'3px'}}>Allocate</MDBBtn>
+                                    <MDBBtn size='sm' color="dark" type='submit' style={{ letterSpacing: '3px' }}>Allocate</MDBBtn>
                                 </div>
                                 {/* <Can I='' a=''> */}
                                 <MDBCol className='text-center'>
-                                    <MDBBtn size='sm' style={{letterSpacing:'3px'}} className='' color='info ' onClick={this.toggle} >
+                                    <MDBBtn size='sm' style={{ letterSpacing: '3px' }} className='' color='info ' onClick={this.toggle} >
                                         Click here to allocate inventory to {to === 'Driver' ? 'Operator' : 'Driver'}
                                     </MDBBtn>
                                 </MDBCol>

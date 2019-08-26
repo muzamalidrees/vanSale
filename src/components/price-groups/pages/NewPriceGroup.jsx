@@ -98,7 +98,7 @@ class NewPriceGroup extends Component {
 
             let { name, productCategory, productOptions } = this.state
             let priceGroupId;
-            console.log(name, productCategory, productOptions);
+            // console.log(name, productCategory, productOptions);
 
             let priceGroup = {
                 name: name, productCategoryId: productCategory.value
@@ -113,13 +113,14 @@ class NewPriceGroup extends Component {
                 .then((res) => res.json())
                 .then((json) => {
                     console.log(json)
-                    priceGroupId = json.data.id
+                    if (json.data) {
+                        priceGroupId = json.data.id
+                    }
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
                     }
                     if (json.success === true) {
-
                         this.setState({
                             name: '',
                             productOptions: [],
@@ -149,7 +150,7 @@ class NewPriceGroup extends Component {
                         fetch('/addNewProductPrice', options)
                             .then((res) => res.json())
                             .then((json) => {
-                                console.log(json)
+                                // console.log(json)
                             })
                             .catch((error) => console.log(error))
                     })
@@ -238,6 +239,7 @@ class NewPriceGroup extends Component {
                                                 value={this.state.name}
                                                 label="Name"
                                                 name='name'
+                                                inputRef={el => this.name = el}
                                                 group
                                                 type="text"
                                                 validate

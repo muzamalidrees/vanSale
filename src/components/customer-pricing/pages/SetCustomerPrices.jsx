@@ -18,7 +18,7 @@ class SetCustomerPrices extends Component {
         fetch('/getAllCustomers')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ customers: json.data })
                 }
@@ -27,7 +27,7 @@ class SetCustomerPrices extends Component {
         fetch('/getAllPriceGroups')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ priceGroups: json.data })
                 }
@@ -39,6 +39,7 @@ class SetCustomerPrices extends Component {
             customers: [],
             priceGroups: [],
             customerPrices: [],
+            productPrices: [],
             customer: '',
             priceGroup: '',
             notificationMessage: '',
@@ -75,8 +76,8 @@ class SetCustomerPrices extends Component {
 
             //validating that customer have not that product's price already
             let customerPriceGroups = [];
-            let productId, customerAllPrices, create = true;
-            let promise = fetch('/getAllCustomerPrices')
+            let productCategoryId, customerAllPrices, create = true;
+            let promise1 = fetch('/getAllCustomerPrices')
                 .then((res) => res.json())
                 .then((json) => {
                     // console.log(json)
@@ -84,11 +85,20 @@ class SetCustomerPrices extends Component {
                 })
                 .catch((error) => console.log(error))
 
-            Promise.all([promise]).then(() => {
+            let promise2 = fetch('/getAllProductPrices')
+                .then((res) => res.json())
+                .then((json) => {
+                    // console.log(json)
+                    this.setState({ productPrices: json.data })
+                })
+                .catch((error) => console.log(error))
+
+            Promise.all([promise1, promise2]).then(() => {
 
                 //finding all price-groups assidned to customer
                 customerAllPrices = this.state.customerPrices
                     .filter(customerPrice => customerPrice.customer_id === customerId);
+                console.log(customerAllPrices);
 
                 //getting customer's price-groups' data
                 customerAllPrices.forEach(customerPrice => {
@@ -96,11 +106,13 @@ class SetCustomerPrices extends Component {
                     let priceGroup = a.shift()
                     customerPriceGroups.push(priceGroup)
                 });
+                console.log(customerPriceGroups);
+
 
                 //finding coming price-group's product-id
                 priceGroups.forEach(priceGroup => {
                     if (priceGroup.id === priceGroupId) {
-                        productId = priceGroup.product_id
+                        productCategoryId = priceGroup.product_category_id
                     }
                 })
 
@@ -114,7 +126,7 @@ class SetCustomerPrices extends Component {
                         create = false
                         return;
                     }
-                    else if (existedPriceGroup.product_id === productId) {
+                    else if (existedPriceGroup.product_category_id === productCategoryId) {
                         if (this._isMounted === true) {
                             this.setState({ notificationMessage: `Customer already have that product's price.`, notificationShow: true })
                             setTimeout(() => { this.setState({ notificationShow: false }) }, 1600)
@@ -137,9 +149,9 @@ class SetCustomerPrices extends Component {
                             console.log(json)
                             if (this._isMounted === true) {
                                 this.setState({ notificationMessage: json.message, notificationShow: true })
+                                setTimeout(() => { this.setState({ notificationShow: false }) }, 1600)
                             }
                             if (json.success === true) {
-
                                 this.setState({
                                     customer: '',
                                     priceGroup: '',

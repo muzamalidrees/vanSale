@@ -231,7 +231,7 @@ class AllPersons extends Component {
                             location: operator.location,
                             buttons: <React.Fragment>
                                 <Can I='read' a='operatorInventory'>
-                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(operator.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
+                                    <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(operator.id)} className='m-1 py-1 px-2' outline color='secondary' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
                                 </Can>
                                 <Can I='update' a='operator'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(operator.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>

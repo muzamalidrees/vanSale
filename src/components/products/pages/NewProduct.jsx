@@ -14,7 +14,7 @@ class NewProduct extends Component {
         fetch('/getAllProductCategories')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ productCategories: json.data, showCategoryOptions: true })
                 }
@@ -64,7 +64,7 @@ class NewProduct extends Component {
         else {
             let { name, description, barcode, productCategory } = this.state
 
-            console.log(name, description, barcode, productCategory, productCategory.value);
+            // console.log(name, description, barcode, productCategory, productCategory.value);
             let product = {
                 name: name, description: description, barcode: barcode,
                 productCategoryId: productCategory.value
@@ -78,7 +78,7 @@ class NewProduct extends Component {
             fetch('/addNewProduct', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json)
+                    // console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                     }
@@ -86,8 +86,8 @@ class NewProduct extends Component {
                         this.setState({
                             productCategory: '',
                             name: '',
+                            barcode: '',
                             description: '',
-                            barCode: '',
                         })
                     }
                     else {

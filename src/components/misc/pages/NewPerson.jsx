@@ -137,6 +137,9 @@ class NewPerson extends Component {
                             dailyMessage: '',
                         })
                     }
+                    else{
+                        this.username.focus();
+                    }
 
                     if (this._isMounted === true) {
                         setTimeout(() => this.setState({ notificationShow: false }), 1802);

@@ -18,7 +18,7 @@ class NewTransaction extends Component {
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ products: json.data, showOptions: true })
+                    this.setState({ products: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -155,30 +155,42 @@ class NewTransaction extends Component {
             let customerAllPrices, customerPriceGroups = [], productCategoryId, desiredPriceGroup, productPrice
 
             //finding all price-groups assidned to customer
-            customerAllPrices = customerPrices
-                .filter(customerPrice => customerPrice.customer_id === customerId);
+            if (customerPrices !== [] && customerPrices !== undefined && customerPrices !== null) {
+                customerAllPrices = customerPrices
+                    .filter(customerPrice => customerPrice.customer_id === customerId);
+            }
 
             //getting customer's price-groups' data
-            customerAllPrices.forEach(customerPrice => {
-                let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
-                let priceGroup = a.shift()
-                customerPriceGroups.push(priceGroup)
-            });
+            if (customerAllPrices !== [] && customerAllPrices !== undefined && customerAllPrices !== null) {
+                if (priceGroups !== [] && priceGroups !== undefined && priceGroups !== null) {
+                    customerAllPrices.forEach(customerPrice => {
+                        let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
+                        let priceGroup = a.shift()
+                        customerPriceGroups.push(priceGroup)
+                    });
+                }
+            }
 
             //finding selected product's category
-            products.forEach(product => {
-                if (product.id === pId) {
-                    productCategoryId = product.product_category_id;
-                }
-            });
+            if (products !== [] && products !== undefined && products !== null) {
+                products.forEach(product => {
+                    if (product.id === pId) {
+                        productCategoryId = product.product_category_id;
+                    }
+                });
+            }
 
             //finding price-group from customer's price-groups that holds this productCategory
-            desiredPriceGroup = (customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategoryId)).shift()
+            if (customerPriceGroups !== [] && customerPriceGroups !== undefined && customerPriceGroups !== null) {
+                desiredPriceGroup = (customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategoryId)).shift()
+            }
 
             //finding prices
-            productPrice = (productPrices.filter(productPrice =>
-                (productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId)).shift()
-            )
+            if (productPrices !== [] && productPrices !== undefined && productPrices !== null) {
+                productPrice = (productPrices.filter(productPrice =>
+                    (productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId)).shift()
+                )
+            }
 
             //setting selling and returning rates
             if (tableId === 'saleProductsTable') {
@@ -212,8 +224,8 @@ class NewTransaction extends Component {
 
         //checking product's qty in stock
         else if (this.props.tableId === 'saleProductsTable') {
-            // let driverId = Number(localStorage.getItem('ui'))
-            let driverId = 7
+            let driverId = Number(localStorage.getItem('ui'))
+            // let driverId = 7
             let checkQty = { driverId: driverId, productId: this.state.product.value }
             // console.log(checkQty);
 
@@ -298,17 +310,18 @@ class NewTransaction extends Component {
             })
         }
         else {
+            let newArray = this.state.alreadyAdded.filter(function (element) {
+                return element !== pId;
+            })
             this.setState({
-                alreadyAdded: this.state.alreadyAdded.filter(function (element) {
-                    return element !== pId;
-                })
+                alreadyAdded: newArray
             });
         }
     }
 
 
     render() {
-        var { rate, qty, product, products, showOptions } = this.state
+        var { rate, qty, product, products } = this.state
 
         //setting product select styles
         const productStyles = {
@@ -323,8 +336,7 @@ class NewTransaction extends Component {
 
         //setting product options
         var productOptions;
-        if (showOptions) {
-
+        if (products !== [] && products !== null && products !== undefined) {
             productOptions = products.map(product => ({
                 key: product.id, label: product.name, value: product.id,
             }));
@@ -411,7 +423,7 @@ class NewTransaction extends Component {
                                             />
                                         </MDBCol>
                                         <MDBCol size='lg' className=''>
-                                            <label style={{ color: 'red' }} className='mb-0 p-0' ref={el => this.message = el}></label>
+                                            <label style={{ fontFamily: 'monospace', color: 'red' }} className='mb-0 p-0' ref={el => this.message = el}></label>
                                             <MDBBtn
                                                 size='sm'
                                                 color="dark"
