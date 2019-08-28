@@ -45,22 +45,27 @@ export default function defineRulesFor(role) {
         })
 
         //getting permissions against that role
-        let userRolePermissions = rolePermissions.filter(rolePermission => rolePermission.role_id === userRoleId)
+        let userRolePermissions = rolePermissions !== undefined && userRoleId !== undefined ?
+            rolePermissions.filter(rolePermission => rolePermission.role_id === userRoleId) : undefined
 
         //getting user's permissions
         let userPermissions = []
-        userRolePermissions.forEach(rolePermission => {
-            permissions.forEach(permission => {
-                if (permission.id === rolePermission.permission_id) {
-                    userPermissions.push(permission)
-                }
+        if (userRolePermissions !== undefined && permissions !== undefined) {
+            userRolePermissions.forEach(rolePermission => {
+                permissions.forEach(permission => {
+                    if (permission.id === rolePermission.permission_id) {
+                        userPermissions.push(permission)
+                    }
+                })
             })
-        })
+        }
         // console.log(userPermissions);
 
         // defining rules for user
-        for (let index = 0; index < userPermissions.length; index++) {
-            can(`${userPermissions[index].permission}`, `${userPermissions[index].entity}`)
+        if (userPermissions !== [] && userPermissions !== undefined) {
+            for (let index = 0; index < userPermissions.length; index++) {
+                can(`${userPermissions[index].permission}`, `${userPermissions[index].entity}`)
+            }
         }
         // can("manage", "all");
         // can("read", "all");

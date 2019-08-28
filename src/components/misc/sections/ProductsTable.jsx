@@ -120,14 +120,18 @@ class ProductsTable extends Component {
 
     saveData = () => {
         let { sales, returns } = this.state
-        sales.forEach(sale => {
-            this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice);
-            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
-        })
-        returns.forEach(Return => {
-            this.props.saveSales(Return.pId, Return.pRate, Return.pQty, Return.pPrice);
-            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
-        })
+        if (sales !== undefined && sales !== []) {
+            sales.forEach(sale => {
+                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice);
+                this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
+            })
+        }
+        if (returns !== undefined && returns !== []) {
+            returns.forEach(Return => {
+                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice);
+                this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+            })
+        }
         this.props.displaySubmitButton(false);
         this.props.displayOtherSection(false);
         this.props.saveInvoice()

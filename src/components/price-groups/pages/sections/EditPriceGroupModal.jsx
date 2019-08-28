@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBRow, MDBCol, MDBIcon, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBRow, MDBCol, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -12,8 +12,6 @@ class EditPriceGroupModal extends Component {
         this.state = {
             modalShow: false,
             name: '',
-            notificationMessage: '',
-            notificationShow: false,
             priceGroupId: '',
             productCategoryId: '',
             products: [],

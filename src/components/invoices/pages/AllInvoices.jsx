@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon, MDBNavLink } from 'mdbreact';
+import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } from 'mdbreact';
 import ViewInvoiceModal from './sections/ViewInvoiceModal';
 import EditInvoiceModal from './sections/EditInvoiceModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
@@ -103,7 +103,7 @@ class AllInvoices extends Component {
         fetch('/deleteInvoice', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
 
@@ -136,7 +136,7 @@ class AllInvoices extends Component {
                     fetch('/deleteSale', options)
                         .then((res) => res.json())
                         .then((json) => {
-                            console.log(json)
+                            // console.log(json)
                         })
                         .catch((error) => console.log(error))
                 })
@@ -151,7 +151,7 @@ class AllInvoices extends Component {
                     fetch('/deleteReturn', options)
                         .then((res) => res.json())
                         .then((json) => {
-                            console.log(json)
+                            // console.log(json)
                         })
                         .catch((error) => console.log(error))
                 })
@@ -209,15 +209,15 @@ class AllInvoices extends Component {
                     driver: currentDriver,
                     total: invoice.total,
                     buttons: <React.Fragment>
-                        {/* <Can I='read' a='invoice'> */}
-                        <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(invoice.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
-                        {/* </Can> */}
-                        {/* <Can I='update' a='invoice'> */}
-                        <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(invoice.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
-                        {/* </Can> */}
-                        {/* <Can I='delete' a='invoice'> */}
-                        <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(invoice.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
-                        {/* </Can> */}
+                        <Can I='read' a='invoice'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(invoice.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
+                        </Can>
+                        <Can I='update' a='invoice'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(invoice.id)} className='m-1 py-1 px-2' outline color='teal' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
+                        </Can>
+                        <Can I='delete' a='invoice'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(invoice.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                        </Can>
                     </React.Fragment>
                 }
             );
@@ -234,28 +234,29 @@ class AllInvoices extends Component {
 
 
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                    All Invoices
+            <Can I='read' a='invoice'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                        All Invoices
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
-                    <MDBDataTable id='invoicesTable' striped small hover theadColor="dark"
-                        bordered btn entries={10} entriesOptions={[10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <ViewInvoiceModal
-                        ref='viewInvoiceModal'
-                    />
-                    <EditInvoiceModal
-                        ref='editInvoiceModal'
-                    />
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteInvoice}
-                    />
-                </MDBCardBody>
-            </MDBCard>
+                    <MDBCardBody className='p-2'>
+                        <MDBDataTable id='invoicesTable' striped small hover theadColor="dark"
+                            bordered btn entries={10} entriesOptions={[10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <ViewInvoiceModal
+                            ref='viewInvoiceModal'
+                        />
+                        <EditInvoiceModal
+                            ref='editInvoiceModal'
+                        />
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deleteInvoice}
+                        />
+                    </MDBCardBody>
+                </MDBCard>
+            </Can>
         );
     }
 

@@ -64,7 +64,7 @@ class LoginForm extends React.Component {
                         }
                     })
                     // console.log(json.user.role_id);
-                    let user = json.user.role_id
+                    let user = json.user
                     this.props.changeUser(user);
 
                 }

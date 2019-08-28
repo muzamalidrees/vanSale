@@ -20,7 +20,6 @@ class EditInvoiceModal extends Component {
     state = {
         modalShow: false,
         invoice: '',
-        invoiceDate: '',
         sales: [],
         returns: [],
         products: [],

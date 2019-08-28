@@ -92,28 +92,30 @@ class AllRoles extends Component {
             rows: rows
         }
         return (
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className=' p-0'>
-                            <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                                User' Roles
+            <Can I='read' a='role'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className=' p-0'>
+                                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                                    User' Roles
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
+                                <MDBCardBody className='p-2'>
 
-                                <MDBDataTable id='rolesTable' striped small hover theadColor="dark"
-                                    bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                                    data={data} theadTextWhite >
-                                </MDBDataTable>
-                                <DeleteModal
-                                    ref='deleteModal'
-                                    deleteEntry={this.deleteRole}
-                                />
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
+                                    <MDBDataTable id='rolesTable' striped small hover theadColor="dark"
+                                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                                        data={data} theadTextWhite >
+                                    </MDBDataTable>
+                                    <DeleteModal
+                                        ref='deleteModal'
+                                        deleteEntry={this.deleteRole}
+                                    />
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can>
         );
     }
 

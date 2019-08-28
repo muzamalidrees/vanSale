@@ -27,3 +27,12 @@ legend.legend-border {
 .notificationCloseBtn {
     display: none;
 }
+
+@media (min-width: 575px) {
+    .actioBarIcons {
+        display: none
+    }
+    .scanButton {
+        display: none
+    }
+}

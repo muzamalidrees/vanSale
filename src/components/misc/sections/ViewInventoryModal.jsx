@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBCardHeader, MDBDataTable } from 'mdbreact';
+import { MDBContainer, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBCardHeader, MDBDataTable } from 'mdbreact';
 
 
 

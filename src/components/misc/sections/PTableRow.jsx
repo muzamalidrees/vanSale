@@ -30,7 +30,7 @@ class PTableRow extends Component {
         let { tableId } = this.props
         // console.log(tableId, pPrice);
 
-        { tableId === 'saleProductsTable' ? this.props.minusFromTotal(pPrice) : this.props.addToTotal(pPrice) }
+        tableId === 'saleProductsTable' ? this.props.minusFromTotal(pPrice) : this.props.addToTotal(pPrice)
 
 
         var a = e.target.innerHTML
@@ -40,10 +40,10 @@ class PTableRow extends Component {
             return { pPrice }
         }, function () {
             // console.log(tableId, this.state.pPrice);
-            {
-                this.props.tableId === 'saleProductsTable' ? this.props.addToTotal(parseInt(this.state.pPrice)) :
-                    this.props.minusFromTotal(parseInt(this.state.pPrice))
-            }
+
+            this.props.tableId === 'saleProductsTable' ? this.props.addToTotal(parseInt(this.state.pPrice)) :
+                this.props.minusFromTotal(parseInt(this.state.pPrice))
+
         })
     }
     onKeyPress = (e) => {
@@ -58,7 +58,7 @@ class PTableRow extends Component {
     render() {
 
 
-        let { index, pId, pName, pRate, pQTY,id } = this.props
+        let { index, pId, pName, pRate, pQTY, id } = this.props
 
         return (
 

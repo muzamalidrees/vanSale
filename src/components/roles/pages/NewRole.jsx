@@ -22,8 +22,9 @@ class NewUser extends Component {
     }
 
     handleInput = e => {
+        let str = e.target.value
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: str.toLowerCase()
         })
     }
 
@@ -71,7 +72,7 @@ class NewUser extends Component {
         var { name } = this.state
 
         return (
-            // <Can I='create' a='role'>
+            <Can I='create' a='role'>
                 <MDBContainer className='' style={{ marginTop: '80px' }}>
                     <MDBRow center>
                         <MDBCol md="6">
@@ -113,7 +114,7 @@ class NewUser extends Component {
                         </MDBCol>
                     </MDBRow>
                 </MDBContainer>
-            // </Can>
+            </Can>
         );
     }
 }

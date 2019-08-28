@@ -10,11 +10,13 @@ class Home extends Component {
         console.log(barcode);
         this.refs.newSales.productScannedInAndroid(barcode)
     }
-    
+
     render() {
         return (
-            <NewSales
-                ref='newSales' />
+            <Can I='sale' a='product'>
+                <NewSales
+                    ref='newSales' />
+            </Can>
         )
     }
 }

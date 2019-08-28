@@ -75,7 +75,7 @@ class AllCustomers extends Component {
         fetch('/deleteCustomer', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
     }
@@ -86,7 +86,7 @@ class AllCustomers extends Component {
         var { customers, routes } = this.state;
         var rows = [];
         var index = 0;
-console.log(customers);
+        // console.log(customers);
 
         customers.forEach((customer) => {
 
@@ -136,26 +136,27 @@ console.log(customers);
             rows: rows
         }
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Your Customers
+            <Can I='read' a='customer'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        Your Customers
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
+                    <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='customersTable' striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <EditCustomerModal
-                        ref='editCustomerModal'
-                    />
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteCustomer}
-                    />
-                </MDBCardBody>
-            </MDBCard>
+                        <MDBDataTable id='customersTable' striped small hover theadColor="dark"
+                            bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <EditCustomerModal
+                            ref='editCustomerModal'
+                        />
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deleteCustomer}
+                        />
+                    </MDBCardBody>
+                </MDBCard>
+            </Can>
         );
     }
 

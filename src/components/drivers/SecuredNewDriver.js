@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import NewPerson from '../misc/pages/NewPerson';
+import { Can } from "../../configs/Ability-context";
+
 
 
 class SecuredNewDriver extends Component {
@@ -33,7 +35,7 @@ class SecuredNewDriver extends Component {
             return <Redirect to='/login' />
         }
         else {
-        return <NewPerson  new={'Driver'}/>
+            return <Can I='create' a='driver'><NewPerson new={'Driver'} /></Can>
         }
 
     }

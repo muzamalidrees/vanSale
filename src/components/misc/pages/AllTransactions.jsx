@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon, MDBNavLink } from 'mdbreact';
-import { Can } from '../../../configs/Ability-context'
+import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBNavLink } from 'mdbreact';
 
 
 
@@ -10,31 +9,29 @@ class AllTransactions extends Component {
   constructor(props) {
     super(props);
     this._isMounted = true
-    {
-      props.trType === 'sales' ?
-        fetch('/getAllSales',
-        )
-          .then((res) => res.json())
-          .then((json) => {
-            console.log(json)
-            if (this._isMounted) {
-              this.setState({ transactions: json.data })
-            }
-          })
-          .catch((error) => console.log(error))
-        :
-        fetch('/getAllReturns',
-        )
-          .then((res) => res.json())
-          .then((json) => {
-            console.log(json)
-            if (this._isMounted) {
-              this.setState({ transactions: json.data })
-            }
-          })
-          .catch((error) => console.log(error))
-    }
-    
+    props.trType === 'sales' ?
+      fetch('/getAllSales',
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(json)
+          if (this._isMounted) {
+            this.setState({ transactions: json.data })
+          }
+        })
+        .catch((error) => console.log(error))
+      :
+      fetch('/getAllReturns',
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(json)
+          if (this._isMounted) {
+            this.setState({ transactions: json.data })
+          }
+        })
+        .catch((error) => console.log(error))
+
     fetch('/getAllProducts',
     )
       .then((res) => res.json())

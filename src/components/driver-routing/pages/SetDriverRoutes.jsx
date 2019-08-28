@@ -160,68 +160,68 @@ class SetDriverRoutes extends Component {
 
 
         return (
-            // <Can I='create' a='driverRoute'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className=' p-5'>
-
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="mb-5 text-center font-weight-bold">
-                                Set Drivers' Routes
+            <Can I='set' a='driverRoute'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className=' p-5'>
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="mb-5 text-center font-weight-bold">
+                                    Set Drivers' Routes
                             </MDBCardHeader>
-                            <MDBCardBody className='p-0'>
+                                <MDBCardBody className='p-0'>
 
-                                <form onSubmit={this.handleSubmit} className='text-center'>
-                                    <MDBRow className='mb-5 grey-text'>
-                                        <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="user-alt" size='2x' />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <Select
-                                                styles={driverStyles}
-                                                value={driver}
-                                                onChange={this.handleSelectChange('driver')}
-                                                options={driverOptions}
-                                                placeholder='Driver'
-                                                isSearchable
-                                                isClearable
-                                                className='form-control-lg px-0'
-                                            />
-                                        </MDBCol>
-                                    </MDBRow>
-                                    <MDBRow className='mb-5 grey-text'>
-                                        <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="search-dollar" size='2x' />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <Select
-                                                styles={routeStyles}
-                                                value={route}
-                                                onChange={this.handleSelectChange('route')}
-                                                options={routeOptions}
-                                                placeholder='Route'
-                                                isSearchable
-                                                isClearable
-                                                className='form-control-lg px-0'
-                                            />
-                                        </MDBCol>
-                                    </MDBRow>
-
-                                    <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
-                                </form>
-                                <Link to='/driverRouting/all'>All Drivers' Routes..</Link>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            // </Can>
+                                    <form onSubmit={this.handleSubmit} className='text-center'>
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="user-alt" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    styles={driverStyles}
+                                                    value={driver}
+                                                    onChange={this.handleSelectChange('driver')}
+                                                    options={driverOptions}
+                                                    placeholder='Driver'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-lg px-0'
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="search-dollar" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    styles={routeStyles}
+                                                    value={route}
+                                                    onChange={this.handleSelectChange('route')}
+                                                    options={routeOptions}
+                                                    placeholder='Route'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-lg px-0'
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
+                                    </form>
+                                    <Can I='read' a='driverRoutes'>
+                                        <Link to='/driverRouting/all'>All Drivers' Routes..</Link>
+                                    </Can>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <Notification
+                                        message={this.state.notificationMessage}
+                                    /> : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can>
         );
     }
 }

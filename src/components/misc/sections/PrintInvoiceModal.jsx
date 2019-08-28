@@ -41,8 +41,13 @@ class PrintInvoiceModal extends Component {
         if (this._isMounted) {
             this.setState({
                 modalShow: !this.state.modalShow,
-
+                sales: [],
+                returns: [],
+                invoiceDetails: {},
+                products: [],
+                paidAmount: 0,
             });
+            totalReturns = 0; totalSales = 0
         }
     }
     saveAndPrint = () => {

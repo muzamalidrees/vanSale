@@ -10,7 +10,9 @@ class AllUsers extends Component {
     render() {
 
         return (
-            <AllPersons all={'Users'} />
+            <Can I='read' a='user'>
+                <AllPersons all={'Users'} />
+            </Can>
         );
     }
 

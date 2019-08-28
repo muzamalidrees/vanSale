@@ -73,63 +73,63 @@ class NewProductCategory extends Component {
     render() {
 
         return (
-            // <Can I='create' a='productCategory'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className=' p-5'>
+            <Can I='create' a='productCategory'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className=' p-5'>
 
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                                New Product Category
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                    New Product Category
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
+                                <MDBCardBody className='p-2'>
 
-                                <form ref='newProductCategoryForm' onSubmit={this.handleSubmit} noValidate>
-                                    <div className="grey-text">
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.name}
-                                            label="Name"
-                                            name='name'
-                                            icon="pen-nib"
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                            inputRef={el => { this.name = el }}
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.description}
-                                            label="Description"
-                                            name="description"
-                                            icon="file-alt"
-                                            group
-                                            type="textarea"
-                                            rows='2'
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                        />
-                                    </div>
-                                    <div className="text-center">
-                                        <MDBBtn size='sm' color="dark" outline type='submit'>Submit</MDBBtn>
-                                    </div>
-                                </form>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            // </Can >
+                                    <form ref='newProductCategoryForm' onSubmit={this.handleSubmit} noValidate>
+                                        <div className="grey-text">
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={this.state.name}
+                                                label="Name"
+                                                name='name'
+                                                icon="pen-nib"
+                                                group
+                                                type="text"
+                                                validate
+                                                error="wrong"
+                                                success="right"
+                                                required
+                                                inputRef={el => { this.name = el }}
+                                            />
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={this.state.description}
+                                                label="Description"
+                                                name="description"
+                                                icon="file-alt"
+                                                group
+                                                type="textarea"
+                                                rows='2'
+                                                validate
+                                                error="wrong"
+                                                success="right"
+                                            />
+                                        </div>
+                                        <div className="text-center">
+                                            <MDBBtn size='sm' color="dark" outline type='submit'>Submit</MDBBtn>
+                                        </div>
+                                    </form>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <Notification
+                                        message={this.state.notificationMessage}
+                                    /> : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can >
         );
     }
 }

@@ -143,26 +143,27 @@ class AllDevices extends Component {
             rows: rows
         }
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    All Devices
+            <Can I='read' a='device'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        All Devices
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
+                    <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='devicesTable' striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <EditDeviceModal
-                        ref='editDeviceModal'
-                    />
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteDevice}
-                    />
-                </MDBCardBody>
-            </MDBCard>
+                        <MDBDataTable id='devicesTable' striped small hover theadColor="dark"
+                            bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <EditDeviceModal
+                            ref='editDeviceModal'
+                        />
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deleteDevice}
+                        />
+                    </MDBCardBody>
+                </MDBCard>
+            </Can>
         );
     }
 

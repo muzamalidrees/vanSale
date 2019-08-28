@@ -76,80 +76,80 @@ class NewPermission extends Component {
         var { permission, entity, slug } = this.state
 
         return (
-            // <Can I='create' a='permission'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className=' p-5'>
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                                New Permission
+            <Can I='create' a='permission'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className=' p-5'>
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                    New Permission
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
+                                <MDBCardBody className='p-2'>
 
-                                <form ref='newPermissionForm' onSubmit={this.handleSubmit} noValidate>
-                                    <div className="grey-text">
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={permission}
-                                            label="Permission"
-                                            name='permission'
-                                            icon="pen-nib"
-                                            inputRef={el => { this.permission = el }}
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                            hint='e.g. edit'
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={entity}
-                                            label="Entity"
-                                            name='entity'
-                                            icon="boxes"
-                                            inputRef={el => { this.entity = el }}
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                            hint='e.g. user'
-                                        />
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={slug}
-                                            label="Slug"
-                                            name='slug'
-                                            icon="pen-nib"
-                                            inputRef={el => { this.slug = el }}
-                                            group
-                                            type="text"
-                                            validate
-                                            error="wrong"
-                                            success="right"
-                                            required
-                                            hint='e.g. edit_user'
-                                        />
-                                    </div>
-                                    <div className="text-right">
-                                        <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
-                                    </div>
-                                </form>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            // </Can>
+                                    <form ref='newPermissionForm' onSubmit={this.handleSubmit} noValidate>
+                                        <div className="grey-text">
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={permission}
+                                                label="Permission"
+                                                name='permission'
+                                                icon="pen-nib"
+                                                inputRef={el => { this.permission = el }}
+                                                group
+                                                type="text"
+                                                validate
+                                                error="wrong"
+                                                success="right"
+                                                required
+                                                hint='e.g. edit'
+                                            />
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={entity}
+                                                label="Entity"
+                                                name='entity'
+                                                icon="boxes"
+                                                inputRef={el => { this.entity = el }}
+                                                group
+                                                type="text"
+                                                validate
+                                                error="wrong"
+                                                success="right"
+                                                required
+                                                hint='e.g. user'
+                                            />
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={slug}
+                                                label="Slug"
+                                                name='slug'
+                                                icon="pen-nib"
+                                                inputRef={el => { this.slug = el }}
+                                                group
+                                                type="text"
+                                                validate
+                                                error="wrong"
+                                                success="right"
+                                                required
+                                                hint='e.g. edit_user'
+                                            />
+                                        </div>
+                                        <div className="text-right">
+                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
+                                        </div>
+                                    </form>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <Notification
+                                        message={this.state.notificationMessage}
+                                    /> : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can>
         );
     }
 }

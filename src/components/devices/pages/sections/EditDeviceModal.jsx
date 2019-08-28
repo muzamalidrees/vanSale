@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 

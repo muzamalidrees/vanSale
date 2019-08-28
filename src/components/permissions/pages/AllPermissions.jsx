@@ -97,28 +97,30 @@ class AllPermissions extends Component {
             rows: rows
         }
         return (
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="8">
-                        <MDBCard className=' p-0'>
-                            <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                                Roles' Permissions
+            <Can I='read' a='permission'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="8">
+                            <MDBCard className=' p-0'>
+                                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                                    Roles' Permissions
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
+                                <MDBCardBody className='p-2'>
 
-                                <MDBDataTable id='permissionsTable' striped small hover theadColor="dark"
-                                    bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                                    data={data} theadTextWhite >
-                                </MDBDataTable>
-                                <DeleteModal
-                                    ref='deleteModal'
-                                    deleteEntry={this.deletePermission}
-                                />
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
+                                    <MDBDataTable id='permissionsTable' striped small hover theadColor="dark"
+                                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                                        data={data} theadTextWhite >
+                                    </MDBDataTable>
+                                    <DeleteModal
+                                        ref='deleteModal'
+                                        deleteEntry={this.deletePermission}
+                                    />
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can>
         );
     }
 

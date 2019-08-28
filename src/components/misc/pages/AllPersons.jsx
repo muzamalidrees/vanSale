@@ -85,7 +85,7 @@ class AllPersons extends Component {
         fetch('/deleteUser', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
     }
@@ -184,7 +184,7 @@ class AllPersons extends Component {
                             // password: user.password,
                             dailyMessage: driver.daily_message,
                             buttons: <React.Fragment>
-                                <Can I='read' a='driverInventory'>
+                                <Can I='read' a='driverInventories'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(driver.id)} className='m-1 py-1 px-2' outline color='secondary' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
                                 </Can>
                                 <Can I='update' a='driver'>
@@ -230,7 +230,7 @@ class AllPersons extends Component {
                             // password: user.password,
                             location: operator.location,
                             buttons: <React.Fragment>
-                                <Can I='read' a='operatorInventory'>
+                                <Can I='read' a='operatorInventories'>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleViewInventory(operator.id)} className='m-1 py-1 px-2' outline color='secondary' size="sm"><MDBIcon icon="boxes" /></MDBBtn>
                                 </Can>
                                 <Can I='update' a='operator'>

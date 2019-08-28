@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBModalFooter, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -206,7 +206,7 @@ class EditInventoryModal extends Component {
                     id: inventory.id, driverId: driver.value, productId: product.value, qty: qty
                 }
 
-                var options = {
+                let options = {
                     method: 'PUT',
                     body: JSON.stringify(driverInventory),
                     headers: { 'Content-Type': 'application/json' }
@@ -251,7 +251,7 @@ class EditInventoryModal extends Component {
                     id: inventory.id, operatorId: operator.value, productId: product.value, qty: qty
                 }
 
-                var options = {
+                let options = {
                     method: 'POST',
                     body: JSON.stringify(operatorInventory),
                     headers: { 'Content-Type': 'application/json' }

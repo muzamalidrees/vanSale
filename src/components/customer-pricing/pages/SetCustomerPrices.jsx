@@ -206,70 +206,72 @@ class SetCustomerPrices extends Component {
 
 
         return (
-            // <Can I='create' a='customerPrice'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className=' p-5'>
+            <Can I='set' a='customerPrice'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className=' p-5'>
 
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="mb-5 text-center font-weight-bold">
-                                Set Customer's Price-Groups
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="mb-5 text-center font-weight-bold">
+                                    Set Customer's Price-Groups
                                 </MDBCardHeader>
-                            <MDBCardBody className='p-0'>
+                                <MDBCardBody className='p-0'>
 
-                                <form onSubmit={this.handleSubmit} className='text-center'>
-                                    <MDBRow className='mb-5 grey-text'>
-                                        <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="user-alt" size='2x' />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <Select
-                                                styles={customerStyles}
-                                                value={customer}
-                                                onChange={this.handleSelectChange('customer')}
-                                                options={customerOptions}
-                                                placeholder='Customer'
-                                                isSearchable
-                                                isClearable
-                                                className='form-control-lg px-0'
-                                            />
-                                        </MDBCol>
-                                    </MDBRow>
-                                    <MDBRow className='mb-5 grey-text'>
-                                        <MDBCol sm='1' className=''>
-                                            <MDBIcon icon="search-dollar" size='2x' />
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <Select
-                                                styles={priceGroupStyles}
-                                                value={priceGroup}
-                                                onChange={this.handleSelectChange('priceGroup')}
-                                                options={priceGroupOptions}
-                                                placeholder='Price-Group'
-                                                isSearchable
-                                                isClearable
-                                                className='form-control-lg px-0'
-                                                ref={el => this.priceGroup = el}
-                                            />
-                                        </MDBCol>
-                                    </MDBRow>
+                                    <form onSubmit={this.handleSubmit} className='text-center'>
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="user-alt" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    styles={customerStyles}
+                                                    value={customer}
+                                                    onChange={this.handleSelectChange('customer')}
+                                                    options={customerOptions}
+                                                    placeholder='Customer'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-lg px-0'
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <MDBRow className='mb-5 grey-text'>
+                                            <MDBCol sm='1' className=''>
+                                                <MDBIcon icon="search-dollar" size='2x' />
+                                            </MDBCol>
+                                            <MDBCol>
+                                                <Select
+                                                    styles={priceGroupStyles}
+                                                    value={priceGroup}
+                                                    onChange={this.handleSelectChange('priceGroup')}
+                                                    options={priceGroupOptions}
+                                                    placeholder='Price-Group'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-lg px-0'
+                                                    ref={el => this.priceGroup = el}
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
 
-                                    <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
-                                </form>
-                                <Link to='/customerPricing/all'>All Customer Prices..</Link>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                />
-                                : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            // </Can>
+                                        <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
+                                    </form>
+                                    <Can I='read' a='customerPrices'>
+                                    <Link to='/customerPricing/all'>All Customer Prices..</Link>
+                                    </Can>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <Notification
+                                        message={this.state.notificationMessage}
+                                    />
+                                    : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can>
         );
     }
 }

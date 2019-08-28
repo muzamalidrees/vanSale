@@ -374,7 +374,7 @@ class NewTransaction extends Component {
                                             </Select>
                                         </MDBCol>
                                         <Can I='scan' a='product'>
-                                            <MDBCol lg='1' className='text-center' middle >
+                                            <MDBCol lg='1' className='text-center scanButton' middle >
                                                 <MDBBtn
                                                     size='sm'
                                                     color="dark"

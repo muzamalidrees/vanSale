@@ -8,7 +8,6 @@ class Notification extends Component {
 
             <MDBNotification
                 show
-                fade
                 labelcolor="#2BBBAD"
                 title="New Message"
                 message={this.props.message}

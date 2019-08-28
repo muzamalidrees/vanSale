@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AllTransactions from '../misc/pages/AllTransactions';
 import { Redirect } from 'react-router'
-
+import { Can } from '../../configs/Ability-context'
 
 class SecuredAllSales extends Component {
     _isMounted = false
@@ -32,7 +32,7 @@ class SecuredAllSales extends Component {
             return <Redirect to='/login' />
         }
         else {
-            return <AllTransactions trType='sales' />
+            return <Can I='read' a='sales'> <AllTransactions trType='sales' /></Can>
         }
 
     }

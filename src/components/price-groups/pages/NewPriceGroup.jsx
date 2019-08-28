@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -222,7 +222,7 @@ class NewPriceGroup extends Component {
         }
 
         return (
-            // <Can I='create' a='priceGroup'>
+            <Can I='create' a='priceGroup'>
             <MDBContainer className=' p-0' fluid style={{ marginTop: '80px' }}>
                 <MDBRow center>
                     <MDBCol md="11">
@@ -302,7 +302,7 @@ class NewPriceGroup extends Component {
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
-            // </Can>
+            </Can>
         );
     }
 }

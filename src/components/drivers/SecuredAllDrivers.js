@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import AllPersons from '../misc/pages/AllPersons';
+import { Can } from '../../configs/Ability-context'
 
 
 class SecuredAllDrivers extends Component {
@@ -32,7 +33,7 @@ class SecuredAllDrivers extends Component {
             return <Redirect to='/login' />
         }
         else {
-        return <AllPersons all={'Drivers'} />
+            return <Can I='read' a='driver'> <AllPersons all={'Drivers'} /></Can>
         }
 
     }

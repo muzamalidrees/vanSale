@@ -184,60 +184,64 @@ class NewReturn extends Component {
 
         return (
             <React.Fragment>
-                <div style={{ marginTop: '72px', paddingTop: '20px' }}>
-                    <InvoiceDetails
-                        ref='invoiceDetails'
-                        customerSelected={this.customerSelected}
-                        lastInvoiceIdFetched={this.lastInvoiceIdFetched}
-                    />
-                    < NewTransaction
-                        ref='returnProducts'
-                        tableId={'returnProductsTable'}
-                        containerId={'returnProductsContainer'}
-                        addProductToTbl={this.addProductToTbl}
-                        customerId={this.state.customerId}
-                    />
-                    <ProductsTable
-                        ref='returnProductsTable'
-                        tableId={'returnProductsTable'}
-                        containerId={'returnProductsContainer'}
-                        deleteProductFrmTbl={this.deleteProductFrmTbl}
-                        minusFromTotal={this.minusFromTotal}
-                        addToTotal={this.addToTotal}
-                        displayOtherSection={this.displayOtherSection}
-                        displaySubmitButton={this.displaySubmitButton}
-                        isDisplaySubmitButton={this.state.isDisplaySubmitButton}
-                        saveReturns={this.saveReturns}
-                        saveSales={this.saveSales}
-                        saveInvoice={this.saveInvoice}
-                        fetchInvoiceDetails={this.fetchInvoiceDetails}
-                    />
-                </div>
-                <div style={{ display: `${this.state.displaySalesSection ? '' : 'none'}` }}>
-                    < NewTransaction
-                        ref='saleProducts'
-                        tableId={'saleProductsTable'}
-                        containerId={'saleProductsContainer'}
-                        addProductToTbl={this.addProductToTbl}
-                        customerId={this.state.customerId}
-                    />
-                    <ProductsTable
-                        ref='saleProductsTable'
-                        tableId={'saleProductsTable'}
-                        containerId={'saleProductsContainer'}
-                        askOtherSection={this.state.askOtherSection}
-                        deleteProductFrmTbl={this.deleteProductFrmTbl}
-                        minusFromTotal={this.minusFromTotal}
-                        addToTotal={this.addToTotal}
-                        isDisplaySubmitButton={!this.state.isDisplaySubmitButton}
-                        saveReturns={this.saveReturns}
-                        saveSales={this.saveSales}
-                        saveInvoice={this.saveInvoice}
-                        displayOtherSection={this.displayOtherSection}
-                        displaySubmitButton={this.displaySubmitButton}
-                        fetchInvoiceDetails={this.fetchInvoiceDetails}
-                    />
-                </div>
+                <Can I='return' a='product'>
+                    <div style={{ marginTop: '72px', paddingTop: '20px' }}>
+                        <InvoiceDetails
+                            ref='invoiceDetails'
+                            customerSelected={this.customerSelected}
+                            lastInvoiceIdFetched={this.lastInvoiceIdFetched}
+                        />
+                        < NewTransaction
+                            ref='returnProducts'
+                            tableId={'returnProductsTable'}
+                            containerId={'returnProductsContainer'}
+                            addProductToTbl={this.addProductToTbl}
+                            customerId={this.state.customerId}
+                        />
+                        <ProductsTable
+                            ref='returnProductsTable'
+                            tableId={'returnProductsTable'}
+                            containerId={'returnProductsContainer'}
+                            deleteProductFrmTbl={this.deleteProductFrmTbl}
+                            minusFromTotal={this.minusFromTotal}
+                            addToTotal={this.addToTotal}
+                            displayOtherSection={this.displayOtherSection}
+                            displaySubmitButton={this.displaySubmitButton}
+                            isDisplaySubmitButton={this.state.isDisplaySubmitButton}
+                            saveReturns={this.saveReturns}
+                            saveSales={this.saveSales}
+                            saveInvoice={this.saveInvoice}
+                            fetchInvoiceDetails={this.fetchInvoiceDetails}
+                        />
+                    </div>
+                </Can>
+                <Can I='sale' a='product'>
+                    <div style={{ display: `${this.state.displaySalesSection ? '' : 'none'}` }}>
+                        < NewTransaction
+                            ref='saleProducts'
+                            tableId={'saleProductsTable'}
+                            containerId={'saleProductsContainer'}
+                            addProductToTbl={this.addProductToTbl}
+                            customerId={this.state.customerId}
+                        />
+                        <ProductsTable
+                            ref='saleProductsTable'
+                            tableId={'saleProductsTable'}
+                            containerId={'saleProductsContainer'}
+                            askOtherSection={this.state.askOtherSection}
+                            deleteProductFrmTbl={this.deleteProductFrmTbl}
+                            minusFromTotal={this.minusFromTotal}
+                            addToTotal={this.addToTotal}
+                            isDisplaySubmitButton={!this.state.isDisplaySubmitButton}
+                            saveReturns={this.saveReturns}
+                            saveSales={this.saveSales}
+                            saveInvoice={this.saveInvoice}
+                            displayOtherSection={this.displayOtherSection}
+                            displaySubmitButton={this.displaySubmitButton}
+                            fetchInvoiceDetails={this.fetchInvoiceDetails}
+                        />
+                    </div>
+                </Can>
             </React.Fragment>
         );
     }

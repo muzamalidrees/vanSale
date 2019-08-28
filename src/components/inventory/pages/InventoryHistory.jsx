@@ -206,18 +206,18 @@ class InventoryHistory extends Component {
         }
 
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Inventory Histories
+            <Can I='read' a='inventoryHistories'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        Inventory Histories
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
+                    <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='inventoryHistoriesTable' striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <b> FTO :</b> factory to operator&nbsp;&nbsp;&nbsp;&nbsp;
+                        <MDBDataTable id='inventoryHistoriesTable' striped small hover theadColor="dark"
+                            bordered btn entries={55} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <b> FTO :</b> factory to operator&nbsp;&nbsp;&nbsp;&nbsp;
                     <b> OTD :</b> operator to driver&nbsp;&nbsp;&nbsp;&nbsp;
                     <b> R.DTO :</b> Return driver to operator&nbsp;&nbsp;&nbsp;&nbsp;
                     <b> R.OTF :</b> Return operator to factory&nbsp;&nbsp;&nbsp;&nbsp;
@@ -228,11 +228,12 @@ class InventoryHistory extends Component {
                     <b> S.Update :</b> driver's sale update&nbsp;&nbsp;&nbsp;&nbsp;
                     <b> S.Delete :</b> driver's sale deleted
                     <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteInventoryHistory}
-                    />
-                </MDBCardBody>
-            </MDBCard >
+                            ref='deleteModal'
+                            deleteEntry={this.deleteInventoryHistory}
+                        />
+                    </MDBCardBody>
+                </MDBCard >
+            </Can>
         );
     }
 

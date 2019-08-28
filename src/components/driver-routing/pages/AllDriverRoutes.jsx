@@ -151,23 +151,23 @@ class AllDriverRoutes extends Component {
             rows: rows
         }
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Drivers' Routes
+            <Can I='read' a='driverRoutes'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        Drivers' Routes
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
-
-                    <MDBDataTable id='driverRouting' striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteDriverRoute}
-                    />
-                </MDBCardBody>
-            </MDBCard>
+                    <MDBCardBody className='p-2'>
+                        <MDBDataTable id='driverRouting' striped small hover theadColor="dark"
+                            bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deleteDriverRoute}
+                        />
+                    </MDBCardBody>
+                </MDBCard>
+            </Can>
         );
     }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import NewPerson from '../misc/pages/NewPerson';
-
+import { Can } from '../../configs/Ability-context'
 
 class SecuredNewOperator extends Component {
     _isMounted = false
@@ -33,7 +33,7 @@ class SecuredNewOperator extends Component {
             return <Redirect to='/login' />
         }
         else {
-        return <NewPerson  new={'Operator'}/>
+            return <Can I='create' a='operator'> <NewPerson new={'Operator'} /></Can>
         }
 
     }

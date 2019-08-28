@@ -24,6 +24,7 @@ class ViewInvoiceModal extends Component {
         });
     }
     fetchData = (id) => {
+        // console.log(id);
 
         fetch('/getSpecificInvoice/' + id)
             .then((res) => res.json())

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBRow, MDBCol, MDBInput } from 'mdbreact';
 import Select from 'react-select';
-import Notification from '../../../misc/sections/Notification';
 
 
 
@@ -75,7 +74,6 @@ class viewPriceGroupModal extends Component {
 
     render() {
 
-        let currentComponent = this
         let { productCategoryId, productCategories, productOptions, products, name } = this.state
 
         let currentProductCategory;

@@ -11,7 +11,9 @@ class NewUser extends Component {
 
 
         return (
-            <NewPerson new={'User'} />
+            <Can I='create' a='user'>
+                <NewPerson new={'User'} />
+            </Can>
         );
     }
 }

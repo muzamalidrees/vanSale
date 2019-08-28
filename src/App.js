@@ -55,7 +55,7 @@ class App extends React.Component {
 
       let { user } = this.state
       if (user !== undefined && user !== null) {
-        this.changeUser(user.role_id);
+        this.changeUser(user);
       }
     })
   }
@@ -80,16 +80,17 @@ class App extends React.Component {
       .catch((err) => console.log(err))
   }
 
-  changeUser = (x) => {
+  changeUser = (user) => {
     let userRole;
     if (this.state.roles) {
       this.state.roles.forEach(role => {
-        if (role.id === x) {
+        if (role.id === user.role_id) {
           userRole = role.name
         }
       });
       if (userRole === 'driver') {
         this.setState({
+          user: user,
           modalShow: true
         })
       }

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { MDBInput, MDBBtn, MDBRow, MDBCol, } from 'mdbreact';
+import { MDBInput, MDBRow, MDBCol, } from 'mdbreact';
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-import { Can } from '../../../configs/Ability-context'
 import Notification from './Notification'
 
 
@@ -66,17 +65,19 @@ class InvoiceDetails extends Component {
     }
 
     minusTotalValue = (value) => {
-
-        this.setState({
-            total: this.state.total - parseInt(value)
-        })
+        if (this._isMounted) {
+            this.setState({
+                total: this.state.total - parseInt(value)
+            })
+        }
     }
 
     addTotalValue = (value) => {
-
-        this.setState({
-            total: this.state.total + parseInt(value)
-        })
+        if (this._isMounted) {
+            this.setState({
+                total: this.state.total + parseInt(value)
+            })
+        }
     }
 
     componentDidMount() {

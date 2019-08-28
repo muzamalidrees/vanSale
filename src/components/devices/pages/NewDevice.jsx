@@ -137,69 +137,69 @@ class NewDevice extends Component {
 
 
         return (
-            // <Can I='create' a='device'>
-            <MDBContainer className='' style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="6">
-                        <MDBCard className='p-3'>
+            <Can I='create' a='device'>
+                <MDBContainer className='' style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="6">
+                            <MDBCard className='p-3'>
 
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                                New Device
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                    New Device
                             </MDBCardHeader>
-                            <MDBCardBody className='p-4'>
+                                <MDBCardBody className='p-4'>
 
-                                <form ref='newDeviceForm' onSubmit={this.handleSubmit} noValidate>
-                                    <div className="grey-text">
-                                        <MDBInput
-                                            onInput={this.handleInput}
-                                            value={this.state.IMEI}
-                                            label="IMEI"
-                                            name="IMEI"
-                                            inputRef={el => { this.IMEI = el }}
-                                            icon="barcode"
-                                            group
-                                            type="text"
-                                            validate
-                                            required
-                                        />
-                                        <MDBRow className='mb-5'>
-                                            <MDBCol sm='1' className=''>
-                                                <MDBIcon icon="user-tie" size='2x' />
-                                            </MDBCol>
-                                            <MDBCol className=''>
-                                                {/* {showOptions ? */}
-                                                <Select
-                                                    styles={customStyles}
-                                                    value={driver}
-                                                    onChange={this.handleSelectChange}
-                                                    options={driverOptions}
-                                                    placeholder='Driver'
-                                                    isSearchable
-                                                    isClearable
-                                                    className='form-control-md pl-0'
-                                                >
-                                                </Select>
-                                                {/* : null */}
-                                                {/* } */}
-                                            </MDBCol>
-                                        </MDBRow>
-                                    </div>
-                                    <div className="text-center">
-                                        <MDBBtn size='sm' color="dark" outline type='submit'>Register</MDBBtn>
-                                    </div>
-                                </form>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            // </Can >
+                                    <form ref='newDeviceForm' onSubmit={this.handleSubmit} noValidate>
+                                        <div className="grey-text">
+                                            <MDBInput
+                                                onInput={this.handleInput}
+                                                value={this.state.IMEI}
+                                                label="IMEI"
+                                                name="IMEI"
+                                                inputRef={el => { this.IMEI = el }}
+                                                icon="barcode"
+                                                group
+                                                type="text"
+                                                validate
+                                                required
+                                            />
+                                            <MDBRow className='mb-5'>
+                                                <MDBCol sm='1' className=''>
+                                                    <MDBIcon icon="user-tie" size='2x' />
+                                                </MDBCol>
+                                                <MDBCol className=''>
+                                                    {/* {showOptions ? */}
+                                                    <Select
+                                                        styles={customStyles}
+                                                        value={driver}
+                                                        onChange={this.handleSelectChange}
+                                                        options={driverOptions}
+                                                        placeholder='Driver'
+                                                        isSearchable
+                                                        isClearable
+                                                        className='form-control-md pl-0'
+                                                    >
+                                                    </Select>
+                                                    {/* : null */}
+                                                    {/* } */}
+                                                </MDBCol>
+                                            </MDBRow>
+                                        </div>
+                                        <div className="text-center">
+                                            <MDBBtn size='sm' color="dark" outline type='submit'>Register</MDBBtn>
+                                        </div>
+                                    </form>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <Notification
+                                        message={this.state.notificationMessage}
+                                    /> : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </Can >
         );
     }
 }

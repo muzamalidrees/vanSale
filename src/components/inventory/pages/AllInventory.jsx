@@ -228,28 +228,31 @@ class AllInventory extends Component {
         }
 
         return (
-
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    All {showWise}s Inventories
+            <Can I='read' a='driverInventories'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        All {showWise}s Inventories
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
-                    <MDBBtn size='sm' style={{ fontSize: '13px', letterSpacing: '3px' }} className='mx-0 px-2' color='info' onClick={this.toggle} >
-                        {showWise === 'Driver' ? 'Location wise' : 'Driver wise'} Inventories
-                    </MDBBtn>
-                    <MDBDataTable id={tableId} striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <EditInventoryModal
-                        ref='editInventoryModal'
-                    />
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deleteInventory}
-                    />
-                </MDBCardBody>
-            </MDBCard >
+                    <MDBCardBody className='p-2'>
+                        <Can I='read' a='operatorInventories'>
+                            <MDBBtn size='sm' style={{ fontSize: '13px', letterSpacing: '3px' }} className='mx-0 px-2' color='info' onClick={this.toggle} >
+                                {showWise === 'Driver' ? 'Location wise' : 'Driver wise'} Inventories
+                            </MDBBtn>
+                        </Can>
+                        <MDBDataTable id={tableId} striped small hover theadColor="dark"
+                            bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <EditInventoryModal
+                            ref='editInventoryModal'
+                        />
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deleteInventory}
+                        />
+                    </MDBCardBody>
+                </MDBCard >
+            </Can>
         );
     }
 

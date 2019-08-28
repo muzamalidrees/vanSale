@@ -126,7 +126,7 @@ class NewInventory extends Component {
                 fetch('/addNewLocationInventory', options)
                     .then((res) => res.json())
                     .then((json) => {
-                        console.log(json)
+                        // console.log(json)
                         if (this._isMounted === true) {
                             this.setState({ notificationMessage: json.message, notificationShow: true })
                         }
@@ -155,7 +155,7 @@ class NewInventory extends Component {
                 fetch('/addNewInventoryHistory', historyOptions)
                     .then((res) => res.json())
                     .then((json) => {
-                        console.log(json)
+                        // console.log(json)
                     })
                     .catch((error) => console.log(error))
             }
@@ -236,7 +236,7 @@ class NewInventory extends Component {
             })
             .catch((error) => console.log(error))
 
-            
+
         let history = {
             customerId: 0, driverId: driver.value, operatorId: Number(localStorage.getItem('ui')),
             productId: product.value, qty: qty, flag: 'OTD'
@@ -317,106 +317,107 @@ class NewInventory extends Component {
 
 
         return (
-
-            <MDBContainer className='mt-5 pt-3'>
-                <div className='row mt-2'>
-                    <MDBCardHeader tag="h4" style={{ color: 'dark', width: '100%' }} className="text-center font-weight-bold">
-                        Allocate inventory to {to}
-                    </MDBCardHeader>
-                    <MDBRow center style={{ width: '100%' }} className='m-1 p-1'>
-                        <MDBCol md='6' className='grey-text m-3 pt-5'>
-                            <form ref='inventoryForm' onSubmit={this.handleSubmit} noValidate>
-                                <MDBRow className='mb-5'>
-                                    <MDBCol sm='1' className=''>
-                                        <MDBIcon icon="user-tie" size='2x' />
-                                    </MDBCol>
-                                    <MDBCol className=''>
-                                        {to === 'Driver' ?
+            <Can I='allocate' a='driverInventory'>
+                <MDBContainer className='mt-5 pt-3'>
+                    <div className='row mt-2'>
+                        <MDBCardHeader tag="h4" style={{ color: 'dark', width: '100%' }} className="text-center font-weight-bold">
+                            Allocate inventory to {to}
+                        </MDBCardHeader>
+                        <MDBRow center style={{ width: '100%' }} className='m-1 p-1'>
+                            <MDBCol md='6' className='grey-text m-3 pt-5'>
+                                <form ref='inventoryForm' onSubmit={this.handleSubmit} noValidate>
+                                    <MDBRow className='mb-5'>
+                                        <MDBCol sm='1' className=''>
+                                            <MDBIcon icon="user-tie" size='2x' />
+                                        </MDBCol>
+                                        <MDBCol className=''>
+                                            {to === 'Driver' ?
+                                                <Select
+                                                    styles={driverStyles}
+                                                    value={driver}
+                                                    onChange={this.handleSelectChange('driver')}
+                                                    options={driverOptions}
+                                                    placeholder='Driver'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md pl-0'
+                                                >
+                                                </Select>
+                                                :
+                                                <Select
+                                                    styles={operatorStyles}
+                                                    value={operator}
+                                                    onChange={this.handleSelectChange('operator')}
+                                                    options={operatorOptions}
+                                                    placeholder='Operator'
+                                                    isSearchable
+                                                    isClearable
+                                                    className='form-control-md pl-0'
+                                                >
+                                                </Select>
+                                            }
+                                        </MDBCol>
+                                    </MDBRow>
+                                    <MDBRow className='mb-5'>
+                                        <MDBCol sm='1' className=''>
+                                            <MDBIcon icon="box-open" size='2x' />
+                                        </MDBCol>
+                                        <MDBCol className=''>
+                                            {/* {showOptions ? */}
                                             <Select
-                                                styles={driverStyles}
-                                                value={driver}
-                                                onChange={this.handleSelectChange('driver')}
-                                                options={driverOptions}
-                                                placeholder='Driver'
+                                                styles={productStyles}
+                                                value={product}
+                                                onChange={this.handleSelectChange('product')}
+                                                options={productOptions}
+                                                placeholder='Product'
                                                 isSearchable
                                                 isClearable
                                                 className='form-control-md pl-0'
                                             >
                                             </Select>
+                                            {/* : null */}
+                                            {/* } */}
+                                        </MDBCol>
+                                    </MDBRow>
+                                    <MDBInput
+                                        onInput={this.handleInput}
+                                        value={this.state.qty}
+                                        label="Qty."
+                                        name="qty"
+                                        icon="sort-numeric-down"
+                                        group
+                                        inputRef={el => this.qty = el}
+                                        onKeyPress={this.onKeyPress}
+                                        type="number"
+                                        validate
+                                        required
+                                    />
+                                    <div className="text-center">
+                                        <MDBBtn size='sm' color="dark" type='submit' style={{ letterSpacing: '3px' }}>Allocate</MDBBtn>
+                                    </div>
+                                    <Can I='allocate' a='operatorInventory'>
+                                        <MDBCol className='text-center'>
+                                            <MDBBtn size='sm' style={{ letterSpacing: '3px' }} className='' color='info ' onClick={this.toggle} >
+                                                Click here to allocate inventory to {to === 'Driver' ? 'Operator' : 'Driver'}
+                                            </MDBBtn>
+                                        </MDBCol>
+                                    </Can>
+                                    {
+                                        this.state.notificationShow ?
+                                            <div className=''>
+                                                <Notification
+                                                    message={this.state.notificationMessage}
+                                                />
+                                            </div>
                                             :
-                                            <Select
-                                                styles={operatorStyles}
-                                                value={operator}
-                                                onChange={this.handleSelectChange('operator')}
-                                                options={operatorOptions}
-                                                placeholder='Operator'
-                                                isSearchable
-                                                isClearable
-                                                className='form-control-md pl-0'
-                                            >
-                                            </Select>
-                                        }
-                                    </MDBCol>
-                                </MDBRow>
-                                <MDBRow className='mb-5'>
-                                    <MDBCol sm='1' className=''>
-                                        <MDBIcon icon="box-open" size='2x' />
-                                    </MDBCol>
-                                    <MDBCol className=''>
-                                        {/* {showOptions ? */}
-                                        <Select
-                                            styles={productStyles}
-                                            value={product}
-                                            onChange={this.handleSelectChange('product')}
-                                            options={productOptions}
-                                            placeholder='Product'
-                                            isSearchable
-                                            isClearable
-                                            className='form-control-md pl-0'
-                                        >
-                                        </Select>
-                                        {/* : null */}
-                                        {/* } */}
-                                    </MDBCol>
-                                </MDBRow>
-                                <MDBInput
-                                    onInput={this.handleInput}
-                                    value={this.state.qty}
-                                    label="Qty."
-                                    name="qty"
-                                    icon="sort-numeric-down"
-                                    group
-                                    inputRef={el => this.qty = el}
-                                    onKeyPress={this.onKeyPress}
-                                    type="number"
-                                    validate
-                                    required
-                                />
-                                <div className="text-center">
-                                    <MDBBtn size='sm' color="dark" type='submit' style={{ letterSpacing: '3px' }}>Allocate</MDBBtn>
-                                </div>
-                                {/* <Can I='' a=''> */}
-                                <MDBCol className='text-center'>
-                                    <MDBBtn size='sm' style={{ letterSpacing: '3px' }} className='' color='info ' onClick={this.toggle} >
-                                        Click here to allocate inventory to {to === 'Driver' ? 'Operator' : 'Driver'}
-                                    </MDBBtn>
-                                </MDBCol>
-                                {/* </Can> */}
-                                {
-                                    this.state.notificationShow ?
-                                        <div className=''>
-                                            <Notification
-                                                message={this.state.notificationMessage}
-                                            />
-                                        </div>
-                                        :
-                                        null
-                                }
-                            </form>
-                        </MDBCol>
-                    </MDBRow>
-                </div>
-            </MDBContainer>
+                                            null
+                                    }
+                                </form>
+                            </MDBCol>
+                        </MDBRow>
+                    </div>
+                </MDBContainer>
+            </Can>
         )
     }
 }

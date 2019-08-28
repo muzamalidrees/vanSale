@@ -43,7 +43,7 @@ class AllPriceGroups extends Component {
     }
 
     handleView = (id) => (e) => {
-        
+
         this.refs.viewPriceGroupModal.fetchData(id);
         this.refs.viewPriceGroupModal.setState({
             modalShow: true
@@ -138,28 +138,30 @@ class AllPriceGroups extends Component {
         }
         return (
 
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
-                <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                    Price Groups
+            <Can I='read' a='PriceGroup'>
+                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                    <MDBCardHeader tag="h4" className="text-center font-weight-bold">
+                        Price Groups
                 </MDBCardHeader>
-                <MDBCardBody className='p-2'>
+                    <MDBCardBody className='p-2'>
 
-                    <MDBDataTable id='priceGroupsTable' striped small hover theadColor="dark"
-                        bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
-                        data={data} theadTextWhite >
-                    </MDBDataTable>
-                    <EditPriceGroupModal
-                        ref='editPriceGroupModal'
-                    />
-                    <ViewPriceGroupModal
-                        ref='viewPriceGroupModal'
-                    />
-                    <DeleteModal
-                        ref='deleteModal'
-                        deleteEntry={this.deletePriceGroup}
-                    />
-                </MDBCardBody>
-            </MDBCard>
+                        <MDBDataTable id='priceGroupsTable' striped small hover theadColor="dark"
+                            bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
+                            data={data} theadTextWhite >
+                        </MDBDataTable>
+                        <EditPriceGroupModal
+                            ref='editPriceGroupModal'
+                        />
+                        <ViewPriceGroupModal
+                            ref='viewPriceGroupModal'
+                        />
+                        <DeleteModal
+                            ref='deleteModal'
+                            deleteEntry={this.deletePriceGroup}
+                        />
+                    </MDBCardBody>
+                </MDBCard>
+            </Can>
         );
     }
 
