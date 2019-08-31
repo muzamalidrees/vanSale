@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBNavLink } from 'mdbreact';
-
+import {Can} from '../../../configs/Ability-context'
 
 
 
@@ -56,18 +56,13 @@ class AllTransactions extends Component {
   render() {
 
     var { transactions, products, } = this.state;
+    let { trType } = this.props
     var rows = [];
     var index = 0;
     transactions.forEach((transaction) => {
 
       index = index + 1;
       let trDate = transaction.date === null ? '' : new Date(transaction.date).toLocaleDateString();
-      // if ({sale.date === null}) {
-      //   trDate = '';
-      // }
-      // else {
-      //   trDate = new Date(sale.date).toLocaleDateString();
-      // }
 
       let Product;
       if (products !== '' && products !== null && products !== undefined) {
@@ -77,22 +72,6 @@ class AllTransactions extends Component {
           }
         });
       }
-
-      // if (customers !== '' && customers !== null && customers !== undefined) {
-      //   customers.forEach(customer => {
-      //     if (customer.id.toString() === sale.customer_id) {
-      //       Customer = customer.name
-      //     }
-      //   });
-      // }
-
-      // if (drivers !== '' && drivers !== null && drivers !== undefined) {
-      //   drivers.forEach(driver => {
-      //     if (driver.id.toString() === sale.driver_id) {
-      //       Driver = driver.name
-      //     }
-      //   });
-      // }
 
       rows.push(
         {
@@ -121,14 +100,16 @@ class AllTransactions extends Component {
 
       <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
         <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-          All {this.props.trType === 'sales' ? 'Sales' : 'Returns'}
+          All {trType === 'sales' ? 'Sales' : 'Returns'}
         </MDBCardHeader>
         <MDBCardBody className='p-2'>
-          <MDBBtn size='sm' className='m-0 p-0 font-weight-bold' color='info ' >
-            <MDBNavLink to={this.props.trType === 'sales' ? '/sales/new' : '/returns/new'} className='m-0' style={{ fontSize: '16px', color: 'white' }}>
-              New {this.props.trType === 'sales' ? 'Sales' : 'Returns'}
-            </MDBNavLink>
-          </MDBBtn>
+          <Can I='create' a={trType === 'sales' ? 'sales' : 'returns'}>
+            <MDBBtn size='sm' className='m-0 p-0 font-weight-bold' color='info ' >
+              <MDBNavLink to={trType === 'sales' ? '/sales/new' : '/returns/new'} className='m-0' style={{ fontSize: '16px', color: 'white' }}>
+                New {trType === 'sales' ? 'Sales' : 'Returns'}
+              </MDBNavLink>
+            </MDBBtn>
+          </Can>
           <MDBDataTable id='allTransactionsTable' striped small hover theadColor="dark"
             bordered btn entries={15} entriesOptions={[10, 20, 35, 55, 70, 100, 135]} responsive
             data={data} theadTextWhite >

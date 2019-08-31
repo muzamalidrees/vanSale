@@ -131,7 +131,7 @@ class AllCustomerPrices extends Component {
             rows: rows
         }
         return (
-            <Can I='read' a='customerPrices'>
+            <Can I='read' a='customerPrice'>
                 <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                     <MDBCardHeader tag="h4" className="text-center font-weight-bold">
                         Customers' Price-Groups

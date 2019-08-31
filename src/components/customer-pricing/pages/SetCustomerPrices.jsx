@@ -256,7 +256,7 @@ class SetCustomerPrices extends Component {
 
                                         <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
                                     </form>
-                                    <Can I='read' a='customerPrices'>
+                                    <Can I='read' a='customerPrice'>
                                     <Link to='/customerPricing/all'>All Customer Prices..</Link>
                                     </Can>
                                 </MDBCardBody>

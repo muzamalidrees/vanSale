@@ -8,18 +8,28 @@ import { Can } from '../../../configs/Ability-context'
 
 class NewPerson extends Component {
     _isMounted = false
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this._isMounted = true
         fetch('/getAllRoles')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ roles: json.data })
                 }
             })
             .catch((error) => console.log(error))
+            .then(() => {
+                if (props.new === 'Operator') {
+                    let operator = this.state.roles.filter(role => role.name = 'operator').shift()
+                    this.handleSelectChange({ key: operator.id, label: operator.name, value: operator.id })
+                }
+                else if (props.new === 'Driver') {
+                    let driver = this.state.roles.filter(role => role.name = 'driver').shift()
+                    this.handleSelectChange({ key: driver.id, label: driver.name, value: driver.id })
+                }
+            })
 
         this.state = {
             role: '',
@@ -35,6 +45,7 @@ class NewPerson extends Component {
             notificationMessage: '',
             notificationShow: false
         };
+
     }
 
     componentWillUnmount() {
@@ -43,7 +54,9 @@ class NewPerson extends Component {
 
     handleSelectChange = selectedOption => {
         this.setState({
-            role: selectedOption
+            role: selectedOption,
+            location: '',
+            dailyMessage: '',
         })
 
         this.roleSelected(selectedOption);
@@ -75,11 +88,13 @@ class NewPerson extends Component {
                     driverElements.forEach(element => {
                         element.disabled = false
                     });
+                    document.getElementById('newUserRoleSelect').classList.add('disabled')
                     break;
                 case ('operator'):
                     operatorElements.forEach(element => {
                         element.disabled = false
                     });
+                    document.getElementById('newUserRoleSelect').classList.add('disabled')
                     break;
                 default:
                     allElements.forEach(element => {
@@ -137,7 +152,7 @@ class NewPerson extends Component {
                             dailyMessage: '',
                         })
                     }
-                    else{
+                    else {
                         this.username.focus();
                     }
 
@@ -194,8 +209,8 @@ class NewPerson extends Component {
                                                     <MDBIcon icon="user-tie" size='2x' />
                                                 </MDBCol>
                                                 <MDBCol className=''>
-                                                    {/* {showOptions ? */}
                                                     <Select
+                                                        id='newUserRoleSelect'
                                                         styles={roleStyles}
                                                         value={role}
                                                         onChange={this.handleSelectChange}
@@ -206,8 +221,6 @@ class NewPerson extends Component {
                                                         className='form-control-md pl-0'
                                                     >
                                                     </Select>
-                                                    {/* : null */}
-                                                    {/* } */}
                                                 </MDBCol>
                                             </MDBRow>
                                             <MDBInput

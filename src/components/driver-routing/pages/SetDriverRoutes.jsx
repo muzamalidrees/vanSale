@@ -207,7 +207,7 @@ class SetDriverRoutes extends Component {
                                         </MDBRow>
                                         <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
                                     </form>
-                                    <Can I='read' a='driverRoutes'>
+                                    <Can I='read' a='driverRoute'>
                                         <Link to='/driverRouting/all'>All Drivers' Routes..</Link>
                                     </Can>
                                 </MDBCardBody>

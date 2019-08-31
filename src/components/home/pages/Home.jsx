@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Can } from '../../../configs/Ability-context'
 import NewSales from '../../sales/pages/NewSales'
-
+import NewInventory from '../../inventory/pages/NewInventory';
 
 
 class Home extends Component {
@@ -13,10 +13,18 @@ class Home extends Component {
 
     render() {
         return (
-            <Can I='sale' a='product'>
-                <NewSales
-                    ref='newSales' />
-            </Can>
+            <React.Fragment>
+                <Can I='create' a='sales'>
+                    <NewSales
+                        ref='newSales' />
+                </Can>
+                <Can I='allocate' a='driverInventory' >
+                    <NewInventory to='Driver' />
+                </Can>
+                <Can I='allocate' a='operatorInventory'>
+                    <NewInventory to='Operator' />
+                </Can>
+            </React.Fragment>
         )
     }
 }

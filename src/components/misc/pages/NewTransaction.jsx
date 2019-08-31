@@ -345,7 +345,7 @@ class NewTransaction extends Component {
 
 
         return (
-            <MDBContainer className='' fluid style={{}}>
+            <MDBContainer className='' fluid style={{ marginBottom: '50px' }}>
                 <MDBRow center>
                     <MDBCol>
                         <MDBCard className=' p-2'>

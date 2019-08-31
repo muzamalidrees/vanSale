@@ -42,7 +42,7 @@ class HeaderNav extends React.Component {
                                         <MDBDropdownItem>
                                             <MDBNavLink style={{ color: '#000000' }} to="/home"><MDBIcon icon="home" /> Home</MDBNavLink>
                                         </MDBDropdownItem>
-                                        <Can I='sale' a='product'>
+                                        <Can I='create' a='sales'>
                                             <MDBDropdownItem>
                                                 <MDBNavLink style={{ color: '#000000' }} to="/sales/new"><MDBIcon icon="plus" /> New Sales</MDBNavLink>
                                             </MDBDropdownItem>
@@ -52,7 +52,7 @@ class HeaderNav extends React.Component {
                                                 <MDBNavLink style={{ color: '#000000' }} to="/sales/all"><MDBIcon icon="eye" /> All Sales</MDBNavLink>
                                             </MDBDropdownItem>
                                         </Can>
-                                        <Can I='return' a='product'>
+                                        <Can I='create' a='returns'>
                                             <MDBDropdownItem>
                                                 <MDBNavLink style={{ color: '#000000' }} to="/returns/new"><MDBIcon icon="plus" /> New Returns</MDBNavLink>
                                             </MDBDropdownItem>
@@ -258,12 +258,12 @@ class HeaderNav extends React.Component {
                                             <MDBIcon icon="boxes" > </MDBIcon>  Inventory
                                         </MDBDropdownToggle>
                                         <MDBDropdownMenu className="text-white">
-                                            <Can I='allocate' a='driverInventory'>
+                                            <Can I='read' a='driverInventories'>
                                                 <MDBDropdownItem>
                                                     <MDBNavLink style={{ color: '#000000' }} to="/inventory/new"><MDBIcon icon="plus" /> Allocate new Inventory</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
-                                            <Can I='return' a='driverInventory'>
+                                            <Can I='read' a='driverInventories'>
                                                 <MDBDropdownItem>
                                                     <MDBNavLink style={{ color: '#000000' }} to="/inventory/return"><MDBIcon icon="arrow-left" /> Return Inventories</MDBNavLink>
                                                 </MDBDropdownItem>

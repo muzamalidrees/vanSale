@@ -183,7 +183,7 @@ class NewSales extends Component {
 
         return (
             <React.Fragment>
-                <Can I='sale' a='product'>
+                <Can I='create' a='sales'>
                     <div style={{ marginTop: '72px', paddingTop: '20px' }}>
                         <InvoiceDetails
                             ref='invoiceDetails'
@@ -214,7 +214,7 @@ class NewSales extends Component {
                         />
                     </div>
                 </Can>
-                <Can I='return' a='product'>
+                <Can I='create' a='returns'>
                     <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
                         < NewTransaction
                             ref='returnProducts'

@@ -117,21 +117,54 @@ class ProductsTable extends Component {
             modalShow: true,
         })
     }
-
-    saveData = () => {
+    saveSales = () => {
         let { sales, returns } = this.state
         if (sales !== undefined && sales !== []) {
             sales.forEach(sale => {
-                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice);
+                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
                 this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
             })
         }
+    }
+    saveReturns = () => {
+        let { sales, returns } = this.state
         if (returns !== undefined && returns !== []) {
             returns.forEach(Return => {
-                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice);
+                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
                 this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
             })
         }
+    }
+    saveData = () => {
+        // this.saveSales(); this.saveReturns();
+        let { sales, returns } = this.state
+        if (sales !== undefined && sales !== []) {
+            sales.forEach(sale => {
+                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
+                this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
+            })
+            if (returns !== undefined && returns !== []) {
+                returns.forEach(Return => {
+                    this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
+                    this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+                })
+
+            }
+        }
+        else if (returns !== undefined && returns !== []) {
+            returns.forEach(Return => {
+                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
+                this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+            })
+            if (sales !== undefined && sales !== []) {
+                sales.forEach(sale => {
+                    this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
+                    this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
+                })
+            }
+        }
+        // Promise.all(a)
+        // Promise.all(b)
         this.props.displaySubmitButton(false);
         this.props.displayOtherSection(false);
         this.props.saveInvoice()
@@ -155,7 +188,7 @@ class ProductsTable extends Component {
         let { tableId, containerId, isDisplaySubmitButton, } = this.props
 
         return (
-            <MDBContainer id={containerId} fluid className='mt-2' style={{ display: 'none' }}>
+            <MDBContainer id={containerId} fluid className='mt-2' style={{ marginBottom: '40px', display: 'none' }}>
                 <MDBRow center>
                     <MDBCol>
                         <MDBCard className='p-2'>

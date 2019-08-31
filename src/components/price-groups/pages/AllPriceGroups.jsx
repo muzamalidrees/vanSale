@@ -113,7 +113,7 @@ class AllPriceGroups extends Component {
                     name: priceGroup.name,
                     category: currentProductCategory,
                     buttons: <React.Fragment>
-                        <Can I='read' a='PriceGroup'>
+                        <Can I='read' a='priceGroup'>
                             <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleView(priceGroup.id)} className='m-1 py-1 px-2' outline color='info' size="sm"><MDBIcon icon="eye" /></MDBBtn>
                         </Can>
                         <Can I='update' a='PriceGroup'>
@@ -138,7 +138,7 @@ class AllPriceGroups extends Component {
         }
         return (
 
-            <Can I='read' a='PriceGroup'>
+            <Can I='read' a='priceGroup'>
                 <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                     <MDBCardHeader tag="h4" className="text-center font-weight-bold">
                         Price Groups

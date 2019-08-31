@@ -23,11 +23,21 @@ class InvoiceDetails extends Component {
             })
             .catch((error) => console.log(error))
 
+        fetch('/getAllDriverRoutes')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ driverRoutes: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
 
         this.state = {
             trDate: new Date(),
             customer: '',
             customers: [],
+            driverRoutes: [],
             total: 0,
             invoiceId: 1,
             notificationMessage: '',
@@ -126,13 +136,15 @@ class InvoiceDetails extends Component {
         this.setState({
             trDate: new Date(),
             customer: '',
-            total: 0
+            total: 0,
+            notificationMessage: '',
+            notificationShow: false
         })
     }
 
 
     render() {
-        var { trDate, customer, customers, total } = this.state
+        var { trDate, customer, customers, driverRoutes, total } = this.state
         const customerStyles = {
             control: (base, state) => ({
                 ...base,
@@ -143,12 +155,24 @@ class InvoiceDetails extends Component {
             })
         }
 
+        let Customers = []
+        if (customers !== [] && driverRoutes !== []) {
+            let driverId = localStorage.getItem('ui')
+            let thisDriverRoutes = driverRoutes.filter(driverRoute => driverRoute.driver_id === Number(driverId))
+            thisDriverRoutes.forEach(driverRoute => {
+                customers.forEach(customer => {
+                    if (customer.route_id === driverRoute.route_id) {
+                        Customers.push(customer)
+                    }
+                })
+            })
+        }
 
         var customerOptions;
-        if (customers !== '' && customers !== null && customers !== undefined) {
-            customerOptions = customers.map(customer => ({
-                key: customer.id, label: customer.name, value: customer.id, message: customer.driver_message,
-                invoiceMessage: customer.invoice_message, shop: customer.shop_name, cell: customer.cell, address: customer.address
+        if (Customers !== [] && Customers !== null && Customers !== undefined) {
+            customerOptions = Customers.map(Customer => ({
+                key: Customer.id, label: Customer.name, value: Customer.id, message: Customer.driver_message,
+                invoiceMessage: Customer.invoice_message, shop: Customer.shop_name, cell: Customer.cell, address: Customer.address
             }));
         }
 

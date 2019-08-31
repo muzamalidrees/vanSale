@@ -103,8 +103,8 @@ class AllPermissions extends Component {
                         <MDBCol md="8">
                             <MDBCard className=' p-0'>
                                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                                    Roles' Permissions
-                            </MDBCardHeader>
+                                    All Permissions
+                                </MDBCardHeader>
                                 <MDBCardBody className='p-2'>
 
                                     <MDBDataTable id='permissionsTable' striped small hover theadColor="dark"

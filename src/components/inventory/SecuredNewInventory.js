@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import NewInventory from './pages/NewInventory';
+import {Can} from '../../configs/Ability-context'
 
 
 class SecuredNewInventory extends Component {
@@ -25,7 +26,12 @@ class SecuredNewInventory extends Component {
             return <Redirect to='/login' />
         }
         else {
-            return <NewInventory />
+            return (
+                <React.Fragment>
+                    <Can I='allocate' a='driverInventory'><NewInventory to='Driver' /></Can>
+                    <Can I='allocate' a='operatorInventory'><NewInventory to='Operator' /></Can>
+                </React.Fragment>
+            )
         }
 
     }
