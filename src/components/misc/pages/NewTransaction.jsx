@@ -345,14 +345,14 @@ class NewTransaction extends Component {
 
 
         return (
-            <MDBContainer className='' fluid style={{ marginBottom: '50px' }}>
+            <MDBContainer className='' fluid style={{ marginBottom: '20px' }}>
                 <MDBRow center>
                     <MDBCol>
-                        <MDBCard className=' p-2'>
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                        <MDBCard className=' px-2 py-0'>
+                            <MDBCardHeader tag="h5" style={{ color: 'dark',lineHeight:'10px' }} className="text-center font-weight-bold">
                                 New {this.props.tableId === 'saleProductsTable' ? 'Sales' : 'Returns'}
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
+                            <MDBCardBody className='px-2 py-0'>
                                 <form ref='productDetailsForm' onSubmit={this.handleProductSubmit} noValidate >
                                     {/* <fieldset className='legend-border'>
                                         <legend className='legend-border'></legend> */}

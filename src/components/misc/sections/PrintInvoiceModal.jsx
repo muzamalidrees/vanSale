@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBInput, MDBModalFooter, MDBRow, MDBCol, MDBModalHeader } from 'mdbreact';
-import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// import * as jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
 
 
 var totalSales = 0

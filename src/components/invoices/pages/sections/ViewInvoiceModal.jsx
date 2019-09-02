@@ -42,7 +42,7 @@ class ViewInvoiceModal extends Component {
         fetch('/getSpecificSales/' + id)
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 json.data.map((x) => {
                     delete x.createdAt;
                     delete x.updatedAt;
@@ -63,7 +63,7 @@ class ViewInvoiceModal extends Component {
         fetch('/getSpecificReturns/' + id)
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
+                console.log(json)
                 json.data.map((x) => {
                     delete x.createdAt;
                     delete x.updatedAt;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import chroma from 'chroma-js';

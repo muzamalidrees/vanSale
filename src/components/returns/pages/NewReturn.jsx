@@ -131,7 +131,7 @@ class NewReturn extends Component {
         fetch('/addNewSale', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
     }
@@ -156,7 +156,7 @@ class NewReturn extends Component {
         fetch('/addNewReturn', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
     }
@@ -185,7 +185,7 @@ class NewReturn extends Component {
         return (
             <React.Fragment>
                 <Can I='create' a='returns'>
-                    <div style={{ marginTop: '72px', paddingTop: '20px' }}>
+                    <div style={{ marginTop: '60px', paddingTop: '0px' }} className='mb-0 pb-0'>
                         <InvoiceDetails
                             ref='invoiceDetails'
                             customerSelected={this.customerSelected}

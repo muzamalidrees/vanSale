@@ -102,14 +102,11 @@ class ProductsTable extends Component {
     handleSubmit = () => {
         let sales = this.fetchSalesTableData(),
             returns = this.fetchReturnsTableData();
-
         this.setState({
             sales: sales,
             returns: returns
         })
-
         let invoiceDetails = this.props.fetchInvoiceDetails();
-
         this.refs.printInvoiceModal.setState({
             sales: sales,
             returns: returns,
@@ -117,57 +114,44 @@ class ProductsTable extends Component {
             modalShow: true,
         })
     }
-    saveSales = () => {
-        let { sales, returns } = this.state
-        if (sales !== undefined && sales !== []) {
-            sales.forEach(sale => {
-                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
-                this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
-            })
-        }
-    }
-    saveReturns = () => {
-        let { sales, returns } = this.state
-        if (returns !== undefined && returns !== []) {
-            returns.forEach(Return => {
-                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
-                this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
-            })
-        }
-    }
-    saveData = () => {
-        // this.saveSales(); this.saveReturns();
-        let { sales, returns } = this.state
-        if (sales !== undefined && sales !== []) {
-            sales.forEach(sale => {
-                this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
-                this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
-            })
-            if (returns !== undefined && returns !== []) {
-                returns.forEach(Return => {
-                    this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
-                    this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
-                })
 
-            }
-        }
-        else if (returns !== undefined && returns !== []) {
-            returns.forEach(Return => {
-                this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
-                this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
-            })
+    saveSales = () => {
+        let { sales } = this.state
+        sales.forEach(sale => {
+            this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
+            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
+        })
+    }
+
+    saveReturns = () => {
+        let { returns } = this.state
+        returns.forEach(Return => {
+            this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
+            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+        })
+    }
+
+    saveData = () => {
+        let { sales, returns } = this.state
+        let currentComponent = this
+
+        let promise1 = new Promise(function (resolve, reject) {
             if (sales !== undefined && sales !== []) {
-                sales.forEach(sale => {
-                    this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
-                    this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
-                })
+                currentComponent.saveSales();
+                // console.log('ok');
             }
-        }
-        // Promise.all(a)
-        // Promise.all(b)
-        this.props.displaySubmitButton(false);
-        this.props.displayOtherSection(false);
-        this.props.saveInvoice()
+            resolve();
+        });
+        promise1.then(function () {
+            // console.log('value');
+            if (returns !== undefined && returns !== []) {
+                currentComponent.saveReturns();
+            }
+        }).then(() => {
+            this.props.displaySubmitButton(false);
+            this.props.displayOtherSection(false);
+            this.props.saveInvoice()
+        })
     }
 
     makeTablesEmpty = () => {
@@ -185,6 +169,7 @@ class ProductsTable extends Component {
 
 
     render() {
+
         let { tableId, containerId, isDisplaySubmitButton, } = this.props
 
         return (
@@ -192,7 +177,7 @@ class ProductsTable extends Component {
                 <MDBRow center>
                     <MDBCol>
                         <MDBCard className='p-2'>
-                            <MDBCardHeader style={{ color: 'dark' }} tag="h4" className="text-center font-weight-bold">
+                            <MDBCardHeader style={{ color: 'dark', lineHeight: '10px' }} tag="h5" className="text-center font-weight-bold">
                                 Products to be {tableId === 'saleProductsTable' ? 'Sale' : 'Returned'}
                             </MDBCardHeader>
                             <MDBCardBody className='p-2'>

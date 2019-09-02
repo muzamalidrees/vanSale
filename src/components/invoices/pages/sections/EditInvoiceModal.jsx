@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBTableHead,
     MDBTable, MDBTableBody, MDBModalFooter, MDBRow, MDBCol, MDBInput, MDBIcon
-} from 'mdbreact';
+}
+    from 'mdbreact';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
@@ -280,70 +281,133 @@ class EditInvoiceModal extends Component {
         })
     }
 
+    // updating sales,returns & invoices from database
     saveUpdates = () => {
-
-        // updating sales,returns & invoices from database
-        let salesTable = document.getElementById('editSalesTable');
-        let returnsTable = document.getElementById('editReturnsTable')
-        let salesTableLength = salesTable.rows.length;
-        let returnsTableLength = returnsTable.rows.length;
-
-        if (salesTableLength > 1) {
-            for (let index = salesTableLength - 1; index > 0; index--) {
-                let pId = salesTable.rows[index].cells[1].innerHTML;
-                let pRate = salesTable.rows[index].cells[3].innerHTML;
-                let pQty = salesTable.rows[index].cells[4].innerHTML;
-                let pPrice = salesTable.rows[index].cells[5].innerHTML;
-                let saleId = salesTable.rows[index].cells[7].innerHTML;
-                // console.log(pId, pRate, pQty, pPrice);
-
-                // adding new sales in invoice
-                if (saleId === null || saleId === '' || saleId === undefined) {
-                    this.addNewSalesOrReturns(pId, pRate, pQty, pPrice, '/addNewSale')
+        let currentComponent = this
+        let promise1 = new Promise(function (resolve, reject) {
+            // console.log('ok');
+            let salesTable = document.getElementById('editSalesTable');
+            let salesTableLength = salesTable.rows.length, sales = []
+            if (salesTableLength > 1) {
+                for (let index = salesTableLength - 1; index > 0; index--) {
+                    let pId = salesTable.rows[index].cells[1].innerHTML;
+                    let pRate = salesTable.rows[index].cells[3].innerHTML;
+                    let pQty = salesTable.rows[index].cells[4].innerHTML;
+                    let pPrice = salesTable.rows[index].cells[5].innerHTML;
+                    let saleId = salesTable.rows[index].cells[7].innerHTML;
+                    // console.log(pId, pRate, pQty, pPrice);
+                    let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, saleId: saleId }
+                    sales.push(transaction)
                 }
-
-                //updating existing sales
-                else {
-                    this.updateSalesOrReturn(saleId, pQty, pPrice, '/updateSale');
-
-                    // emptying table at frontend
-                    // this.deleteProductFrmTbl('saleProductsTable', pPrice, 'editSalesTable', index)
-                }
-
             }
-        }
-
-        if (returnsTableLength > 1) {
-            for (let index = returnsTableLength - 1; index > 0; index--) {
-                let pId = returnsTable.rows[index].cells[1].innerHTML;
-                let pRate = returnsTable.rows[index].cells[3].innerHTML;
-                let pQty = returnsTable.rows[index].cells[4].innerHTML;
-                let pPrice = returnsTable.rows[index].cells[5].innerHTML;
-                let returnId = returnsTable.rows[index].cells[7].innerHTML;
-                // console.log(pId, pRate, pQty, pPrice);
-
-                // adding new return in invoice
-                if (returnId === null || returnId === '' || returnId === undefined) {
-                    this.addNewSalesOrReturns(pId, pRate, pQty, pPrice, '/addNewReturn')
+            resolve(sales);
+        });
+        promise1.then(function (sales) {
+            // console.log('value');
+            let { invoiceDate, invoice } = currentComponent.state
+            sales.forEach(sale => {
+                if (sale.saleId === null || sale.saleId === '' || sale.saleId === undefined) {
+                    let newSale = {
+                        trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                        driverId: invoice.driver_id, productId: sale.pId, rate: sale.pRate, qty: sale.pQty, price: sale.pPrice
+                    }
+                    let options1 = {
+                        method: 'POST',
+                        body: JSON.stringify(newSale),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/addNewSale', options1)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            // console.log(json)
+                        })
+                        .catch((error) => console.log(error))
                 }
-
-                //updating existing return
                 else {
-                    this.updateSalesOrReturn(returnId, pQty, pPrice, '/updateReturn');
-
-                    // emptying table at frontend
-                    // this.deleteProductFrmTbl('returnProductsTable', pPrice, 'editReturnsTable', index)
+                    let saleUpdate = {
+                        id: sale.saleId, qty: sale.pQty, price: sale.pPrice
+                    }
+                    let options2 = {
+                        method: 'PUT',
+                        body: JSON.stringify(saleUpdate),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/updateSale', options2)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            // console.log(json)
+                        })
+                        .catch((error) => console.log(error))
                 }
-
-            }
-        }
-        this.updateInvoice();
-
-        // closing edit modal
-        this.toggle()
-
+            })
+        }).then(() => {
+            let promise2 = new Promise(function (resolve, reject) {
+                // console.log('value1');
+                let returnsTable = document.getElementById('editReturnsTable')
+                let returnsTableLength = returnsTable.rows.length, returns = []
+                if (returnsTableLength > 1) {
+                    for (let index = returnsTableLength - 1; index > 0; index--) {
+                        let pId = returnsTable.rows[index].cells[1].innerHTML;
+                        let pRate = returnsTable.rows[index].cells[3].innerHTML;
+                        let pQty = returnsTable.rows[index].cells[4].innerHTML;
+                        let pPrice = returnsTable.rows[index].cells[5].innerHTML;
+                        let returnId = returnsTable.rows[index].cells[7].innerHTML;
+                        // console.log(pId, pRate, pQty, pPrice);
+                        let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, returnId: returnId }
+                        returns.push(transaction)
+                    }
+                }
+                resolve(returns)
+            });
+            promise2.then((returns) => {
+                // console.log('value2');
+                let { invoiceDate, invoice } = currentComponent.state
+                returns.forEach(Return => {
+                    if (Return.returnId === null || Return.returnId === '' || Return.returnId === undefined) {
+                        let newReturn = {
+                            trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                            driverId: invoice.driver_id, productId: Return.pId, rate: Return.pRate, qty: Return.pQty, price: Return.pPrice
+                        }
+                        let options1 = {
+                            method: 'POST',
+                            body: JSON.stringify(newReturn),
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        fetch('/addNewReturn', options1)
+                            .then((res) => res.json())
+                            .then((json) => {
+                                // console.log(json)
+                            })
+                            .catch((error) => console.log(error))
+                    }
+                    else {
+                        let returnUpdate = {
+                            id: Return.returnId, qty: Return.pQty, price: Return.pPrice
+                        }
+                        let options2 = {
+                            method: 'PUT',
+                            body: JSON.stringify(returnUpdate),
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        fetch('/updateReturn', options2)
+                            .then((res) => res.json())
+                            .then((json) => {
+                                // console.log(json)
+                            })
+                            .catch((error) => console.log(error))
+                    }
+                })
+            })
+        }).then(() => {
+            this.updateInvoice();
+        }).then(() => {
+            // closing edit modal
+            // this.toggle()
+        })
+        // .then(() => {
         // refreshing all records table
-        window.location.reload();
+        //     window.location.reload();
+        // })
     }
 
     updateInvoice = () => {
@@ -357,51 +421,12 @@ class EditInvoiceModal extends Component {
         fetch('/updateInvoice', options)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
-    }
-
-    addNewSalesOrReturns = (pId, pRate, pQty, pPrice, path) => {
-        let { invoiceDate, invoice, } = this.state
-        let newSaleOrReturn = {
-            trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
-            driverId: invoice.driver_id, productId: pId, rate: pRate, qty: pQty, price: pPrice
-        }
-        let options = {
-            method: 'POST',
-            body: JSON.stringify(newSaleOrReturn),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch(`${path}`, options)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
-    }
-
-    updateSalesOrReturn = (saleOrReturnId, pQty, pPrice, path) => {
-        let saleOrReturnUpdate = {
-            id: saleOrReturnId, qty: pQty, price: pPrice
-        }
-        let options = {
-            method: 'PUT',
-            body: JSON.stringify(saleOrReturnUpdate),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        // console.log(saleOrReturnId, pQty, pPrice, path);
-
-        fetch(`${path}`, options)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
             .catch((error) => console.log(error))
     }
 
     //toggling add saleOrReturn form
-
     addFormToggle = (form) => () => {
         if (form === 'sale') {
             this.setState({
@@ -566,7 +591,7 @@ class EditInvoiceModal extends Component {
                     ref='deleteModal'
                     deleteEntry={this.deleteEntry}
                 />
-            </MDBContainer>
+            </MDBContainer >
         );
     }
 }

@@ -91,7 +91,7 @@ class App extends React.Component {
       if (userRole === 'driver') {
         this.setState({
           user: user,
-          modalShow: true
+          // modalShow: true
         })
       }
     }
@@ -142,7 +142,7 @@ class App extends React.Component {
             <AllRoutes
               changeUser={this.changeUser}
             />
-            <Footer />
+            {/* <Footer /> */}
           </div >
         </AbilityContext.Provider>
       </BrowserRouter>

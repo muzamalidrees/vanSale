@@ -181,7 +181,7 @@ class InvoiceDetails extends Component {
         return (
 
             <MDBRow className='m-0 p-0' center>
-                <MDBCol lg='2' className='mb-3' middle >
+                <MDBCol lg='2' className='' middle >
                     <DatePicker
                         selected={trDate}
                         placeholderText='Date'
@@ -196,7 +196,7 @@ class InvoiceDetails extends Component {
                         required
                     />
                 </MDBCol>
-                <MDBCol lg='3' className='mb-3' middle >
+                <MDBCol lg='3' className='' middle >
                     <Select
                         styles={customerStyles}
                         value={customer}
@@ -217,7 +217,7 @@ class InvoiceDetails extends Component {
                             /> : null
                     }
                 </MDBCol>
-                <MDBCol lg='2' className='mb-3' >
+                <MDBCol lg='2' className='' >
                     <MDBInput
                         type='number'
                         value={total}
