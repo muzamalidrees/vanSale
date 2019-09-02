@@ -134,24 +134,48 @@ class ProductsTable extends Component {
     saveData = () => {
         let { sales, returns } = this.state
         let currentComponent = this
-
-        let promise1 = new Promise(function (resolve, reject) {
-            if (sales !== undefined && sales !== []) {
-                currentComponent.saveSales();
-                // console.log('ok');
-            }
-            resolve();
-        });
-        promise1.then(function () {
-            // console.log('value');
+        let invoiceDetails = this.props.fetchInvoiceDetails();
+        let calls = []
+        if (sales !== undefined && sales !== []) {
+            sales.forEach(sale => {
+                let Sales = {
+                    productId: Number(sale.pId), rate: Number(sale.pRate), qty: Number(sale.pQty), price: Number(sale.pPrice), trDate: invoiceDetails.trDate,
+                    invoiceId: invoiceDetails.invoiceId, customerId: invoiceDetails.customer.id,
+                    driverId: Number(localStorage.getItem('ui'))
+                }
+                let options = {
+                    method: 'POST',
+                    body: JSON.stringify(Sales),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+                let call = { options: options, path: '/addNewSale' }
+                calls.push(call);
+            })
+        }
+        let requests = calls.map(call => fetch(call.path, call.options))
+        Promise.all(requests).then(() => {
             if (returns !== undefined && returns !== []) {
                 currentComponent.saveReturns();
             }
-        }).then(() => {
-            this.props.displaySubmitButton(false);
-            this.props.displayOtherSection(false);
-            this.props.saveInvoice()
         })
+            // let promise1 = new Promise(function (resolve, reject) {
+            //     if (sales !== undefined && sales !== []) {
+            //         currentComponent.saveSales();
+            //         // console.log('ok');
+            //     }
+            //     resolve();
+            // });
+            // promise1.then(function () {
+            //     // console.log('value');
+            //     if (returns !== undefined && returns !== []) {
+            //         currentComponent.saveReturns();
+            //     }
+            // })
+            .then(() => {
+                this.props.displaySubmitButton(false);
+                this.props.displayOtherSection(false);
+                this.props.saveInvoice()
+            })
     }
 
     makeTablesEmpty = () => {

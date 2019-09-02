@@ -280,135 +280,127 @@ class EditInvoiceModal extends Component {
             saveUpdatesBtn: true
         })
     }
-
     // updating sales,returns & invoices from database
-    saveUpdates = () => {
+
+    updateSales = () => {
         let currentComponent = this
-        let promise1 = new Promise(function (resolve, reject) {
-            // console.log('ok');
-            let salesTable = document.getElementById('editSalesTable');
-            let salesTableLength = salesTable.rows.length, sales = []
-            if (salesTableLength > 1) {
-                for (let index = salesTableLength - 1; index > 0; index--) {
-                    let pId = salesTable.rows[index].cells[1].innerHTML;
-                    let pRate = salesTable.rows[index].cells[3].innerHTML;
-                    let pQty = salesTable.rows[index].cells[4].innerHTML;
-                    let pPrice = salesTable.rows[index].cells[5].innerHTML;
-                    let saleId = salesTable.rows[index].cells[7].innerHTML;
-                    // console.log(pId, pRate, pQty, pPrice);
-                    let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, saleId: saleId }
-                    sales.push(transaction)
-                }
+        let { invoiceDate, invoice } = currentComponent.state
+        let salesTable = document.getElementById('editSalesTable');
+        let salesTableLength = salesTable.rows.length, sales = []
+        if (salesTableLength > 1) {
+            for (let index = salesTableLength - 1; index > 0; index--) {
+                let pId = salesTable.rows[index].cells[1].innerHTML;
+                let pRate = salesTable.rows[index].cells[3].innerHTML;
+                let pQty = salesTable.rows[index].cells[4].innerHTML;
+                let pPrice = salesTable.rows[index].cells[5].innerHTML;
+                let saleId = salesTable.rows[index].cells[7].innerHTML;
+                // console.log(pId, pRate, pQty, pPrice);
+                let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, saleId: saleId }
+                sales.push(transaction)
             }
-            resolve(sales);
-        });
-        promise1.then(function (sales) {
-            // console.log('value');
-            let { invoiceDate, invoice } = currentComponent.state
-            sales.forEach(sale => {
-                if (sale.saleId === null || sale.saleId === '' || sale.saleId === undefined) {
-                    let newSale = {
-                        trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
-                        driverId: invoice.driver_id, productId: sale.pId, rate: sale.pRate, qty: sale.pQty, price: sale.pPrice
-                    }
-                    let options1 = {
-                        method: 'POST',
-                        body: JSON.stringify(newSale),
-                        headers: { 'Content-Type': 'application/json' }
-                    }
-                    fetch('/addNewSale', options1)
-                        .then((res) => res.json())
-                        .then((json) => {
-                            // console.log(json)
-                        })
-                        .catch((error) => console.log(error))
+        }
+        sales.forEach(sale => {
+            if (sale.saleId === null || sale.saleId === '' || sale.saleId === undefined) {
+                let newSale = {
+                    trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                    driverId: invoice.driver_id, productId: sale.pId, rate: sale.pRate, qty: sale.pQty, price: sale.pPrice
                 }
-                else {
-                    let saleUpdate = {
-                        id: sale.saleId, qty: sale.pQty, price: sale.pPrice
-                    }
-                    let options2 = {
-                        method: 'PUT',
-                        body: JSON.stringify(saleUpdate),
-                        headers: { 'Content-Type': 'application/json' }
-                    }
-                    fetch('/updateSale', options2)
-                        .then((res) => res.json())
-                        .then((json) => {
-                            // console.log(json)
-                        })
-                        .catch((error) => console.log(error))
+                let options1 = {
+                    method: 'POST',
+                    body: JSON.stringify(newSale),
+                    headers: { 'Content-Type': 'application/json' }
                 }
-            })
-        }).then(() => {
-            let promise2 = new Promise(function (resolve, reject) {
-                // console.log('value1');
-                let returnsTable = document.getElementById('editReturnsTable')
-                let returnsTableLength = returnsTable.rows.length, returns = []
-                if (returnsTableLength > 1) {
-                    for (let index = returnsTableLength - 1; index > 0; index--) {
-                        let pId = returnsTable.rows[index].cells[1].innerHTML;
-                        let pRate = returnsTable.rows[index].cells[3].innerHTML;
-                        let pQty = returnsTable.rows[index].cells[4].innerHTML;
-                        let pPrice = returnsTable.rows[index].cells[5].innerHTML;
-                        let returnId = returnsTable.rows[index].cells[7].innerHTML;
-                        // console.log(pId, pRate, pQty, pPrice);
-                        let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, returnId: returnId }
-                        returns.push(transaction)
-                    }
+                fetch('/addNewSale', options1)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        console.log(json)
+                    })
+                    .catch((error) => console.log(error))
+            }
+            else {
+                let saleUpdate = {
+                    id: sale.saleId, qty: sale.pQty, price: sale.pPrice
                 }
-                resolve(returns)
-            });
-            promise2.then((returns) => {
-                // console.log('value2');
-                let { invoiceDate, invoice } = currentComponent.state
-                returns.forEach(Return => {
-                    if (Return.returnId === null || Return.returnId === '' || Return.returnId === undefined) {
-                        let newReturn = {
-                            trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
-                            driverId: invoice.driver_id, productId: Return.pId, rate: Return.pRate, qty: Return.pQty, price: Return.pPrice
-                        }
-                        let options1 = {
-                            method: 'POST',
-                            body: JSON.stringify(newReturn),
-                            headers: { 'Content-Type': 'application/json' }
-                        }
-                        fetch('/addNewReturn', options1)
-                            .then((res) => res.json())
-                            .then((json) => {
-                                // console.log(json)
-                            })
-                            .catch((error) => console.log(error))
-                    }
-                    else {
-                        let returnUpdate = {
-                            id: Return.returnId, qty: Return.pQty, price: Return.pPrice
-                        }
-                        let options2 = {
-                            method: 'PUT',
-                            body: JSON.stringify(returnUpdate),
-                            headers: { 'Content-Type': 'application/json' }
-                        }
-                        fetch('/updateReturn', options2)
-                            .then((res) => res.json())
-                            .then((json) => {
-                                // console.log(json)
-                            })
-                            .catch((error) => console.log(error))
-                    }
-                })
-            })
-        }).then(() => {
-            this.updateInvoice();
-        }).then(() => {
-            // closing edit modal
-            // this.toggle()
+                let options2 = {
+                    method: 'PUT',
+                    body: JSON.stringify(saleUpdate),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+                fetch('/updateSale', options2)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        console.log(json)
+                    })
+                    .catch((error) => console.log(error))
+            }
         })
-        // .then(() => {
-        // refreshing all records table
-        //     window.location.reload();
-        // })
     }
+
+    updateReturns = () => {
+        let returnsTable = document.getElementById('editReturnsTable')
+        let returnsTableLength = returnsTable.rows.length, returns = []
+        if (returnsTableLength > 1) {
+            for (let index = returnsTableLength - 1; index > 0; index--) {
+                let pId = returnsTable.rows[index].cells[1].innerHTML;
+                let pRate = returnsTable.rows[index].cells[3].innerHTML;
+                let pQty = returnsTable.rows[index].cells[4].innerHTML;
+                let pPrice = returnsTable.rows[index].cells[5].innerHTML;
+                let returnId = returnsTable.rows[index].cells[7].innerHTML;
+                // console.log(pId, pRate, pQty, pPrice);
+                let transaction = { pId: pId, pRate: pRate, pQty: pQty, pPrice: pPrice, returnId: returnId }
+                returns.push(transaction)
+            }
+        }
+        let currentComponent = this
+        let { invoiceDate, invoice } = currentComponent.state
+        returns.forEach(Return => {
+            if (Return.returnId === null || Return.returnId === '' || Return.returnId === undefined) {
+                let newReturn = {
+                    trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                    driverId: invoice.driver_id, productId: Return.pId, rate: Return.pRate, qty: Return.pQty, price: Return.pPrice
+                }
+                let options1 = {
+                    method: 'POST',
+                    body: JSON.stringify(newReturn),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+                fetch('/addNewReturn', options1)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        console.log(json)
+                    })
+                    .catch((error) => console.log(error))
+            }
+            else {
+                let returnUpdate = {
+                    id: Return.returnId, qty: Return.pQty, price: Return.pPrice
+                }
+                let options2 = {
+                    method: 'PUT',
+                    body: JSON.stringify(returnUpdate),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+                fetch('/updateReturn', options2)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        console.log(json)
+                    })
+                    .catch((error) => console.log(error))
+            }
+        })
+    }
+    saveUpdates = () => {
+        this.updateSales();
+        setTimeout(this.updateReturns(), 3000)
+        setTimeout(this.updateInvoice(), 3000)
+        // this.updateInvoice();
+    }
+    // closing edit modal
+    // this.toggle()
+    // .then(() => {
+    // refreshing all records table
+    //     window.location.reload();
+    // })
 
     updateInvoice = () => {
         let { invoice, invoiceDate, total } = this.state
