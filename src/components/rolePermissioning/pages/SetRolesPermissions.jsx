@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import chroma from 'chroma-js';
@@ -39,7 +39,8 @@ class SetRolesPermissions extends Component {
             role: '',
             permission: '',
             notificationMessage: '',
-            notificationShow: false
+            notificationShow: false,
+            modalShow: false
         };
     }
 
@@ -67,7 +68,7 @@ class SetRolesPermissions extends Component {
             return
         }
         else {
-            this.refs.loaderModal.setState({ modalShow: true })
+            this.setState({ modalShow: true })
             let { role, permission } = this.state
             let roleId = role.value
             let Permissions = []
@@ -96,13 +97,13 @@ class SetRolesPermissions extends Component {
                     }
                 })
                 .catch((error) => console.log(error))
-            this.refs.loaderModal.setState({ modalShow: false })
+            this.setState({ modalShow: false })
         }
     }
 
     render() {
 
-        const { role, roles, permission, permissions } = this.state
+        const { role, roles, permission, permissions, modalShow } = this.state
         const animatedComponents = makeAnimated();
         const roleStyles = {
             control: (base, state) => ({
@@ -259,7 +260,7 @@ class SetRolesPermissions extends Component {
                         </MDBCol>
                     </MDBRow>
                     <LoaderModal
-                        ref='loaderModal'
+                        show={modalShow}
                     />
                 </MDBContainer>
             </Can >

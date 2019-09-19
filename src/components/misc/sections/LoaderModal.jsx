@@ -9,9 +9,11 @@ class LoaderModal extends React.Component {
 
         return (
             <MDBModal size="sm" centered backdrop={true}
-                isOpen={this.state.modalShow} toggle={() => { }}>
+                // isOpen={this.state.modalShow}
+                isOpen={this.props.show}
+                toggle={() => { }}>
                 <MDBModalBody className="text-center">
-                    <div className="spinner-border text-info" role="status">
+                    <div className="spinner-border text-dark" role="status">
                         <span className="sr-only">Loading...</span>
                     </div>
                 </MDBModalBody>

@@ -16,7 +16,8 @@ class NewSales extends Component {
             displayReturnsSection: false,
             isDisplaySubmitButton: false,
             invoiceId: 1,
-            customerId: ''
+            customerId: '',
+            modalShow: false
         }
         this.addProductToTbl = this.addProductToTbl.bind(this)
     }
@@ -131,12 +132,12 @@ class NewSales extends Component {
     }
 
     loaderModalShow = (value) => {
-        this.refs.loaderModal.setState({ modalShow: value })
+        this.setState({ modalShow: value })
     }
 
 
     render() {
-
+        let { modalShow, customerId, isDisplaySubmitButton, displayReturnsSection, askOtherSection } = this.state
 
         return (
             <React.Fragment>
@@ -152,7 +153,7 @@ class NewSales extends Component {
                             tableId={'saleProductsTable'}
                             containerId={'saleProductsContainer'}
                             addProductToTbl={this.addProductToTbl}
-                            customerId={this.state.customerId}
+                            customerId={customerId}
                         />
                         <ProductsTable
                             ref='saleProductsTable'
@@ -163,7 +164,7 @@ class NewSales extends Component {
                             addToTotal={this.addToTotal}
                             displayOtherSection={this.displayOtherSection}
                             displaySubmitButton={this.displaySubmitButton}
-                            isDisplaySubmitButton={this.state.isDisplaySubmitButton}
+                            isDisplaySubmitButton={isDisplaySubmitButton}
                             saveReturns={this.saveReturns}
                             saveSales={this.saveSales}
                             saveInvoice={this.saveInvoice}
@@ -173,16 +174,16 @@ class NewSales extends Component {
                     </div>
                 </Can>
                 <Can I='create' a='returns'>
-                    <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
+                    <div style={{ display: `${displayReturnsSection ? '' : 'none'}` }}>
                         <ProductsTable
                             ref='returnProductsTable'
                             tableId={'returnProductsTable'}
                             containerId={'returnProductsContainer'}
-                            askOtherSection={this.state.askOtherSection}
+                            askOtherSection={askOtherSection}
                             deleteProductFrmTbl={this.deleteProductFrmTbl}
                             minusFromTotal={this.minusFromTotal}
                             addToTotal={this.addToTotal}
-                            isDisplaySubmitButton={!this.state.isDisplaySubmitButton}
+                            isDisplaySubmitButton={!isDisplaySubmitButton}
                             saveReturns={this.saveReturns}
                             saveSales={this.saveSales}
                             saveInvoice={this.saveInvoice}
@@ -196,12 +197,12 @@ class NewSales extends Component {
                             tableId={'returnProductsTable'}
                             containerId={'returnProductsContainer'}
                             addProductToTbl={this.addProductToTbl}
-                            customerId={this.state.customerId}
+                            customerId={customerId}
                         />
                     </div>
                 </Can>
                 <LoaderModal
-                    ref='loaderModal'
+                    show={modalShow}
                 />
             </React.Fragment>
         );

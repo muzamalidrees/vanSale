@@ -83,7 +83,7 @@ class ChartSection1 extends Component {
                             }
                         });
                     }
-                    invoiceRows.push(
+                    otherRows.push(
                         {
                             index: index,
                             invoice_id: transaction.invoice_id,
@@ -98,11 +98,12 @@ class ChartSection1 extends Component {
                 });
                 data = {
                     columns: [
-                        { label: '#', field: 'index', }, { label: 'Date', field: 'date', },
-                        { label: 'Customer', field: 'customer', }, { label: 'Driver', field: 'driver' },
-                        { label: 'Total', field: 'total', },
+                        { label: '#', field: 'index', }, { label: 'Invoice_Id', field: 'invoice_id', },
+                        { label: 'Customer', field: 'customer', }, { label: 'Date', field: 'date', },
+                        { label: 'Product', field: 'pName' }, { label: 'Rate', field: 'pRate', },
+                        { label: 'Qty.', field: 'pQty', }, { label: 'Price', field: 'pPrice', },
                     ],
-                    rows: invoiceRows
+                    rows: otherRows
                 }
                 return data
             }
@@ -130,7 +131,7 @@ class ChartSection1 extends Component {
                     else {
                         invoiceDate = new Date(invoice.date).toLocaleDateString();
                     }
-                    otherRows.push(
+                    invoiceRows.push(
                         {
                             index: index,
                             date: invoiceDate,
@@ -142,12 +143,11 @@ class ChartSection1 extends Component {
                 });
                 data = {
                     columns: [
-                        { label: '#', field: 'index', }, { label: 'Invoice_Id', field: 'invoice_id', },
-                        { label: 'Customer', field: 'customer', }, { label: 'Date', field: 'date', },
-                        { label: 'Product', field: 'pName' }, { label: 'Rate', field: 'pRate', },
-                        { label: 'Qty.', field: 'pQty', }, { label: 'Price', field: 'pPrice', },
+                        { label: '#', field: 'index', }, { label: 'Date', field: 'date', },
+                        { label: 'Customer', field: 'customer', }, { label: 'Driver', field: 'driver' },
+                        { label: 'Total', field: 'total', },
                     ],
-                    rows: otherRows
+                    rows: invoiceRows
                 }
                 return data
             }
@@ -263,9 +263,6 @@ class ChartSection1 extends Component {
                 }
             ]
         }
-
-
-
 
 
         return (

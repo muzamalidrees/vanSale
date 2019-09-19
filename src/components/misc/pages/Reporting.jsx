@@ -5,6 +5,8 @@ import BreadcrumSection from './sections/BreadcrumSection';
 import ChartSection1 from './sections/ChartSection1';
 import ChartSection2 from './sections/ChartSection2';
 import { Can } from '../../../configs/Ability-context';
+import LoaderModal from '../sections/LoaderModal';
+
 
 
 let users = [], roles = [], sales = [], returns = [], invoices = [], customers = [], products = [],
@@ -22,10 +24,25 @@ class Reporting extends React.Component {
   _isMounted = false;
   constructor() {
     super();
+    this.state = {
+      users: [],
+      roles: [],
+      sales: [],
+      returns: [],
+      invoices: [],
+      customers: [],
+      products: [],
+      reportOn: 'Net Income',
+      reportBy: 'Your Company',
+      selectedEntity: 'OverAll',
+      fromDate: 'Beginning',
+      toDate: 'Today',
+      show: false
+    }
     this._isMounted = true
     this.dataRequests = calls.map(call => fetch(call.path))
     Promise.all(this.dataRequests)
-      .then(responses =>
+      .then(responses => {
 
         //getting responses from data requests
         Promise.all(responses.map(res =>
@@ -54,22 +71,7 @@ class Reporting extends React.Component {
               })
             }
           })
-      )
-    this.state = {
-      users: [],
-      roles: [],
-      sales: [],
-      returns: [],
-      invoices: [],
-      customers: [],
-      products: [],
-      reportOn: 'Net Income',
-      reportBy: 'Your Company',
-      selectedEntity: 'OverAll',
-      fromDate: 'Beginning',
-      toDate: 'Today',
-      show: false
-    }
+      })
   }
 
   makeReport = (reportOn, reportBy, selectedEntity, fromDate, toDate) => {
@@ -181,6 +183,9 @@ class Reporting extends React.Component {
           </Can>
           :
           null}
+        <LoaderModal
+          show={!show}
+        />
       </>
     )
   }
