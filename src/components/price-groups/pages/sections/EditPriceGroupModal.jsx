@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBRow, MDBCol, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard,MDBAnimation, MDBRow, MDBCol, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -300,9 +300,13 @@ class EditPriceGroupModal extends Component {
                                 </MDBCard>
                                 {
                                     this.state.notificationShow ?
-                                        <Notification
-                                            message={this.state.notificationMessage}
-                                        /> : null
+                                        <MDBAnimation type="fadeInUp" >
+                                            <Notification
+                                                message={this.state.notificationMessage}
+                                                icon={"bell"}
+                                            />
+                                        </MDBAnimation>
+                                        : null
                                 }
                             </MDBCol>
                         </MDBRow>

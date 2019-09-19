@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBInput, MDBBtn, MDBRow, MDBCol, MDBContainer, MDBCard, MDBCardBody, MDBCardHeader } from 'mdbreact';
+import { MDBInput, MDBBtn, MDBRow, MDBCol, MDBContainer, MDBCard, MDBCardBody,MDBAnimation, MDBCardHeader } from 'mdbreact';
 import Select from 'react-select';
 import { Can } from '../../../configs/Ability-context'
 import ScanProductModal from '../sections/ScanProductModal'
@@ -105,6 +105,7 @@ class NewTransaction extends Component {
         }
         else {
             this.setState({ rate: '', qty: '' })
+            this.message.innerHTML = ''
         }
     }
 
@@ -155,14 +156,14 @@ class NewTransaction extends Component {
             let customerAllPrices, customerPriceGroups = [], productCategoryId, desiredPriceGroup, productPrice
 
             //finding all price-groups assidned to customer
-            if (customerPrices !== [] && customerPrices !== undefined && customerPrices !== null) {
+            if (customerPrices .length!==0 && customerPrices !== undefined && customerPrices !== null) {
                 customerAllPrices = customerPrices
                     .filter(customerPrice => customerPrice.customer_id === customerId);
             }
 
             //getting customer's price-groups' data
-            if (customerAllPrices !== [] && customerAllPrices !== undefined && customerAllPrices !== null) {
-                if (priceGroups !== [] && priceGroups !== undefined && priceGroups !== null) {
+            if (customerAllPrices .length!==0 && customerAllPrices !== undefined && customerAllPrices !== null) {
+                if (priceGroups .length!==0 && priceGroups !== undefined && priceGroups !== null) {
                     customerAllPrices.forEach(customerPrice => {
                         let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
                         let priceGroup = a.shift()
@@ -172,7 +173,7 @@ class NewTransaction extends Component {
             }
 
             //finding selected product's category
-            if (products !== [] && products !== undefined && products !== null) {
+            if (products .length!==0 && products !== undefined && products !== null) {
                 products.forEach(product => {
                     if (product.id === pId) {
                         productCategoryId = product.product_category_id;
@@ -181,12 +182,12 @@ class NewTransaction extends Component {
             }
 
             //finding price-group from customer's price-groups that holds this productCategory
-            if (customerPriceGroups !== [] && customerPriceGroups !== undefined && customerPriceGroups !== null) {
+            if (customerPriceGroups .length!==0 && customerPriceGroups !== undefined && customerPriceGroups !== null) {
                 desiredPriceGroup = (customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategoryId)).shift()
             }
 
             //finding prices
-            if (productPrices !== [] && productPrices !== undefined && productPrices !== null) {
+            if (productPrices .length!==0 && productPrices !== undefined && productPrices !== null) {
                 productPrice = (productPrices.filter(productPrice =>
                     (productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId)).shift()
                 )
@@ -336,7 +337,7 @@ class NewTransaction extends Component {
 
         //setting product options
         var productOptions;
-        if (products !== [] && products !== null && products !== undefined) {
+        if (products .length!==0 && products !== null && products !== undefined) {
             productOptions = products.map(product => ({
                 key: product.id, label: product.name, value: product.id,
             }));
@@ -345,11 +346,11 @@ class NewTransaction extends Component {
 
 
         return (
-            <MDBContainer className='' fluid style={{ marginBottom: '20px' }}>
+            <MDBContainer className=''>
                 <MDBRow center>
                     <MDBCol>
                         <MDBCard className=' px-2 py-0'>
-                            <MDBCardHeader tag="h5" style={{ color: 'dark',lineHeight:'10px' }} className="text-center font-weight-bold">
+                            <MDBCardHeader tag="h5" style={{ color: 'dark', lineHeight: '10px' }} className="text-center font-weight-bold">
                                 New {this.props.tableId === 'saleProductsTable' ? 'Sales' : 'Returns'}
                             </MDBCardHeader>
                             <MDBCardBody className='px-2 py-0'>
@@ -358,8 +359,16 @@ class NewTransaction extends Component {
                                         <legend className='legend-border'></legend> */}
                                     <MDBRow className=' p-0'>
                                         <MDBCol lg='3' className='3' middle >
-                                            {this.state.notificationShow ?
-                                                <Notification message={this.state.notificationMessage} icon='bell' /> : null}
+                                            {
+                                                this.state.notificationShow ?
+                                                    <MDBAnimation type="fadeInUp" >
+                                                        <Notification
+                                                            message={this.state.notificationMessage}
+                                                            icon={"bell"}
+                                                        />
+                                                    </MDBAnimation>
+                                                    : null
+                                            }
                                             <Select
                                                 styles={productStyles}
                                                 value={product}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCardHeader, MDBInput } from 'mdbreact'
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBIcon, MDBCardHeader, MDBInput } from 'mdbreact'
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification'
 import { Can } from '../../../configs/Ability-context'
@@ -384,9 +384,12 @@ class ReturnInventory extends Component {
                                 {
                                     this.state.notificationShow ?
                                         <div className=''>
-                                            <Notification
-                                                message={this.state.notificationMessage}
-                                            />
+                                            <MDBAnimation type="fadeInUp" >
+                                                <Notification
+                                                    message={this.state.notificationMessage}
+                                                    icon={"bell"}
+                                                />
+                                            </MDBAnimation>
                                         </div>
                                         :
                                         null

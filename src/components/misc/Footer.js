@@ -5,11 +5,13 @@ class Footer extends React.Component {
     render() {
 
         return (
-            <MDBFooter color="black" style={{marginTop:'100px'}} className="text-center fixed-bottom font-small mt-5" >
-                <p className="footer-copyright mb-0 py-3 text-center">
-                    &copy; {new Date().getFullYear()} Copyright: <a href="http://devzone.com.pk/"> DevZone </a>
-                </p>
-            </MDBFooter>
+            <div style={{ marginTop: '110px' }}>
+                <MDBFooter color="black" className="text-center fixed-bottom mb-0 font-small" >
+                    <p className="footer-copyright mb-0 py-3 text-center">
+                        &copy; {new Date().getFullYear()} Copyright: <a href="http://devzone.com.pk/"> DevZone </a>
+                    </p>
+                </MDBFooter>
+            </div>
         )
     }
 }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { MDBAnimation } from 'mdbreact'
 import { Can } from '../../../configs/Ability-context'
 import NewTransaction from '../../misc/pages/NewTransaction';
 import ProductsTable from '../../misc/sections/ProductsTable';
 import InvoiceDetails from '../../misc/sections/InvoiceDetails'
+import LoaderModal from '../../misc/sections/LoaderModal';
 
 
 class NewSales extends Component {
@@ -110,62 +112,6 @@ class NewSales extends Component {
         this.setState({ isDisplaySubmitButton: value })
     }
 
-    saveSales = (pId, pRate, pQty, pPrice) => {
-        console.log('sale');
-
-        let { trDate } = this.refs.invoiceDetails.state
-        let { invoiceId, customerId } = this.state
-        console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
-
-        let sales = {
-            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
-            invoiceId: invoiceId, customerId: customerId,
-            // driverId: 7  
-            driverId: Number(localStorage.getItem('ui'))
-        }
-
-        var options = {
-            method: 'POST',
-            body: JSON.stringify(sales),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewSale', options)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
-    }
-
-    saveReturns = (pId, pRate, pQty, pPrice) => {
-        console.log('return');
-        // console.log(this.state.customerId);
-
-        let { trDate } = this.refs.invoiceDetails.state
-        let { invoiceId, customerId } = this.state
-        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
-
-        let returns = {
-            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
-            invoiceId: invoiceId, customerId: customerId,
-            // driverId: 7  
-            driverId: Number(localStorage.getItem('ui'))
-        }
-
-        var options = {
-            method: 'POST',
-            body: JSON.stringify(returns),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewReturn', options)
-            .then((res) => res.json())
-            .then((json) => {
-                console.log(json)
-            })
-            .catch((error) => console.log(error))
-
-    }
-
     saveInvoice = () => {
         this.setState({
             customerId: '',
@@ -182,6 +128,10 @@ class NewSales extends Component {
         let invoiceId = this.refs.invoiceDetails.state.invoiceId
         let invoiceDetails = { total: total, invoiceId: invoiceId, customer: customer, trDate: trDate }
         return invoiceDetails
+    }
+
+    loaderModalShow = (value) => {
+        this.refs.loaderModal.setState({ modalShow: value })
     }
 
 
@@ -218,18 +168,12 @@ class NewSales extends Component {
                             saveSales={this.saveSales}
                             saveInvoice={this.saveInvoice}
                             fetchInvoiceDetails={this.fetchInvoiceDetails}
+                            loaderModalShow={this.loaderModalShow}
                         />
                     </div>
                 </Can>
                 <Can I='create' a='returns'>
                     <div style={{ display: `${this.state.displayReturnsSection ? '' : 'none'}` }}>
-                        < NewTransaction
-                            ref='returnProducts'
-                            tableId={'returnProductsTable'}
-                            containerId={'returnProductsContainer'}
-                            addProductToTbl={this.addProductToTbl}
-                            customerId={this.state.customerId}
-                        />
                         <ProductsTable
                             ref='returnProductsTable'
                             tableId={'returnProductsTable'}
@@ -245,9 +189,20 @@ class NewSales extends Component {
                             displayOtherSection={this.displayOtherSection}
                             displaySubmitButton={this.displaySubmitButton}
                             fetchInvoiceDetails={this.fetchInvoiceDetails}
+                            loaderModalShow={this.loaderModalShow}
+                        />
+                        < NewTransaction
+                            ref='returnProducts'
+                            tableId={'returnProductsTable'}
+                            containerId={'returnProductsContainer'}
+                            addProductToTbl={this.addProductToTbl}
+                            customerId={this.state.customerId}
                         />
                     </div>
                 </Can>
+                <LoaderModal
+                    ref='loaderModal'
+                />
             </React.Fragment>
         );
     }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { MDBInput, MDBRow, MDBCol, } from 'mdbreact';
+import { MDBInput, MDBRow, MDBCol, MDBAnimation} from 'mdbreact';
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+// import "react-datepicker/dist/react-datepicker.css";
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import Notification from './Notification'
 
 
@@ -56,22 +56,24 @@ class InvoiceDetails extends Component {
     }
 
     handleSelectChange = selectedOption => {
-        if (selectedOption !== null) {
+        if (this._isMounted) {
+            if (selectedOption !== null) {
+                this.setState({
+                    notificationMessage: selectedOption.message,
+                    notificationShow: true
+                })
+                setTimeout(() => this.setState({ notificationShow: false }), 15002);
+            }
+            else {
+                this.setState({
+                    notificationShow: false
+                })
+            }
             this.setState({
-                notificationMessage: selectedOption.message,
-                notificationShow: true
+                customer: selectedOption
             })
-            setTimeout(() => this.setState({ notificationShow: false }), 15002);
+            this.props.customerSelected(selectedOption)
         }
-        else {
-            this.setState({
-                notificationShow: false
-            })
-        }
-        this.setState({
-            customer: selectedOption
-        })
-        this.props.customerSelected(selectedOption)
     }
 
     minusTotalValue = (value) => {
@@ -114,6 +116,7 @@ class InvoiceDetails extends Component {
 
     saveInvoice = () => {
         let { trDate, total, customer } = this.state
+        // console.log(trDate, total, customer);
 
         let invoice = {
             trDate: trDate, total: total, customerId: customer.value,
@@ -132,14 +135,15 @@ class InvoiceDetails extends Component {
                 // console.log(json)
             })
             .catch((error) => console.log(error))
-
-        this.setState({
-            trDate: new Date(),
-            customer: '',
-            total: 0,
-            notificationMessage: '',
-            notificationShow: false
-        })
+        if (this._isMounted) {
+            this.setState({
+                trDate: new Date(),
+                customer: '',
+                total: 0,
+                notificationMessage: '',
+                notificationShow: false
+            })
+        }
     }
 
 
@@ -156,7 +160,7 @@ class InvoiceDetails extends Component {
         }
 
         let Customers = []
-        if (customers !== [] && driverRoutes !== []) {
+        if (customers .length!==0 && driverRoutes .length!==0) {
             let driverId = localStorage.getItem('ui')
             let thisDriverRoutes = driverRoutes.filter(driverRoute => driverRoute.driver_id === Number(driverId))
             thisDriverRoutes.forEach(driverRoute => {
@@ -169,7 +173,7 @@ class InvoiceDetails extends Component {
         }
 
         var customerOptions;
-        if (Customers !== [] && Customers !== null && Customers !== undefined) {
+        if (Customers .length!==0 && Customers !== null && Customers !== undefined) {
             customerOptions = Customers.map(Customer => ({
                 key: Customer.id, label: Customer.name, value: Customer.id, message: Customer.driver_message,
                 invoiceMessage: Customer.invoice_message, shop: Customer.shop_name, cell: Customer.cell, address: Customer.address
@@ -210,11 +214,16 @@ class InvoiceDetails extends Component {
                     >
                     </Select>
                     {
-                        this.state.notificationShow ?
-                            <Notification
-                                message={this.state.notificationMessage}
-                                icon={"envelope"}
-                            /> : null
+                        this.state.notificationShow
+                            ?
+                            <MDBAnimation type="fadeInUp" >
+                                <Notification
+                                    message={this.state.notificationMessage}
+                                    icon={"envelope"}
+                                />
+                            </MDBAnimation>
+                            :
+                            null
                     }
                 </MDBCol>
                 <MDBCol lg='2' className='' >

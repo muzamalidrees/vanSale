@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol,MDBAnimation, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -165,7 +165,7 @@ class NewPerson extends Component {
     }
 
     render() {
-        var { role, roles, name, email, cell, address, username, password, location, dailyMessage } = this.state
+        let { role, roles, name, email, cell, address, username, password, location, dailyMessage } = this.state
 
         const roleStyles = {
             control: (base, state) => ({
@@ -183,8 +183,7 @@ class NewPerson extends Component {
 
 
         var roleOptions;
-        if (roles !== '' && roles !== [] && roles !== null) {
-
+        if (roles !== '' && roles .length!==0 && roles !== null) {
             roleOptions = roles.map(role => ({ key: role.id, label: role.name, value: role.id }));
         }
 
@@ -219,6 +218,7 @@ class NewPerson extends Component {
                                                         isSearchable
                                                         isClearable
                                                         className='form-control-md pl-0'
+                                                        isOptionDisabled={option => option.label === 'super_admin'}
                                                     >
                                                     </Select>
                                                 </MDBCol>
@@ -284,9 +284,13 @@ class NewPerson extends Component {
                                             />
                                             {
                                                 this.state.notificationShow ?
-                                                    <Notification
-                                                        message={this.state.notificationMessage}
-                                                    /> : null
+                                                    <MDBAnimation type="fadeInUp" >
+                                                        <Notification
+                                                            message={this.state.notificationMessage}
+                                                            icon={"bell"}
+                                                        />
+                                                    </MDBAnimation>
+                                                    : null
                                             }
                                         </MDBCol>
                                         <MDBCol md="5" className='pt-0'>

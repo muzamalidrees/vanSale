@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody,MDBAnimation, MDBModalHeader, MDBInput } from 'mdbreact';
 import Notification from '../../../misc/sections/Notification';
 
 
@@ -143,9 +143,12 @@ class EditProductCategoryModal extends Component {
                             </MDBCardBody>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    />
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
                                     : null
                             }
                         </MDBCard>

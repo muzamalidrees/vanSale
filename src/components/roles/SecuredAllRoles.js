@@ -1,38 +1,31 @@
 import React, { Component } from 'react';
 import AllRoles from './pages/AllRoles';
 import { Redirect } from 'react-router'
-
+import {Can} from '../../configs/Ability-context'
 
 class SecuredAllRoles extends Component {
-    _isMounted = false
-    state = {
-        loggedIn: ''
-    }
+    loggedIn
     constructor() {
         super()
         this.user = localStorage.getItem('ui')
-        // console.log(this.user);
 
         if (this.user !== null) {
-            // console.log('user not null');
             this.loggedIn = true
         }
         else {
-            // console.log('user null 2');
             this.loggedIn = false
         }
     }
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
 
     render() {
+        if (this.loggedIn === false) {
 
-        if (this.state.loggedIn === false) {
-            return <Redirect to='/login' />
+            return <Redirect to='/home' />
         }
         else {
-            return <AllRoles />
+            return <Can I='read' a='role'>
+                <AllRoles />
+            </Can>
         }
 
     }

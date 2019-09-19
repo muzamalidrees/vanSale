@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal,MDBAnimation, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -410,9 +410,12 @@ class EditInventoryModal extends Component {
                                     {
                                         this.state.notificationShow ?
                                             <div className=''>
-                                                <Notification
-                                                    message={this.state.notificationMessage}
-                                                />
+                                                <MDBAnimation type="fadeInUp" >
+                                                    <Notification
+                                                        message={this.state.notificationMessage}
+                                                        icon={"bell"}
+                                                    />
+                                                </MDBAnimation>
                                             </div>
                                             :
                                             null

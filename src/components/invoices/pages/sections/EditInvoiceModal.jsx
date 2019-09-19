@@ -280,11 +280,10 @@ class EditInvoiceModal extends Component {
             saveUpdatesBtn: true
         })
     }
-    // updating sales,returns & invoices from database
 
-    updateSales = () => {
-        let currentComponent = this
-        let { invoiceDate, invoice } = currentComponent.state
+    saveUpdates = () => {
+
+        //fetching sales table data
         let salesTable = document.getElementById('editSalesTable');
         let salesTableLength = salesTable.rows.length, sales = []
         if (salesTableLength > 1) {
@@ -299,44 +298,8 @@ class EditInvoiceModal extends Component {
                 sales.push(transaction)
             }
         }
-        sales.forEach(sale => {
-            if (sale.saleId === null || sale.saleId === '' || sale.saleId === undefined) {
-                let newSale = {
-                    trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
-                    driverId: invoice.driver_id, productId: sale.pId, rate: sale.pRate, qty: sale.pQty, price: sale.pPrice
-                }
-                let options1 = {
-                    method: 'POST',
-                    body: JSON.stringify(newSale),
-                    headers: { 'Content-Type': 'application/json' }
-                }
-                fetch('/addNewSale', options1)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                    })
-                    .catch((error) => console.log(error))
-            }
-            else {
-                let saleUpdate = {
-                    id: sale.saleId, qty: sale.pQty, price: sale.pPrice
-                }
-                let options2 = {
-                    method: 'PUT',
-                    body: JSON.stringify(saleUpdate),
-                    headers: { 'Content-Type': 'application/json' }
-                }
-                fetch('/updateSale', options2)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                    })
-                    .catch((error) => console.log(error))
-            }
-        })
-    }
 
-    updateReturns = () => {
+        //fetching returns table data
         let returnsTable = document.getElementById('editReturnsTable')
         let returnsTableLength = returnsTable.rows.length, returns = []
         if (returnsTableLength > 1) {
@@ -351,56 +314,96 @@ class EditInvoiceModal extends Component {
                 returns.push(transaction)
             }
         }
-        let currentComponent = this
-        let { invoiceDate, invoice } = currentComponent.state
-        returns.forEach(Return => {
-            if (Return.returnId === null || Return.returnId === '' || Return.returnId === undefined) {
-                let newReturn = {
-                    trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
-                    driverId: invoice.driver_id, productId: Return.pId, rate: Return.pRate, qty: Return.pQty, price: Return.pPrice
+
+        //fetching invoice details
+        let { invoiceDate, invoice } = this.state
+        let calls = []
+
+        //making new or update sale requests
+        if (sales !== undefined && sales !== null && sales.length !== 0) {
+            sales.forEach(sale => {
+                if (sale.saleId === null || sale.saleId === '' || sale.saleId === undefined) {
+                    let newSale = {
+                        trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                        driverId: invoice.driver_id, productId: sale.pId, rate: sale.pRate, qty: sale.pQty, price: sale.pPrice
+                    }
+                    let newSaleOptions = {
+                        method: 'POST',
+                        body: JSON.stringify(newSale),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    let call = { options: newSaleOptions, path: '/addNewSale' }
+                    calls.push(call);
                 }
-                let options1 = {
-                    method: 'POST',
-                    body: JSON.stringify(newReturn),
-                    headers: { 'Content-Type': 'application/json' }
+                else {
+                    let saleUpdate = {
+                        id: sale.saleId, qty: sale.pQty, price: sale.pPrice
+                    }
+                    let saleUpdateOptions = {
+                        method: 'PUT',
+                        body: JSON.stringify(saleUpdate),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    let call = { options: saleUpdateOptions, path: '/updateSale' }
+                    calls.push(call);
                 }
-                fetch('/addNewReturn', options1)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                    })
-                    .catch((error) => console.log(error))
+            })
+        }
+
+        //saving sale requests
+        let saleRequests = calls.map(call => fetch(call.path, call.options))
+
+        //calling sale requests
+        Promise.all(saleRequests).then(() => {
+
+            //emptying calls array
+            calls = []
+
+            //making new or update return requests
+            if (returns !== undefined && returns.length !== 0) {
+                returns.forEach(Return => {
+                    if (Return.returnId === null || Return.returnId === '' || Return.returnId === undefined) {
+                        let newReturn = {
+                            trDate: invoiceDate, invoiceId: invoice.id, customerId: invoice.customer_id,
+                            driverId: invoice.driver_id, productId: Return.pId, rate: Return.pRate, qty: Return.pQty, price: Return.pPrice
+                        }
+                        let newReturnOptions = {
+                            method: 'POST',
+                            body: JSON.stringify(newReturn),
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        let call = { options: newReturnOptions, path: '/addNewReturn' }
+                        calls.push(call);
+                    }
+                    else {
+                        let returnUpdate = {
+                            id: Return.returnId, qty: Return.pQty, price: Return.pPrice
+                        }
+                        let returnUpdateOptions = {
+                            method: 'PUT',
+                            body: JSON.stringify(returnUpdate),
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        let call = { options: returnUpdateOptions, path: '/updateReturn' }
+                        calls.push(call);
+                    }
+                })
             }
-            else {
-                let returnUpdate = {
-                    id: Return.returnId, qty: Return.pQty, price: Return.pPrice
-                }
-                let options2 = {
-                    method: 'PUT',
-                    body: JSON.stringify(returnUpdate),
-                    headers: { 'Content-Type': 'application/json' }
-                }
-                fetch('/updateReturn', options2)
-                    .then((res) => res.json())
-                    .then((json) => {
-                        console.log(json)
-                    })
-                    .catch((error) => console.log(error))
-            }
+
+            //saving return requests
+            let returnRequests = calls.map(call => fetch(call.path, call.options))
+
+            //calling return requests
+            Promise.all(returnRequests).then(() => {
+
+                //updating invoice
+                this.updateInvoice()
+
+                // closing edit modal
+                this.toggle()
+            })
         })
     }
-    saveUpdates = () => {
-        this.updateSales();
-        setTimeout(this.updateReturns(), 3000)
-        setTimeout(this.updateInvoice(), 3000)
-        // this.updateInvoice();
-    }
-    // closing edit modal
-    // this.toggle()
-    // .then(() => {
-    // refreshing all records table
-    //     window.location.reload();
-    // })
 
     updateInvoice = () => {
         let { invoice, invoiceDate, total } = this.state

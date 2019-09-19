@@ -115,34 +115,24 @@ class ProductsTable extends Component {
         })
     }
 
-    saveSales = () => {
-        let { sales } = this.state
-        sales.forEach(sale => {
-            this.props.saveSales(sale.pId, sale.pRate, sale.pQty, sale.pPrice)
-            this.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
-        })
-    }
-
-    saveReturns = () => {
-        let { returns } = this.state
-        returns.forEach(Return => {
-            this.props.saveReturns(Return.pId, Return.pRate, Return.pQty, Return.pPrice)
-            this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
-        })
-    }
-
     saveData = () => {
+        this.props.loaderModalShow(true)
+        let invoiceDetails = this.props.fetchInvoiceDetails();
+        console.log(invoiceDetails);
+        
+        this.props.saveInvoice()
         let { sales, returns } = this.state
         let currentComponent = this
-        let invoiceDetails = this.props.fetchInvoiceDetails();
         let calls = []
-        if (sales !== undefined && sales !== []) {
+        if (sales !== undefined && sales .length!==0) {
             sales.forEach(sale => {
                 let Sales = {
                     productId: Number(sale.pId), rate: Number(sale.pRate), qty: Number(sale.pQty), price: Number(sale.pPrice), trDate: invoiceDetails.trDate,
-                    invoiceId: invoiceDetails.invoiceId, customerId: invoiceDetails.customer.id,
+                    invoiceId: invoiceDetails.invoiceId, customerId: invoiceDetails.customer.value,
                     driverId: Number(localStorage.getItem('ui'))
                 }
+                console.log(Sales);
+
                 let options = {
                     method: 'POST',
                     body: JSON.stringify(Sales),
@@ -150,32 +140,36 @@ class ProductsTable extends Component {
                 }
                 let call = { options: options, path: '/addNewSale' }
                 calls.push(call);
+                currentComponent.props.deleteProductFrmTbl(sale.pPrice, sale.index, 'saleProductsTable', 'saleProductsContainer', Number(sale.pId))
             })
         }
-        let requests = calls.map(call => fetch(call.path, call.options))
-        Promise.all(requests).then(() => {
-            if (returns !== undefined && returns !== []) {
-                currentComponent.saveReturns();
+        let saleRequests = calls.map(call => fetch(call.path, call.options))
+        Promise.all(saleRequests).then(() => {
+            calls = []
+            if (returns !== undefined && returns .length!==0) {
+                returns.forEach(Return => {
+                    let Returns = {
+                        productId: Number(Return.pId), rate: Number(Return.pRate), qty: Number(Return.pQty), price: Number(Return.pPrice), trDate: invoiceDetails.trDate,
+                        invoiceId: invoiceDetails.invoiceId, customerId: invoiceDetails.customer.value,
+                        driverId: Number(localStorage.getItem('ui'))
+                    }
+                    let options = {
+                        method: 'POST',
+                        body: JSON.stringify(Returns),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    let call = { options: options, path: '/addNewReturn' }
+                    calls.push(call);
+                    this.props.deleteProductFrmTbl(Return.pPrice, Return.index, 'returnProductsTable', 'returnProductsContainer', Number(Return.pId))
+                })
             }
-        })
-            // let promise1 = new Promise(function (resolve, reject) {
-            //     if (sales !== undefined && sales !== []) {
-            //         currentComponent.saveSales();
-            //         // console.log('ok');
-            //     }
-            //     resolve();
-            // });
-            // promise1.then(function () {
-            //     // console.log('value');
-            //     if (returns !== undefined && returns !== []) {
-            //         currentComponent.saveReturns();
-            //     }
-            // })
-            .then(() => {
+            let returnRequests = calls.map(call => fetch(call.path, call.options))
+            Promise.all(returnRequests).then(() => {
                 this.props.displaySubmitButton(false);
                 this.props.displayOtherSection(false);
-                this.props.saveInvoice()
+                this.props.loaderModalShow(false)
             })
+        })
     }
 
     makeTablesEmpty = () => {
@@ -197,15 +191,15 @@ class ProductsTable extends Component {
         let { tableId, containerId, isDisplaySubmitButton, } = this.props
 
         return (
-            <MDBContainer id={containerId} fluid className='mt-2' style={{ marginBottom: '40px', display: 'none' }}>
+            <MDBContainer id={containerId} className=' py-0 my-2' style={{ display: 'none' }}>
                 <MDBRow center>
                     <MDBCol>
-                        <MDBCard className='p-2'>
+                        <MDBCard className='px-2 pt-2 pb-0'>
                             <MDBCardHeader style={{ color: 'dark', lineHeight: '10px' }} tag="h5" className="text-center font-weight-bold">
                                 Products to be {tableId === 'saleProductsTable' ? 'Sale' : 'Returned'}
                             </MDBCardHeader>
-                            <MDBCardBody className='p-2'>
-                                <MDBTable id={tableId} striped responsive bordered >
+                            <MDBCardBody className='px-2 pt-2 pb-0'>
+                                <MDBTable small id={tableId} striped responsive bordered >
                                     <caption style={{ display: `${this.state.askOtherSection ? '' : 'none'}`, fontWeight: 'bold' }}>
                                         Any {tableId === 'saleProductsTable' ? 'Returns' : 'Sales'} ?
                                         <MDBBtn
@@ -243,7 +237,6 @@ class ProductsTable extends Component {
                                     </MDBTableBody>
                                 </MDBTable>
                                 <div style={{ display: `${isDisplaySubmitButton ? '' : 'none'}` }} className='text-right'>
-                                    <label style={{ color: 'red' }} className='mb-0 p-0 mr-2' ref={el => this.submitMessage = el}></label>
                                     <MDBBtn
                                         size='sm'
                                         color="dark"

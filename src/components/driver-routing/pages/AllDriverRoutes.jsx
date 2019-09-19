@@ -12,7 +12,7 @@ class AllDriverRoutes extends Component {
         fetch('/getAllDriverRoutes')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ driverRoutes: json.data })
                 }
@@ -21,7 +21,7 @@ class AllDriverRoutes extends Component {
         fetch('/getAllUsers')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ users: json.data })
                 }
@@ -40,7 +40,7 @@ class AllDriverRoutes extends Component {
         fetch('/getAllRoutes')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ routes: json.data })
                 }

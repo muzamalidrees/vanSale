@@ -142,7 +142,7 @@ class App extends React.Component {
             <AllRoutes
               changeUser={this.changeUser}
             />
-            {/* <Footer /> */}
+            <Footer />
           </div >
         </AbilityContext.Provider>
       </BrowserRouter>

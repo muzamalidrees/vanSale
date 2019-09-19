@@ -111,7 +111,7 @@ class ViewInventoryModal extends Component {
         var index = 0;
         var rows = [];
         var data;
-        if (inventories !== '' || inventories !== null || inventories !== undefined) {
+        if (inventories !== '' && inventories !== null && inventories !== undefined) {
             inventories.forEach((inventory) => {
                 index = index + 1;
                 let Product;

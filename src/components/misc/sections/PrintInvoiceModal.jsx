@@ -70,7 +70,7 @@ class PrintInvoiceModal extends Component {
             if (sales) {
                 window.Android.printSalesHeader();
                 sales.forEach(sale => {
-                    if (products !== [] && products !== null && products !== undefined) {
+                    if (products .length!==0 && products !== null && products !== undefined) {
                         products.forEach(product => {
                             if (product.id === Number(sale.pId)) {
                                 currentProduct = product.name
@@ -84,7 +84,7 @@ class PrintInvoiceModal extends Component {
             if (returns) {
                 window.Android.printReturnsHeader();
                 returns.forEach(Return => {
-                    if (products !== [] && products !== null && products !== undefined) {
+                    if (products .length!==0 && products !== null && products !== undefined) {
                         products.forEach(product => {
                             if (product.id === Number(Return.pId)) {
                                 currentProduct = product.name
@@ -151,7 +151,7 @@ class PrintInvoiceModal extends Component {
         }
 
         sales.forEach(sale => {
-            if (products !== [] && products !== null && products !== undefined) {
+            if (products .length!==0 && products !== null && products !== undefined) {
                 products.forEach(product => {
                     if (product.id === Number(sale.pId)) {
                         currentProduct = product.name
@@ -171,7 +171,7 @@ class PrintInvoiceModal extends Component {
         })
 
         returns.forEach(Return => {
-            if (products !== [] && products !== null && products !== undefined) {
+            if (products .length!==0 && products !== null && products !== undefined) {
                 products.forEach(product => {
                     if (product.id === Number(Return.pId)) {
                         currentProduct = product.name

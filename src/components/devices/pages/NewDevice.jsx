@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBInput, MDBCardBody, MDBCardHeader, MDBCard, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -192,9 +192,13 @@ class NewDevice extends Component {
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    /> : null
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
                             }
                         </MDBCol>
                     </MDBRow>

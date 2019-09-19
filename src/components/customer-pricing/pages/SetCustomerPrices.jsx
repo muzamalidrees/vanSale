@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
-import { func } from 'prop-types';
-import { promises } from 'dns';
-import { Promise } from 'q';
 
 
 
@@ -98,7 +95,7 @@ class SetCustomerPrices extends Component {
                 //finding all price-groups assidned to customer
                 customerAllPrices = this.state.customerPrices
                     .filter(customerPrice => customerPrice.customer_id === customerId);
-                console.log(customerAllPrices);
+                // console.log(customerAllPrices);
 
                 //getting customer's price-groups' data
                 customerAllPrices.forEach(customerPrice => {
@@ -106,7 +103,7 @@ class SetCustomerPrices extends Component {
                     let priceGroup = a.shift()
                     customerPriceGroups.push(priceGroup)
                 });
-                console.log(customerPriceGroups);
+                // console.log(customerPriceGroups);
 
 
                 //finding coming price-group's product-id
@@ -257,15 +254,18 @@ class SetCustomerPrices extends Component {
                                         <MDBBtn size='sm' className='mb-5' color="dark" outline type='submit'>Submit</MDBBtn>
                                     </form>
                                     <Can I='read' a='customerPrice'>
-                                    <Link to='/customerPricing/all'>All Customer Prices..</Link>
+                                        <Link to='/customerPricing/all'>All Customer Prices..</Link>
                                     </Can>
                                 </MDBCardBody>
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    />
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
                                     : null
                             }
                         </MDBCol>

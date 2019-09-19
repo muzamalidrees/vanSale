@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput,MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -223,85 +223,89 @@ class NewPriceGroup extends Component {
 
         return (
             <Can I='create' a='priceGroup'>
-            <MDBContainer className=' p-0' fluid style={{ marginTop: '80px' }}>
-                <MDBRow center>
-                    <MDBCol md="11">
-                        <MDBCard className='p-3'>
-                            <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
-                                New PriceGroup
+                <MDBContainer className=' p-0' fluid style={{ marginTop: '80px' }}>
+                    <MDBRow center>
+                        <MDBCol md="11">
+                            <MDBCard className='p-3'>
+                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                    New PriceGroup
                             </MDBCardHeader>
-                            <MDBCardBody className='px-5'>
-                                <form ref='newPriceGroupForm' onSubmit={this.handleSubmit} noValidate>
-                                    <MDBRow className="grey-text ">
-                                        <MDBCol md='4' middle>
-                                            <MDBInput
-                                                onInput={this.handleInput}
-                                                value={this.state.name}
-                                                label="Name"
-                                                name='name'
-                                                inputRef={el => this.name = el}
-                                                group
-                                                type="text"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                required
-                                                outline
-                                            />
-                                        </MDBCol>
-                                        <MDBCol md='4' middle>
-                                            <MDBRow className='mb-3 grey-text'>
-                                                <MDBCol>
-                                                    <Select
-                                                        styles={categoryStyles}
-                                                        value={productCategory}
-                                                        onChange={this.handleSelectChange('category')}
-                                                        options={CategoryOptions}
-                                                        placeholder='Product-Category'
-                                                        isSearchable
-                                                        isClearable
-                                                        className='form-control-md px-0'
-                                                    />
-                                                </MDBCol>
-                                            </MDBRow>
-                                        </MDBCol>
-                                    </MDBRow>
-                                    {this.state.labelRow ?
-                                        <MDBRow >
-                                            <MDBCol lg='8'>
-                                                <MDBRow>
-                                                    <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
-                                                        <label>Product</label>
-                                                    </MDBCol>
-                                                    <MDBCol lg='3' className='mx-2 text-center font-weight-bold'>
-                                                        <label>Selling-Price</label>
-                                                    </MDBCol>
-                                                    <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
-                                                        <label>Buying-back-Price</label>
+                                <MDBCardBody className='px-5'>
+                                    <form ref='newPriceGroupForm' onSubmit={this.handleSubmit} noValidate>
+                                        <MDBRow className="grey-text ">
+                                            <MDBCol md='4' middle>
+                                                <MDBInput
+                                                    onInput={this.handleInput}
+                                                    value={this.state.name}
+                                                    label="Name"
+                                                    name='name'
+                                                    inputRef={el => this.name = el}
+                                                    group
+                                                    type="text"
+                                                    validate
+                                                    error="wrong"
+                                                    success="right"
+                                                    required
+                                                    outline
+                                                />
+                                            </MDBCol>
+                                            <MDBCol md='4' middle>
+                                                <MDBRow className='mb-3 grey-text'>
+                                                    <MDBCol>
+                                                        <Select
+                                                            styles={categoryStyles}
+                                                            value={productCategory}
+                                                            onChange={this.handleSelectChange('category')}
+                                                            options={CategoryOptions}
+                                                            placeholder='Product-Category'
+                                                            isSearchable
+                                                            isClearable
+                                                            className='form-control-md px-0'
+                                                        />
                                                     </MDBCol>
                                                 </MDBRow>
-                                                {productViews}
                                             </MDBCol>
                                         </MDBRow>
-                                        :
-                                        null}
-                                    <MDBRow >
-                                        <MDBCol md='3'>
-                                            <MDBBtn className='py-0 font-weight-bold form-control' color="dark" outline type='submit'>Submit</MDBBtn>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </form>
-                            </MDBCardBody>
-                        </MDBCard>
-                        {
-                            this.state.notificationShow ?
-                                <Notification
-                                    message={this.state.notificationMessage}
-                                /> : null
-                        }
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
+                                        {this.state.labelRow ?
+                                            <MDBRow >
+                                                <MDBCol lg='8'>
+                                                    <MDBRow>
+                                                        <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
+                                                            <label>Product</label>
+                                                        </MDBCol>
+                                                        <MDBCol lg='3' className='mx-2 text-center font-weight-bold'>
+                                                            <label>Selling-Price</label>
+                                                        </MDBCol>
+                                                        <MDBCol lg='4' className='mx-2 text-center font-weight-bold'>
+                                                            <label>Buying-back-Price</label>
+                                                        </MDBCol>
+                                                    </MDBRow>
+                                                    {productViews}
+                                                </MDBCol>
+                                            </MDBRow>
+                                            :
+                                            null}
+                                        <MDBRow >
+                                            <MDBCol md='3'>
+                                                <MDBBtn className='py-0 font-weight-bold form-control' color="dark" outline type='submit'>Submit</MDBBtn>
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </form>
+                                </MDBCardBody>
+                            </MDBCard>
+                            {
+                                this.state.notificationShow ?
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
+                            }
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
             </Can>
         );
     }

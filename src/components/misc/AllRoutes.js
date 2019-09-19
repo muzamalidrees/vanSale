@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound';
+import ProfilePage from './pages/ProfilePage';
 import SecuredLogin from '../auth/SecuredLogin';
 import SecuredHome from '../home/SecuredHome';
 import Users from '../users/Users';
@@ -21,6 +22,7 @@ import Devices from '../devices/Devices';
 import Sales from '../sales/Sales';
 import Returns from '../returns/Returns';
 import Invoices from '../invoices/Invoices';
+import Reporting from './pages/Reporting';
 // import ReactSideBar from './sections/ReactSideBar';
 
 
@@ -56,10 +58,12 @@ class AllRoutes extends Component {
                         <Route exact path="/login" render={() => (<SecuredLogin changeUser={this.props.changeUser} />)} />
                         {/* <Route exact path="/" component={SecuredHome} /> */}
                         <Route path="/home" component={SecuredHome} />
+                        <Route path="/myProfile" component={ProfilePage} />
+                        <Route path="/reporting" component={Reporting} />
                         <Route path="/users" component={Users} />
                         <Route path="/roles" component={Roles} />
                         <Route path="/permissions" component={Permissions} />
-                        <Route path="/rolePermissioning" component={RolePermissioning} />RolePermissioning
+                        <Route path="/rolePermissioning" component={RolePermissioning} />
                         <Route path="/products" component={Products} />
                         <Route path="/productCategories" component={ProductCategories} />
                         <Route path="/customers" component={Customers} />

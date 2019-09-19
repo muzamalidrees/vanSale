@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBIcon, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody,MDBAnimation, MDBIcon, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBModalHeader, MDBInput } from 'mdbreact';
 import Select from 'react-select';
 import Notification from './Notification';
 
@@ -204,6 +204,7 @@ class EditPersonModal extends Component {
                                                             isSearchable
                                                             isClearable
                                                             className='form-control-md pl-0'
+                                                            isOptionDisabled={option => option.label === 'super_admin'}
                                                             ref={el => this.role = el}
                                                         >
                                                         </Select>
@@ -315,9 +316,12 @@ class EditPersonModal extends Component {
                                     </MDBRow>
                                     {
                                         this.state.notificationShow ?
-                                            <Notification
-                                                message={this.state.notificationMessage}
-                                            />
+                                            <MDBAnimation type="fadeInUp" >
+                                                <Notification
+                                                    message={this.state.notificationMessage}
+                                                    icon={"bell"}
+                                                />
+                                            </MDBAnimation>
                                             : null
                                     }
                                     <div className='text-right'>

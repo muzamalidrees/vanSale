@@ -93,15 +93,38 @@ class AllInvoices extends Component {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
         document.getElementById('invoicesTable').deleteRow(rowToBeDeleted)
+        let sales = [], returns = [], calls = []
 
-        let promise1 = new Promise(function (resolve, reject) {
-            console.log('ok');
-            let sales = [];
-            fetch('/getSpecificSales/' + dRowValue)
-                .then((res) => res.json())
-                .then((json) => {
-                    console.log(json)
-                    sales = json.data
+        //fetching sales of this invoice
+        let call = { path: '/getSpecificSales/' + dRowValue }
+        calls.push(call)
+
+        //fetching returns of this invoice
+        let anotherCall = { path: '/getSpecificReturns/' + dRowValue }
+        calls.push(anotherCall)
+        let dataRequests = calls.map(call =>
+            fetch(call.path)
+        )
+
+        //running data requests
+        Promise.all(dataRequests)
+            .then(responses =>
+
+                //getting responses from data requests
+                Promise.all(responses.map(res =>
+                    res.json()
+                ))
+                    .then(jsons => {
+
+                        //initializing sales and returns
+                        sales = jsons[0].data
+                        returns = jsons[1].data
+                    })
+            )
+            .then(() => {
+
+                // deleting sales
+                if (sales !== undefined && sales !== null && sales.length !== 0) {
                     sales.forEach(sale => {
                         let Sale = { value: sale.id }
                         let saleOptions = {
@@ -109,56 +132,46 @@ class AllInvoices extends Component {
                             body: JSON.stringify(Sale),
                             headers: { 'Content-Type': 'application/json' }
                         }
-                        fetch('/deleteSale', saleOptions)
-                            .then((res) => res.json())
-                            .then((json) => {
-                                console.log(json)
-                            })
-                            .catch((error) => console.log(error))
+                        let call = { options: saleOptions, path: '/deleteSale' }
+                        calls.push(call)
                     })
-                })
-                .catch((error) => console.log(error))
-            resolve()
-        });
-        promise1.then(function () {
-            console.log('value');
-            let returns = []
-            fetch('/getSpecificReturns/' + dRowValue)
-                .then((res) => res.json())
-                .then((json) => {
-                    console.log(json)
-                    returns = json.data
-                    returns.forEach(Return => {
-                        let _return = { value: Return.id }
-                        let returnOptions = {
+                }
+                let saleRequests = calls.map(call => fetch(call.path, call.options))
+                Promise.all(saleRequests).then(() => {
+                    calls = []
+
+                    //deleting returns
+                    if (returns !== undefined && returns !== null && returns.length !== 0) {
+                        returns.forEach(Return => {
+                            let _return = { value: Return.id }
+                            let returnOptions = {
+                                method: 'DELETE',
+                                body: JSON.stringify(_return),
+                                headers: { 'Content-Type': 'application/json' }
+                            }
+                            let call = { options: returnOptions, path: '/deleteReturn' }
+                            calls.push(call)
+                        })
+                    }
+                    let returnRequests = calls.map(call => fetch(call.path, call.options))
+                    Promise.all(returnRequests).then(() => {
+
+                        //deleting invoice
+                        let invoice = { value: dRowValue }
+                        let invoiceOptions = {
                             method: 'DELETE',
-                            body: JSON.stringify(_return),
+                            body: JSON.stringify(invoice),
                             headers: { 'Content-Type': 'application/json' }
                         }
-                        fetch('/deleteReturn', returnOptions)
+                        fetch('/deleteInvoice', invoiceOptions)
                             .then((res) => res.json())
                             .then((json) => {
-                                console.log(json)
+                                // console.log(json)
                             })
                             .catch((error) => console.log(error))
                     })
                 })
-                .catch((error) => console.log(error))
-        }).then(() => {
-            console.log('value2');
-            let invoice = { value: dRowValue }
-            let invoiceOptions = {
-                method: 'DELETE',
-                body: JSON.stringify(invoice),
-                headers: { 'Content-Type': 'application/json' }
-            }
-            fetch('/deleteInvoice', invoiceOptions)
-                .then((res) => res.json())
-                .then((json) => {
-                    // console.log(json)
-                })
-                .catch((error) => console.log(error))
-        })
+            })
     }
 
 

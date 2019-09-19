@@ -62,9 +62,11 @@ export default function defineRulesFor(role) {
         // console.log(userPermissions);
 
         // defining rules for user
-        if (userPermissions !== [] && userPermissions !== undefined) {
+        if (userPermissions .length!==0 && userPermissions !== undefined) {
             for (let index = 0; index < userPermissions.length; index++) {
                 can(`${userPermissions[index].permission}`, `${userPermissions[index].entity}`)
+                // console.log(`${userPermissions[index].permission}`, `${userPermissions[index].entity}`);
+
             }
         }
         // can("manage", "all");

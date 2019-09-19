@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol,MDBAnimation, MDBBtn, MDBInput, MDBIcon, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -292,9 +292,13 @@ class NewCustomer extends Component {
                                                 </MDBRow>
                                                 {
                                                     this.state.notificationShow ?
-                                                        <Notification
-                                                            message={this.state.notificationMessage}
-                                                        /> : null
+                                                        <MDBAnimation type="fadeInUp" >
+                                                            <Notification
+                                                                message={this.state.notificationMessage}
+                                                                icon={"bell"}
+                                                            />
+                                                        </MDBAnimation>
+                                                        : null
                                                 }
                                                 <MDBBtn className='form-control py-0 font-weight-bold mt-4' size='lg' color="dark" outline type='submit'>Register</MDBBtn>
                                             </MDBCol>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody,MDBAnimation, MDBCard, MDBCardBody, MDBModalHeader, MDBInput, MDBRow, MDBCol, MDBIcon } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../../misc/sections/Notification';
 
@@ -226,9 +226,12 @@ class EditDeviceModal extends Component {
                             </MDBCardBody>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    />
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
                                     : null
                             }
                         </MDBCard>

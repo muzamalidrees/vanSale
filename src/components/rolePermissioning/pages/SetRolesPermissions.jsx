@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import chroma from 'chroma-js';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
-
+import LoaderModal from '../../misc/sections/LoaderModal'
 
 
 class SetRolesPermissions extends Component {
@@ -17,7 +17,7 @@ class SetRolesPermissions extends Component {
         fetch('/getAllPermissions')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ permissions: json.data })
                 }
@@ -37,7 +37,7 @@ class SetRolesPermissions extends Component {
             permissions: [],
             roles: [],
             role: '',
-            permission: [],
+            permission: '',
             notificationMessage: '',
             notificationShow: false
         };
@@ -48,6 +48,7 @@ class SetRolesPermissions extends Component {
     }
 
     handleSelectChange = name => selectedOption => {
+
         this.setState({
             [name]: selectedOption
         })
@@ -61,11 +62,12 @@ class SetRolesPermissions extends Component {
             this.setState({ role: null })
             return
         }
-        else if (this.state.permission === [] || this.state.permission === null) {
+        else if (this.state.permission === [] || this.state.permission === null || this.state.permission === '') {
             this.setState({ permission: null })
             return
         }
         else {
+            this.refs.loaderModal.setState({ modalShow: true })
             let { role, permission } = this.state
             let roleId = role.value
             let Permissions = []
@@ -85,13 +87,16 @@ class SetRolesPermissions extends Component {
                 .then((res) => res.json())
                 .then((json) => {
                     console.log(json)
-                    this.setState({
-                        role: '',
-                        permission: []
+                    if (this._isMounted) {
+                        this.setState({
+                            role: '',
+                            permission: []
+                        })
                         // window.location.reload()
-                    })
+                    }
                 })
                 .catch((error) => console.log(error))
+            this.refs.loaderModal.setState({ modalShow: false })
         }
     }
 
@@ -219,7 +224,7 @@ class SetRolesPermissions extends Component {
                                         </MDBRow>
                                         <MDBRow around className='my-4 p-0 mx-0'>
                                             <MDBCol className='m-0 pl-4'>
-                                                <label ref='label' style={{ fontFamily: 'monospace', color: '#6600cc' }}>{this.state.permission ?this.state.permission.length:0} permissions selected</label>
+                                                <label ref='label' style={{ fontFamily: 'monospace', color: '#6600cc' }}>{this.state.permission ? this.state.permission.length : 0} permissions selected</label>
                                                 <Select
                                                     isMulti
                                                     styles={permissionStyles}
@@ -243,12 +248,19 @@ class SetRolesPermissions extends Component {
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    /> : null
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
                             }
                         </MDBCol>
                     </MDBRow>
+                    <LoaderModal
+                        ref='loaderModal'
+                    />
                 </MDBContainer>
             </Can >
         );

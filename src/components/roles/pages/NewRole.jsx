@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
 
@@ -12,7 +12,7 @@ class NewUser extends Component {
         this._isMounted = true
         this.state = {
             name: '',
-            message: '',
+            notificationMessage: '',
             notificationShow: false
         };
     }
@@ -22,9 +22,8 @@ class NewUser extends Component {
     }
 
     handleInput = e => {
-        let str = e.target.value
         this.setState({
-            [e.target.name]: str.toLowerCase()
+            [e.target.name]: e.target.value
         })
     }
 
@@ -69,7 +68,7 @@ class NewUser extends Component {
 
     render() {
 
-        var { name } = this.state
+        let { name } = this.state
 
         return (
             <Can I='create' a='role'>
@@ -77,7 +76,7 @@ class NewUser extends Component {
                     <MDBRow center>
                         <MDBCol md="6">
                             <MDBCard className=' p-5'>
-                                <MDBCardHeader tag="h4" style={{ color: 'dark' }} className="text-center font-weight-bold">
+                                <MDBCardHeader tag="h4" style={{ color: 'teal' }} className="text-center font-weight-bold">
                                     New Role
                                 </MDBCardHeader>
                                 <MDBCardBody className='p-2'>
@@ -86,10 +85,10 @@ class NewUser extends Component {
                                         <div className="grey-text">
                                             <MDBInput
                                                 onInput={this.handleInput}
-                                                value={this.state.name}
+                                                value={name}
                                                 label="Name"
                                                 name='name'
-                                                icon="pen-nib"
+                                                icon="user"
                                                 inputRef={el => { this.name = el }}
                                                 group
                                                 type="text"
@@ -99,17 +98,21 @@ class NewUser extends Component {
                                                 required
                                             />
                                         </div>
-                                        <div className="text-right">
-                                            <MDBBtn size='sm' color="teal" outline type='submit'>Register</MDBBtn>
+                                        <div className="text-center">
+                                            <MDBBtn size='sm' color="teal" outline type='submit'>Create</MDBBtn>
                                         </div>
                                     </form>
                                 </MDBCardBody>
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.message}
-                                    /> : null
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
                             }
                         </MDBCol>
                     </MDBRow>

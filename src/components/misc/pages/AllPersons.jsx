@@ -134,16 +134,16 @@ class AllPersons extends Component {
                             email: user.email,
                             cell: user.cell,
                             address: user.address,
-                            username: user.username,
+                            username: currentRole === 'super_admin' ? 'superAdmin' : user.username,
                             // password: user.password,
                             role: currentRole,
                             location: user.location,
                             dailyMessage: user.daily_message,
                             buttons: <React.Fragment>
-                                <Can I='update' a='user'>
+                                <Can I='update' a={currentRole === 'super_admin' ? 'superAdmin' : 'user'}>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleEdit(user.id)} className='m-1 py-1 px-2' outline color='dark' size="sm"><MDBIcon icon="pencil-alt" /></MDBBtn>
                                 </Can>
-                                <Can I='delete' a='user'>
+                                <Can I='delete' a={currentRole === 'super_admin' ? 'superAdmin' : 'user'}>
                                     <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(user.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                                 </Can>
                             </React.Fragment>

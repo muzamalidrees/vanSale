@@ -8,14 +8,9 @@ import { Can } from "../../../configs/Ability-context";
 
 class HeaderNav extends React.Component {
     _isMounted = false
-    // shouldRedirect = false
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
         this.handleLogOut = this.handleLogOut.bind(this);
-
     }
     componentWillUnmount() {
         this._isMounted = false
@@ -282,6 +277,13 @@ class HeaderNav extends React.Component {
                                     </MDBDropdown>
                                 </MDBNavItem>
                             </Can>
+                            <Can I='read' a='report'>
+                                <MDBNavItem>
+                                    <MDBNavLink style={{ color: '#ffffff' }} to='/reporting'>
+                                       Reporting
+                                    </MDBNavLink>
+                                </MDBNavItem>
+                            </Can>
                         </React.Fragment>
                         :
                         null
@@ -295,11 +297,18 @@ class HeaderNav extends React.Component {
                             </MDBDropdownToggle>
                             <MDBDropdownMenu className="dropdown-default" right>
                                 {this.props.loggedIn ?
-                                    <MDBDropdownItem>
-                                        <MDBNavLink style={{ color: '#000000' }} onClick={this.handleLogOut} to=''>
-                                            Log Out
+                                    <React.Fragment>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} to='/myProfile'>
+                                                My Profile
+                                            </MDBNavLink>
+                                        </MDBDropdownItem>
+                                        <MDBDropdownItem>
+                                            <MDBNavLink style={{ color: '#000000' }} onClick={this.handleLogOut} to=''>
+                                                Log Out
                                         </MDBNavLink>
-                                    </MDBDropdownItem>
+                                        </MDBDropdownItem>
+                                    </React.Fragment>
                                     :
                                     <MDBDropdownItem>
                                         <MDBNavLink style={{ color: '#000000' }} to="/login">

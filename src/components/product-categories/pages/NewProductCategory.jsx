@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput,MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
 
@@ -122,9 +122,13 @@ class NewProductCategory extends Component {
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    /> : null
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
                             }
                         </MDBCol>
                     </MDBRow>

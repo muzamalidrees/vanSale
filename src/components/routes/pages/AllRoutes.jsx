@@ -13,7 +13,7 @@ class AllRoutes extends Component {
         fetch('/getAllRoutes')
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 if (this._isMounted) {
                     this.setState({ routes: json.data })
                 }

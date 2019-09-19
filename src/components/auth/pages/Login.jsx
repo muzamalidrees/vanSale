@@ -19,6 +19,7 @@ class LoginForm extends React.Component {
         })
     }
     validateLogin = (e) => {
+        
         e.preventDefault();
         let form = this.refs.myForm;
         if (form.checkValidity() === false) {
@@ -72,10 +73,6 @@ class LoginForm extends React.Component {
             })
             .catch((err) => console.log(err))
     }
-
-
-
-
 
     onChangeLabel = () => {
         this.refs.loginLabel.innerHTML = '';
@@ -137,7 +134,7 @@ class LoginForm extends React.Component {
                                 </div>
                                 <label ref='loginLabel' style={{ fontFamily: 'monospace', color: 'red' }}></label>
                                 <div className="text-center">
-                                    <MDBBtn color='dark' type="submit">Login</MDBBtn>
+                                    <MDBBtn color='dark' className='login_btn bg-info' type="submit">Login</MDBBtn>
                                 </div>
                             </form>
                         </MDBCol>

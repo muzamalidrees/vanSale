@@ -19,7 +19,6 @@ class Roles extends Component {
 
 
         return (
-            
             <Switch>
                 <Route path="/roles/new" component={SecuredNewRole} />
                 <Route path="/roles/all" component={SecuredAllRoles} />

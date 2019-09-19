@@ -207,7 +207,7 @@ class InventoryHistory extends Component {
 
         return (
             <Can I='read' a='inventoryHistories'>
-                <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+                <MDBCard className='mx-5 p-0' style={{ marginTop: '70px' }}>
                     <MDBCardHeader tag="h4" className="text-center font-weight-bold">
                         Inventory Histories
                 </MDBCardHeader>

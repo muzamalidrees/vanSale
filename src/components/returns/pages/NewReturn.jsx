@@ -3,6 +3,7 @@ import { Can } from '../../../configs/Ability-context'
 import NewTransaction from '../../misc/pages/NewTransaction';
 import ProductsTable from '../../misc/sections/ProductsTable';
 import InvoiceDetails from '../../misc/sections/InvoiceDetails'
+import LoaderModal from '../../misc/sections/LoaderModal';
 
 
 class NewReturn extends Component {
@@ -111,56 +112,6 @@ class NewReturn extends Component {
         this.setState({ isDisplaySubmitButton: value })
     }
 
-    saveSales = (pId, pRate, pQty, pPrice) => {
-        let { trDate } = this.refs.invoiceDetails.state
-        let { invoiceId, customerId } = this.state
-        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
-
-        let sales = {
-            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
-            invoiceId: invoiceId, customerId: customerId,
-            // driverId: 7
-            driverId: Number(localStorage.getItem('ui'))
-        }
-
-        var options = {
-            method: 'POST',
-            body: JSON.stringify(sales),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewSale', options)
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json)
-            })
-            .catch((error) => console.log(error))
-    }
-
-    saveReturns = (pId, pRate, pQty, pPrice) => {
-        let { trDate } = this.refs.invoiceDetails.state
-        let { invoiceId, customerId } = this.state
-        // console.log(pId, pRate, pQty, pPrice, trDate, invoiceId, customerId);
-
-        let returns = {
-            productId: Number(pId), rate: Number(pRate), qty: Number(pQty), price: Number(pPrice), trDate: trDate,
-            invoiceId: invoiceId, customerId: customerId,
-            // driverId: 7 
-            driverId: Number(localStorage.getItem('ui'))
-        }
-
-        var options = {
-            method: 'POST',
-            body: JSON.stringify(returns),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        fetch('/addNewReturn', options)
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json)
-            })
-            .catch((error) => console.log(error))
-    }
-
     saveInvoice = () => {
         this.setState({
             customerId: '',
@@ -179,6 +130,9 @@ class NewReturn extends Component {
         return invoiceDetails
     }
 
+    loaderModalShow = (value) => {
+        this.refs.loaderModal.setState({ modalShow: value })
+    }
 
     render() {
 
@@ -212,18 +166,12 @@ class NewReturn extends Component {
                             saveSales={this.saveSales}
                             saveInvoice={this.saveInvoice}
                             fetchInvoiceDetails={this.fetchInvoiceDetails}
+                            loaderModalShow={this.loaderModalShow}
                         />
                     </div>
                 </Can>
                 <Can I='create' a='sales'>
                     <div style={{ display: `${this.state.displaySalesSection ? '' : 'none'}` }}>
-                        < NewTransaction
-                            ref='saleProducts'
-                            tableId={'saleProductsTable'}
-                            containerId={'saleProductsContainer'}
-                            addProductToTbl={this.addProductToTbl}
-                            customerId={this.state.customerId}
-                        />
                         <ProductsTable
                             ref='saleProductsTable'
                             tableId={'saleProductsTable'}
@@ -239,9 +187,20 @@ class NewReturn extends Component {
                             displayOtherSection={this.displayOtherSection}
                             displaySubmitButton={this.displaySubmitButton}
                             fetchInvoiceDetails={this.fetchInvoiceDetails}
+                            loaderModalShow={this.loaderModalShow}
+                        />
+                        < NewTransaction
+                            ref='saleProducts'
+                            tableId={'saleProductsTable'}
+                            containerId={'saleProductsContainer'}
+                            addProductToTbl={this.addProductToTbl}
+                            customerId={this.state.customerId}
                         />
                     </div>
                 </Can>
+                <LoaderModal
+                    ref='loaderModal'
+                />
             </React.Fragment>
         );
     }

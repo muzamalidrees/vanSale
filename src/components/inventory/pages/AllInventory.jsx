@@ -228,7 +228,7 @@ class AllInventory extends Component {
         }
 
         return (
-            <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
+            <MDBCard className='mx-5 p-0' style={{ marginTop: showWise === 'Driver' ? '72px' : '15px' }}>
                 <MDBCardHeader tag="h4" className="text-center font-weight-bold">
                     All {showWise}s Inventories
                 </MDBCardHeader>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCardBody, MDBIcon, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBAnimation, MDBInput, MDBCardBody, MDBIcon, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -81,21 +81,18 @@ class NewProduct extends Component {
                     // console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
-                    }
-                    if (json.success === true) {
-                        this.setState({
-                            productCategory: '',
-                            name: '',
-                            barcode: '',
-                            description: '',
-                        })
-                    }
-                    else {
-                        this.name.focus();
-                    }
-                    if (this._isMounted === true) {
+                        if (json.success === true) {
+                            this.setState({
+                                productCategory: '',
+                                name: '',
+                                barcode: '',
+                                description: '',
+                            })
+                        }
+                        else {
+                            this.name.focus();
+                        }
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
-
                     }
                 })
                 .catch((error) => console.log(error))
@@ -212,9 +209,13 @@ class NewProduct extends Component {
                             </MDBCard>
                             {
                                 this.state.notificationShow ?
-                                    <Notification
-                                        message={this.state.notificationMessage}
-                                    /> : null
+                                    <MDBAnimation type="fadeInUp" >
+                                        <Notification
+                                            message={this.state.notificationMessage}
+                                            icon={"bell"}
+                                        />
+                                    </MDBAnimation>
+                                    : null
                             }
                         </MDBCol>
                     </MDBRow>
