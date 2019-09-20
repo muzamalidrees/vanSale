@@ -4,8 +4,8 @@ import AdminCardSection2 from './sections/AdminCardSection2';
 import BreadcrumSection from './sections/BreadcrumSection';
 import ChartSection1 from './sections/ChartSection1';
 import ChartSection2 from './sections/ChartSection2';
-import { Can } from '../../../configs/Ability-context';
-import LoaderModal from '../sections/LoaderModal';
+import { Can } from '../../configs/Ability-context';
+import LoaderModal from '../misc/sections/LoaderModal';
 
 
 
@@ -173,6 +173,11 @@ class Reporting extends React.Component {
                 sales={sales}
                 returns={returns}
                 invoices={invoices}
+                users={users}
+                customers={customers}
+                products={products}
+                drivers={drivers}
+                operators={operators}
               />
               <AdminCardSection2
                 sales={sales}

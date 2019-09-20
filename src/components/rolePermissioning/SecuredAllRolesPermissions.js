@@ -4,24 +4,13 @@ import { Redirect } from 'react-router'
 
 
 class SecuredAllRolesPermissions extends Component {
-    _isMounted = false
     state = {
         loggedIn: ''
     }
     constructor() {
         super()
-        this._isMounted = true;
         this.user = localStorage.getItem('ui')
-
-        if (this.user !== null) {
-            this.loggedIn = true
-        }
-        else {
-            this.loggedIn = false
-        }
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
+        this.user !== null ? this.loggedIn = true : this.loggedIn = false
     }
 
     render() {

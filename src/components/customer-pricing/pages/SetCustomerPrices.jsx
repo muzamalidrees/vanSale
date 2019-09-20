@@ -197,9 +197,7 @@ class SetCustomerPrices extends Component {
         var priceGroupOptions;
         customerOptions = customers.map(customer => ({ key: customer.id, label: customer.name, value: customer.id }));
         priceGroupOptions = priceGroups.map(priceGroup => ({ key: priceGroup.id, label: priceGroup.name, value: priceGroup.id }));
-        // if (showOptions) {
-
-        // }
+        
 
 
         return (

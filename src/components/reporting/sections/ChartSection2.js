@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow } from 'mdbreact';
+import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon, MDBRow } from 'mdbreact';
 import { Bar } from 'react-chartjs-2';
 import Select from 'react-select'
 
@@ -105,7 +105,7 @@ class ChartSection2 extends Component {
 
     render() {
         let { selectedYear } = this.state
-        let { invoices } = this.props
+        let { sales, returns, invoices, users, drivers, operators, customers, products } = this.props
 
         const barChartOptions = {
             responsive: true,
@@ -129,6 +129,15 @@ class ChartSection2 extends Component {
                 }]
             }
         }
+        let yearOptions = []
+        if (invoices !== undefined && invoices !== null && invoices.length !== 0) {
+            let firstInvoiceYear = new Date(invoices[0].createdAt).getFullYear(), nextYear = new Date().getFullYear() + 1;
+            for (let i = -1; firstInvoiceYear + i <= nextYear; i++) {
+                yearOptions.push(
+                    { label: `${firstInvoiceYear + i}`, value: `${firstInvoiceYear + i}`, key: `${i}` }
+                )
+            }
+        }
 
         const selectStyles = {
             control: (base) => ({
@@ -139,15 +148,6 @@ class ChartSection2 extends Component {
                 borderLeft: 'none',
                 borderRadius: 'none',
             })
-        }
-        let yearOptions = []
-        if (invoices !== undefined && invoices !== null && invoices.length !== 0) {
-            let firstInvoiceYear = new Date(invoices[0].createdAt).getFullYear(), nextYear = new Date().getFullYear() + 1;
-            for (let i = -1; firstInvoiceYear + i <= nextYear; i++) {
-                yearOptions.push(
-                    { label: `${firstInvoiceYear + i}`, value: `${firstInvoiceYear + i}`, key: `${i}` }
-                )
-            }
         }
 
 
@@ -162,7 +162,7 @@ class ChartSection2 extends Component {
                         </MDBCardHeader>
                         <MDBCardBody>
                             <MDBRow start className='pl-3 my-0 py-0'>
-                                <MDBCol size='3' className='pl-3 my-0 py-0'>
+                                <MDBCol lg='3' md='4' sm='8' xs='12' className='pl-3 my-0 py-0'>
                                     <Select
                                         styles={selectStyles}
                                         value={selectedYear}
@@ -180,8 +180,78 @@ class ChartSection2 extends Component {
                             </MDBRow>
                         </MDBCardBody>
                     </MDBCard>
+                    <MDBCard className="mb-4">
+                        <MDBCardHeader color='unique-color' className='text-center'>
+                            Some other statistics
+                        </MDBCardHeader>
+                        <MDBCardBody>
+                            <MDBRow>
+                                <MDBCol lg='4'>
+                                    <MDBListGroup className="list-group-flush">
+                                        <MDBListGroupItem color="success">
+                                            Sale Transactions
+                                            <MDBBadge color="success" pill className="float-right">
+                                                {/* <MDBIcon fab icon="facebook-f" /> */}
+                                                {sales.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                        <MDBListGroupItem color='danger'>
+                                            Return Transactions
+                                            <MDBBadge color="danger" pill className="float-right">
+                                                {returns.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                        <MDBListGroupItem color='info'>
+                                            Total Invoices
+                                            <MDBBadge color="info" pill className="float-right">
+                                                {invoices.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                    </MDBListGroup>
+                                </MDBCol>
+                                <MDBCol lg='4' middle>
+                                    <MDBListGroup className="list-group-flush">
+                                        <MDBListGroupItem color='warning'>
+                                            Customers
+                                            <MDBBadge color="warning" pill className="float-right">
+                                                {customers.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                        <MDBListGroupItem color='dark'>
+                                            Products
+                                            <MDBBadge color="dark" pill className="float-right">
+                                                {products.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                    </MDBListGroup>
+                                </MDBCol>
+                                <MDBCol lg='4'>
+                                    <MDBListGroup className="list-group-flush">
+                                        <MDBListGroupItem color='primary'>
+                                            Users
+                                            <MDBBadge color="green" pill className="float-right">
+                                                {users.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                        <MDBListGroupItem color='secondary'>
+                                            Drivers
+                                            <MDBBadge color="pink" pill className="float-right">
+                                                {drivers.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                        <MDBListGroupItem color='info'>
+                                            Operators
+                                            <MDBBadge color="teal" pill className="float-right">
+                                                {operators.length}
+                                            </MDBBadge>
+                                        </MDBListGroupItem>
+                                    </MDBListGroup>
+                                </MDBCol>
+                            </MDBRow>
+                        </MDBCardBody>
+                    </MDBCard>
                 </MDBCol>
-            </MDBRow>
+            </MDBRow >
         )
     }
 

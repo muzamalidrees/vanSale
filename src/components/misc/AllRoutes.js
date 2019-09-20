@@ -22,7 +22,7 @@ import Devices from '../devices/Devices';
 import Sales from '../sales/Sales';
 import Returns from '../returns/Returns';
 import Invoices from '../invoices/Invoices';
-import Reporting from './pages/Reporting';
+import Reporting from '../reporting/Reporting';
 // import ReactSideBar from './sections/ReactSideBar';
 
 

@@ -5,6 +5,10 @@ a {
 .list-group-flush {
     color: #495057;
 }
+iframe
+{
+    display: none;
+}
 
 main {
     background-color: #EDEDEE;

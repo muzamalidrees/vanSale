@@ -9,13 +9,7 @@ class SecuredLogin extends Component {
     constructor() {
         super()
         this.user = localStorage.getItem('ui')
-
-        if (this.user !== null) {
-            this.loggedIn = true
-        }
-        else {
-            this.loggedIn = false
-        }
+        this.user !== null ? this.loggedIn = true : this.loggedIn = false
     }
 
     render() {

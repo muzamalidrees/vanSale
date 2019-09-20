@@ -19,7 +19,7 @@ class LoginForm extends React.Component {
         })
     }
     validateLogin = (e) => {
-        
+
         e.preventDefault();
         let form = this.refs.myForm;
         if (form.checkValidity() === false) {
@@ -42,6 +42,7 @@ class LoginForm extends React.Component {
             .then((json) => {
                 // console.log(json);
                 let message = json.message;
+                let user = json.user
                 this.refs.loginLabel.innerHTML = message;
                 if (message === 'incorrect password') {
                     this.password.value = "";
@@ -54,7 +55,7 @@ class LoginForm extends React.Component {
                 else {
                     this.setState({
                         isLoggedIn: true,
-                        user: json.user
+                        user: user
                     }, function () {
                         if (typeof (Storage) !== "undefined") {
                             localStorage.setItem('ui', JSON.stringify(json.user.id))
@@ -64,10 +65,7 @@ class LoginForm extends React.Component {
                             alert('Please use another browser to get it working correctly.')
                         }
                     })
-                    // console.log(json.user.role_id);
-                    let user = json.user
                     this.props.changeUser(user);
-
                 }
 
             })
@@ -141,7 +139,6 @@ class LoginForm extends React.Component {
                     </MDBRow>
                 </MDBContainer>
             )
-
     }
 }
 export default LoginForm;

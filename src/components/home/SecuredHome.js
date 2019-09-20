@@ -8,17 +8,7 @@ class SecuredHome extends Component {
     constructor() {
         super()
         this.user = localStorage.getItem('ui')
-        // console.log(this.user);
-
-        if (this.user !== null) {
-            // console.log('user not null');
-            this.loggedIn = true
-        }
-        else {
-            // console.log('user null 2');
-            this.loggedIn = false
-        }
-
+        this.user !== null ? this.loggedIn = true : this.loggedIn = false
     }
 
     render() {
