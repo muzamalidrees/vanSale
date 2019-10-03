@@ -11,7 +11,7 @@ class CustomerPricing extends Component {
 
         return (
             <Switch>
-                <Route path="/customerPricing/new" component={SecuredSetCustomerPrices} />
+                {/* <Route path="/customerPricing/new" component={SecuredSetCustomerPrices} /> */}
                 <Route path="/customerPricing/all" component={AllCustomerPrices} />
             </Switch>
 

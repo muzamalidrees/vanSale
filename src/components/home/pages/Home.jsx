@@ -2,21 +2,17 @@ import React, { Component } from 'react';
 import { Can } from '../../../configs/Ability-context'
 import NewSales from '../../sales/pages/NewSales'
 import NewInventory from '../../inventory/pages/NewInventory';
-
+import DriversCustomers from './sections/driver-section/DriversCustomers'
 
 class Home extends Component {
-
-    productScannedInAndroid = (barcode) => {
-        console.log(barcode);
-        this.refs.newSales.productScannedInAndroid(barcode)
-    }
 
     render() {
         return (
             <React.Fragment>
                 <Can I='create' a='sales'>
-                    <NewSales
-                        ref='newSales' />
+                    {/* <NewSales
+                        ref='newSales' /> */}
+                    <DriversCustomers />
                 </Can>
                 <Can I='allocate' a='driverInventory' >
                     <NewInventory to='Driver' />

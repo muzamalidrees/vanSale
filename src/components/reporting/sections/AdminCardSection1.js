@@ -84,6 +84,8 @@ class AdminCardSection1 extends React.Component {
       }
       this.props.setTabularFormData(desiredTransactions, reportOn, reportBy)
     }
+    // console.log(desiredTransactions);
+    
 
     //calculating results
     if (reportOn === 'total' && reportBy === 'product') {
@@ -91,12 +93,12 @@ class AdminCardSection1 extends React.Component {
       // console.log(desiredReturns);
       let totalSales = 0
       let totalReturns = 0
-      if (desiredSales !== null && desiredSales .length!==0) {
+      if (desiredSales !== null && desiredSales.length !== 0) {
         desiredSales.forEach(sale => {
           totalSales += sale.price
         })
       }
-      if (desiredReturns !== null && desiredReturns .length!==0) {
+      if (desiredReturns !== null && desiredReturns.length !== 0) {
         desiredReturns.forEach(Return => {
           totalReturns += Return.price
         })
@@ -104,23 +106,27 @@ class AdminCardSection1 extends React.Component {
       this.totalReturns = totalReturns; this.totalSales = totalSales
       this.netIncome = totalSales - totalReturns
     }
-    else if (reportOn === 'total' && reportBy === 'driver' || reportBy === 'customer') {
+    else if (reportOn === 'total' && (reportBy === 'driver' || reportBy === 'customer')) {
       let totalAmount = 0
-      if (desiredTransactions !== null && desiredTransactions .length!==0) {
+      if (desiredTransactions !== null && desiredTransactions.length !== 0) {
         desiredTransactions.forEach(transaction => {
           totalAmount += transaction.total
         })
       }
       this.netIncome = totalAmount
+      // console.log(totalAmount);
+      
     }
     else {
       // console.log(desiredTransactions);
       let totalAmount = 0
-      if (desiredTransactions !== null && desiredTransactions .length!==0) {
+      if (desiredTransactions !== null && desiredTransactions.length !== 0) {
         desiredTransactions.forEach(transaction => {
           totalAmount += transaction.price
         })
       }
+      // console.log(totalAmount);
+      
       reportOn === 'sale' ? this.totalSales = totalAmount : reportOn === 'return' ? this.totalReturns = totalAmount : totalAmount = 0
     }
 

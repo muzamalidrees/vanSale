@@ -45,7 +45,7 @@ class ViewInventoryModal extends Component {
                 // console.log(json)
                 if (this._isMounted === true) {
                     this.setState({
-                        products: json.data
+                        products: json.data,
                     })
                 }
             })

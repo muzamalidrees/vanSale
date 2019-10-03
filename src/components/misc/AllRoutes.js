@@ -12,6 +12,7 @@ import ProductCategories from '../product-categories/ProductCategories';
 import Customers from '../customers/Customers';
 import PriceGroups from '../price-groups/PriceGroups';
 import CustomerPricing from '../customer-pricing/CustomerPricing';
+import customerRouting from '../customer-routing/CustomerRouting';
 import DriverRouting from '../driver-routing/DriverRouting';
 import RolePermissioning from '../rolePermissioning/RolePermissioning';
 import Drivers from '../drivers/Drivers';
@@ -59,7 +60,6 @@ class AllRoutes extends Component {
                         {/* <Route exact path="/" component={SecuredHome} /> */}
                         <Route path="/home" component={SecuredHome} />
                         <Route path="/myProfile" component={ProfilePage} />
-                        <Route path="/reporting" component={Reporting} />
                         <Route path="/users" component={Users} />
                         <Route path="/roles" component={Roles} />
                         <Route path="/permissions" component={Permissions} />
@@ -69,6 +69,7 @@ class AllRoutes extends Component {
                         <Route path="/customers" component={Customers} />
                         <Route path="/priceGroups" component={PriceGroups} />
                         <Route path="/customerPricing" component={CustomerPricing} />
+                        <Route path="/customerRouting" component={customerRouting} />
                         <Route path="/driverRouting" component={DriverRouting} />
                         <Route path="/drivers" component={Drivers} />
                         <Route path="/operators" component={Operators} />
@@ -78,6 +79,7 @@ class AllRoutes extends Component {
                         <Route path="/sales" component={Sales} />
                         <Route path="/returns" component={Returns} />
                         <Route path="/invoices" component={Invoices} />
+                        <Route path="/reporting" component={Reporting} />
                         <Route path='/' component={NotFound} />
                     </Switch>
                 </div>

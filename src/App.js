@@ -8,7 +8,6 @@ import { BrowserRouter, Redirect } from 'react-router-dom';
 import { AbilityContext } from "./configs/Ability-context";
 import defineRulesFor from "./configs/Ability";
 import { Ability } from "@casl/ability";
-import ErrorBoundary from './components/misc/ErrorBoundary'
 // import ReactSideBar from './components/misc/sections/ReactSideBar';
 
 
@@ -88,7 +87,8 @@ class App extends React.Component {
       });
     if (userRole === 'driver') {
       this.setState({
-        modalShow: true
+        user: user,
+        // modalShow: true
       })
     }
 
@@ -114,7 +114,7 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <AbilityContext.Provider value={ability}>
-          {loggedIn === false ? <Redirect to='/login' /> : null}
+          {loggedIn === false && <Redirect to='/login' />}
 
           <div
           // style={{ marginLeft: '15%' }}

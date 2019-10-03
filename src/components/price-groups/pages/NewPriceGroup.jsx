@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput,MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBAnimation, MDBCardBody, MDBCardHeader, MDBCard } from 'mdbreact';
 import Select from 'react-select';
 import Notification from '../../misc/sections/Notification';
 import { Can } from '../../../configs/Ability-context'
@@ -125,6 +125,7 @@ class NewPriceGroup extends Component {
                             name: '',
                             productOptions: [],
                             productCategory: '',
+                            labelRow: false
                         })
                     }
                     else {

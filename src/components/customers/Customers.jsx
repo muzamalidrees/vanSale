@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 // import { Can } from "../../configs/Ability-context";
 import SecuredNewCustomer from './SecuredNewCustomer';
 import SecuredAllCustomers from './SecuredAllCustomers';
+import SelectedCustomer from './pages/SelectedCustomer';
 
 
 
@@ -16,16 +17,11 @@ class Customers extends Component {
 
     render() {
 
-
         return (
-            // <div>
-            //     <h1 style={{ marginTop: '80px' }}>
-            //         Users Page
-            //     </h1>
-            // </div>
             <Switch>
                 <Route path="/customers/new" component={SecuredNewCustomer} />
                 <Route path="/customers/all" component={SecuredAllCustomers} />
+                <Route path="/customers/customer" component={SelectedCustomer} />
             </Switch>
 
         )

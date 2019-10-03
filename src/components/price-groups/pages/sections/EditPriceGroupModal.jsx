@@ -109,7 +109,7 @@ class EditPriceGroupModal extends Component {
         else {
 
             let { name, productCategoryId, productOptions, priceGroupId } = this.state
-            console.log(name, productCategoryId, productOptions);
+            // console.log(name, productCategoryId, productOptions);
 
             let priceGroup = {
                 id: priceGroupId, name: name, productCategoryId: productCategoryId
@@ -120,12 +120,12 @@ class EditPriceGroupModal extends Component {
                 body: JSON.stringify(priceGroup),
                 headers: { 'Content-Type': 'application/json' }
             }
-            console.log(priceGroup);
+            // console.log(priceGroup);
 
             fetch('/updatePriceGroup', options)
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json)
+                    // console.log(json)
                     if (this._isMounted === true) {
                         this.setState({ notificationMessage: json.message, notificationShow: true })
                         setTimeout(() => this.setState({ notificationShow: false }), 1502);
@@ -163,7 +163,7 @@ class EditPriceGroupModal extends Component {
                 fetch('/updateProductPrice', options)
                     .then((res) => res.json())
                     .then((json) => {
-                        console.log(json)
+                        // console.log(json)
                     })
                     .catch((error) => console.log(error))
             })

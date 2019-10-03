@@ -3,6 +3,7 @@ import { MDBDataTable, MDBCard, MDBCardHeader, MDBCardBody, MDBBtn, MDBIcon } fr
 import EditCustomerModal from './sections/EditCustomerModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
+import LoaderModal from '../../misc/sections/LoaderModal'
 
 
 class AllCustomers extends Component {
@@ -19,20 +20,11 @@ class AllCustomers extends Component {
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllRoutes')
-            .then((res) => res.json())
-            .then((json) => {
-                // console.log(json)
-                if (this._isMounted) {
-                    this.setState({ routes: json.data })
-                }
-            })
-            .catch((error) => console.log(error))
         this.state = {
             customers: [],
             rowToBeDeleted: '',
             dRowValue: '',
-            routes: '',
+            loaderModalShow: false
         }
     }
 
@@ -42,10 +34,10 @@ class AllCustomers extends Component {
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editCustomerModal.setState({
-            modalShow: true
-        })
         this.refs.editCustomerModal.fetchData(id);
+        this.setState({
+            loaderModalShow: true
+        })
     }
 
     handleDelete = (id) => (e) => {
@@ -76,6 +68,27 @@ class AllCustomers extends Component {
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
+                if (json.success) {
+                    let customer = json.data
+                    let Customer = { customer_id: customer.id }
+                    let deleteOptions = {
+                        method: 'DELETE',
+                        body: JSON.stringify(Customer),
+                        headers: { 'Content-Type': 'application/json' }
+                    }
+                    fetch('/deleteCustomerRoutes', deleteOptions)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            // console.log(json)
+                        })
+                        .catch((error) => console.log(error))
+                    fetch('/deleteCustomerPrices', deleteOptions)
+                        .then((res) => res.json())
+                        .then((json) => {
+                            // console.log(json)
+                        })
+                        .catch((error) => console.log(error))
+                }
             })
             .catch((error) => console.log(error))
     }
@@ -83,7 +96,7 @@ class AllCustomers extends Component {
 
 
     render() {
-        var { customers, routes } = this.state;
+        var { customers, loaderModalShow } = this.state;
         var rows = [];
         var index = 0;
         // console.log(customers);
@@ -91,14 +104,6 @@ class AllCustomers extends Component {
         customers.forEach((customer) => {
 
             index = index + 1;
-            let currentRoute;
-            if (routes !== '' && routes !== null && routes !== undefined) {
-                routes.forEach(route => {
-                    if (route.id === customer.route_id) {
-                        currentRoute = route.name
-                    }
-                });
-            }
             rows.push(
                 {
                     index: index,
@@ -108,7 +113,6 @@ class AllCustomers extends Component {
                     cell: customer.cell,
                     address: customer.address,
                     postCode: customer.post_code,
-                    route: currentRoute,
                     shopName: customer.shop_name,
                     driverMessage: customer.driver_message,
                     invoiceMessage: customer.invoice_message,
@@ -129,12 +133,13 @@ class AllCustomers extends Component {
                 { label: '#', field: 'index', }, { label: 'Id', field: 'customer_id', }, { label: 'Name', field: 'name' },
                 { label: 'Email', field: 'email', }, { label: 'Cell', field: 'cell', },
                 { label: 'Address', field: 'address', }, { label: 'Post Code', field: 'postCode', },
-                { label: 'Route', field: 'route', }, { label: 'Shop Name', field: 'shopName', },
+                { label: 'Shop Name', field: 'shopName', },
                 { label: 'Message For Driver', field: 'driverMessage', },
                 { label: 'Message On Invoice', field: 'invoiceMessage', }, { label: 'Action', field: 'buttons' },
             ],
             rows: rows
         }
+
         return (
             <Can I='read' a='customer'>
                 <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
@@ -149,10 +154,14 @@ class AllCustomers extends Component {
                         </MDBDataTable>
                         <EditCustomerModal
                             ref='editCustomerModal'
+                            disappearLoaderModal={() => { this.setState({ loaderModalShow: false }) }}
                         />
                         <DeleteModal
                             ref='deleteModal'
                             deleteEntry={this.deleteCustomer}
+                        />
+                        <LoaderModal
+                            show={loaderModalShow}
                         />
                     </MDBCardBody>
                 </MDBCard>

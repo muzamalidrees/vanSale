@@ -23,9 +23,9 @@ class ChartSection1 extends Component {
                     returns: [],
                     invoices: [],
                 })
-                document.getElementById('reportingAllSalesTable').innerHTML += ` (selected ${reportBy})`
+                document.getElementById('reportingAllSalesTable').innerHTML = `All Sales (selected ${reportBy})`
                 document.getElementById('reportingAllReturnsTable').innerHTML = `All Returns`
-                document.getElementById('reportingAllInvoicesTable').innerHTML += `All Invoices`
+                document.getElementById('reportingAllInvoicesTable').innerHTML = `All Invoices`
                 break;
             case 'return':
                 this.setState({
@@ -34,8 +34,8 @@ class ChartSection1 extends Component {
                     invoices: [],
                 })
                 document.getElementById('reportingAllSalesTable').innerHTML = `All Sales`
-                document.getElementById('reportingAllReturnsTable').innerHTML += ` (selected ${reportBy})`
-                document.getElementById('reportingAllInvoicesTable').innerHTML += `All Invoices`
+                document.getElementById('reportingAllReturnsTable').innerHTML = `All Returns (selected ${reportBy})`
+                document.getElementById('reportingAllInvoicesTable').innerHTML = `All Invoices`
                 break;
             case 'total':
                 this.setState({
@@ -45,7 +45,7 @@ class ChartSection1 extends Component {
                 })
                 document.getElementById('reportingAllSalesTable').innerHTML = `All Sales`
                 document.getElementById('reportingAllReturnsTable').innerHTML = `All Returns`
-                document.getElementById('reportingAllInvoicesTable').innerHTML += ` (selected ${reportBy})`
+                document.getElementById('reportingAllInvoicesTable').innerHTML = `All Invoices (selected ${reportBy})`
                 break;
             default:
                 this.setState({
@@ -55,7 +55,7 @@ class ChartSection1 extends Component {
                 })
                 document.getElementById('reportingAllSalesTable').innerHTML = `All Sales`
                 document.getElementById('reportingAllReturnsTable').innerHTML = `All Returns`
-                document.getElementById('reportingAllInvoicesTable').innerHTML += `All Invoices`
+                document.getElementById('reportingAllInvoicesTable').innerHTML = `All Invoices`
                 break;
         }
     }

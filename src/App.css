@@ -7,8 +7,6 @@ table tbody+thead {
     display: none;
 }
 
-
-
 fieldset.legend-border {
     border: 1px solid black !important;
     padding: 0 1.4em 1.4em 1.4em !important;
@@ -31,11 +29,21 @@ legend.legend-border {
 }
 
 @media (min-width: 575px) {
-    .actioBarIcons {
+    .actionBarIcons {
         display: none
     }
     .scanButton {
         display: none;
+    }
+}
+
+@media (max-width: 575px) {
+    .actionBarBrand {
+        /* margin-left: -215px; */
+        display: none;
+    }
+    .actionBarToggler {
+        margin-left: -15px
     }
 }
 
@@ -102,4 +110,8 @@ legend.legend-border {
     100% {
         height: 0%;
     }
+}
+
+.top {
+    margin-top: 69px;
 }

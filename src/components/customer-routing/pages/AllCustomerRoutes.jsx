@@ -4,17 +4,17 @@ import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
 
 
-class AllCustomerPrices extends Component {
+class AllCustomerRoutes extends Component {
     _isMounted = false
     constructor() {
         super();
         this._isMounted = true
-        fetch('/getAllCustomerPrices')
+        fetch('/getAllCustomerRoutes')
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ customerPrices: json.data })
+                    this.setState({ customerRoutes: json.data })
                 }
             })
             .catch((error) => console.log(error))
@@ -27,20 +27,20 @@ class AllCustomerPrices extends Component {
                 }
             })
             .catch((error) => console.log(error))
-        fetch('/getAllPriceGroups')
+        fetch('/getAllRoutes')
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
                 if (this._isMounted) {
-                    this.setState({ priceGroups: json.data })
+                    this.setState({ routes: json.data })
                 }
             })
             .catch((error) => console.log(error))
 
         this.state = {
-            customerPrices: [],
+            customerRoutes: [],
             customers: [],
-            priceGroups: [],
+            routes: [],
             rowToBeDeleted: '',
             dRowValue: '',
         }
@@ -64,18 +64,18 @@ class AllCustomerPrices extends Component {
         })
     }
 
-    deleteCustomerPriceGroup = () => {
+    deleteCustomerRoute = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
-        document.getElementById('customerPricingTable').deleteRow(rowToBeDeleted)
-        let customerPriceGroup = { value: dRowValue }
+        document.getElementById('customerRoutingTable').deleteRow(rowToBeDeleted)
+        let customerRoute = { value: dRowValue }
 
         var options = {
             method: 'DELETE',
-            body: JSON.stringify(customerPriceGroup),
+            body: JSON.stringify(customerRoute),
             headers: { 'Content-Type': 'application/json' }
         }
-        fetch('/deleteCustomerPrice', options)
+        fetch('/deleteCustomerRoute', options)
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
@@ -86,26 +86,27 @@ class AllCustomerPrices extends Component {
 
 
     render() {
-        var { customers, priceGroups, customerPrices } = this.state;
+        var { customers, routes, customerRoutes } = this.state;
         var rows = [];
         var index = 0;
 
-        customerPrices.forEach((customerPrice) => {
+        customerRoutes.forEach((customerRoute) => {
 
             index = index + 1;
             let currentCustomer;
-            let currentPriceGroup;
-            if (customers !== '' && customers !== null && customers !== undefined) {
+            let currentRoute;
+            if (customers.length !== 0 && customers !== null && customers !== undefined) {
                 customers.forEach(customer => {
-                    if (customer.id === customerPrice.customer_id) {
+                    if (customer.id === customerRoute.customer_id) {
                         currentCustomer = customer
                     }
                 });
             }
-            if (priceGroups !== '' && priceGroups !== null && priceGroups !== undefined) {
-                priceGroups.forEach(priceGroup => {
-                    if (priceGroup.id === customerPrice.price_group_id) {
-                        currentPriceGroup = priceGroup.name
+
+            if (routes.length !== 0 && routes !== null && routes !== undefined) {
+                routes.forEach(route => {
+                    if (route.id === customerRoute.route_id) {
+                        currentRoute = route.name
                     }
                 });
             }
@@ -114,10 +115,10 @@ class AllCustomerPrices extends Component {
                     index: index,
                     customer: currentCustomer ? currentCustomer.name : '',
                     customerId: currentCustomer ? currentCustomer.customer_id : '',
-                    priceGroup: currentPriceGroup,
+                    route: currentRoute,
                     buttons: <React.Fragment>
-                        <Can I='delete' a='customerPrice'>
-                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(customerPrice.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
+                        <Can I='delete' a='customerRoute'>
+                            <MDBBtn style={{ fontSize: '15px' }} onClick={this.handleDelete(customerRoute.id)} className='m-1 py-1 px-2' outline color='red darken-3' size="sm"><MDBIcon icon="trash" /></MDBBtn>
                         </Can>
                     </React.Fragment>
                 }
@@ -127,25 +128,25 @@ class AllCustomerPrices extends Component {
         var data = {
             columns: [
                 { label: '#', field: 'index', }, { label: 'Customer', field: 'customer' }, { label: 'Customer_Id', field: 'customerId' },
-                { label: 'Price-Group', field: 'priceGroup', }, { label: 'Action', field: 'buttons' }
+                { label: 'Route', field: 'route', }, { label: 'Action', field: 'buttons' }
             ],
             rows: rows
         }
         return (
-            <Can I='read' a='customerPrice'>
+            <Can I='read' a='customerRoute'>
                 <MDBCard className=' p-0' style={{ marginTop: '70px' }}>
                     <MDBCardHeader tag="h4" className="text-center font-weight-bold">
-                        Customers' Price-Groups
+                        Customers' Routes
                 </MDBCardHeader>
                     <MDBCardBody className='p-2'>
 
-                        <MDBDataTable id='customerPricingTable' striped small hover theadColor="dark"
+                        <MDBDataTable id='customerRoutingTable' striped small hover theadColor="dark"
                             bordered btn entries={12} entriesOptions={[5, 10, 20, 35, 55, 70, 100, 135]} responsive
                             data={data} theadTextWhite >
                         </MDBDataTable>
                         <DeleteModal
                             ref='deleteModal'
-                            deleteEntry={this.deleteCustomerPriceGroup}
+                            deleteEntry={this.deleteCustomerRoute}
                         />
                     </MDBCardBody>
                 </MDBCard>
@@ -155,4 +156,4 @@ class AllCustomerPrices extends Component {
 
 }
 
-export default AllCustomerPrices
+export default AllCustomerRoutes

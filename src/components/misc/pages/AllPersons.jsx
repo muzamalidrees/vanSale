@@ -4,6 +4,7 @@ import ViewInventoryModal from '../sections/ViewInventoryModal';
 import EditPersonModal from '../sections/EditPersonModal';
 import DeleteModal from '../../misc/sections/DeleteModal';
 import { Can } from "../../../configs/Ability-context";
+import LoaderModal from '../sections/LoaderModal'
 
 
 class AllPersons extends Component {
@@ -35,6 +36,7 @@ class AllPersons extends Component {
             rowToBeDeleted: '',
             dRowValue: '',
             roles: [],
+            loaderModalShow: false
         }
     }
 
@@ -43,19 +45,18 @@ class AllPersons extends Component {
     }
 
     handleViewInventory = (id) => (e) => {
-
+        this.refs.viewInventoryModal.fetchData(id);
         this.refs.viewInventoryModal.setState({
             modalShow: true
         })
-        this.refs.viewInventoryModal.fetchData(id);
     }
 
 
     handleEdit = (id) => (e) => {
-        this.refs.editPersonModal.setState({
-            modalShow: true
-        })
         this.refs.editPersonModal.fetchData(id);
+        this.setState({
+            loaderModalShow: true
+        })
     }
 
     handleDelete = (id) => (e) => {
@@ -74,6 +75,7 @@ class AllPersons extends Component {
     deletePerson = () => {
         let rowToBeDeleted = this.state.rowToBeDeleted
         let dRowValue = this.state.dRowValue
+        let userRole = document.getElementById('personsTable').rows[rowToBeDeleted].cells[6].innerHTML
         document.getElementById('personsTable').deleteRow(rowToBeDeleted)
         let user = { value: dRowValue }
 
@@ -86,6 +88,23 @@ class AllPersons extends Component {
             .then((res) => res.json())
             .then((json) => {
                 // console.log(json)
+                if (json.success) {
+                    let userId = json.data.id
+                    if (userRole === 'driver') {
+                        let driver = { driver_id: userId }
+                        let deleteRouteOptions = {
+                            method: 'DELETE',
+                            body: JSON.stringify(driver),
+                            headers: { 'Content-Type': 'application/json' }
+                        }
+                        fetch('/deleteDriverRoutes', deleteRouteOptions)
+                            .then((res) => res.json())
+                            .then((json) => {
+                                // console.log(json)
+                            })
+                            .catch((error) => console.log(error))
+                    }
+                }
             })
             .catch((error) => console.log(error))
     }
@@ -100,7 +119,7 @@ class AllPersons extends Component {
                 edit = 'Driver'
                 break;
             case 'Operators':
-                edit = 'operator'
+                edit = 'Operator'
                 break;
             default:
                 break;
@@ -111,7 +130,7 @@ class AllPersons extends Component {
 
 
     render() {
-        var { users, roles } = this.state;
+        var { users, roles, loaderModalShow } = this.state;
         var rows = [];
         var data;
         var index = 0;
@@ -277,12 +296,16 @@ class AllPersons extends Component {
                     <EditPersonModal
                         ref='editPersonModal'
                         edit={this.defineEditProp()}
+                        disappearLoaderModal={() => { this.setState({ loaderModalShow: false }) }}
                     />
                     <DeleteModal
                         ref='deleteModal'
                         deleteEntry={this.deletePerson}
                     />
                 </MDBCardBody>
+                <LoaderModal
+                    show={loaderModalShow}
+                />
             </MDBCard>
         );
     }

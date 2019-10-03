@@ -18,13 +18,8 @@ class DriverRouting extends Component {
 
 
         return (
-            // <div>
-            //     <h1 style={{ marginTop: '80px' }}>
-            //         Users Page
-            //     </h1>
-            // </div>
             <Switch>
-                <Route path="/driverRouting/new" component={SecuredSetDriverRoutes} />
+                {/* <Route path="/driverRouting/new" component={SecuredSetDriverRoutes} /> */}
                 <Route path="/driverRouting/all" component={SecuredAllDriverRoutes} />
             </Switch>
 

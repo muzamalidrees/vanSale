@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     MDBNavbarNav, MDBNavItem, MDBNavLink, MDBCollapse, MDBDropdown,
-    MDBDropdownToggle, MDBDropdownMenu, MDBIcon, MDBDropdownItem
+    MDBDropdownToggle, MDBDropdownMenu, MDBIcon, MDBDropdownItem, MDBNavbarBrand
 } from "mdbreact";
 import { Can } from "../../../configs/Ability-context";
 
@@ -160,6 +160,22 @@ class HeaderNav extends React.Component {
                                                     <MDBNavLink style={{ color: '#000000' }} to="/customers/all"><MDBIcon icon="eye" /> View Customers</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
+                                            <Can I='read' a='customerRoute'>
+                                                <MDBDropdownItem>
+                                                    <MDBNavLink style={{ color: '#000000' }} to="/customerRouting/all"><MDBIcon icon="eye" /> View Customers'Routes</MDBNavLink>
+                                                </MDBDropdownItem>
+                                            </Can>
+                                        </MDBDropdownMenu>
+                                    </MDBDropdown>
+                                </MDBNavItem>
+                            </Can>
+                            <Can I='read' a='priceGroup'>
+                                <MDBNavItem>
+                                    <MDBDropdown>
+                                        <MDBDropdownToggle nav caret>
+                                            <MDBIcon icon="object-group" > </MDBIcon>  Price-Groups
+                                        </MDBDropdownToggle>
+                                        <MDBDropdownMenu className="text-white">
                                             <Can I='create' a='priceGroup'>
                                                 <MDBDropdownItem>
                                                     <MDBNavLink style={{ color: '#000000' }} to="/priceGroups/new"><MDBIcon icon="plus" /> Create new Price-Group</MDBNavLink>
@@ -170,9 +186,9 @@ class HeaderNav extends React.Component {
                                                     <MDBNavLink style={{ color: '#000000' }} to="/priceGroups/all"><MDBIcon icon="eye" /> View Price-Groups</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
-                                            <Can I='set' a='customerPrice'>
+                                            <Can I='read' a='customerPrice'>
                                                 <MDBDropdownItem>
-                                                    <MDBNavLink style={{ color: '#000000' }} to="/customerPricing/new"><MDBIcon icon="pencil-alt" /> Customer-Pricing</MDBNavLink>
+                                                    <MDBNavLink style={{ color: '#000000' }} to="/customerPricing/all"><MDBIcon icon="eye" /> View Customers' Prices</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
                                         </MDBDropdownMenu>
@@ -216,9 +232,9 @@ class HeaderNav extends React.Component {
                                                     <MDBNavLink style={{ color: '#000000' }} to="/devices/all"><MDBIcon icon="eye" /> View Devices</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
-                                            <Can I='set' a='driverRoute'>
+                                            <Can I='read' a='driverRoute'>
                                                 <MDBDropdownItem>
-                                                    <MDBNavLink style={{ color: '#000000' }} to="/driverRouting/new"><MDBIcon icon="eye" /> Driver-Routing</MDBNavLink>
+                                                    <MDBNavLink style={{ color: '#000000' }} to="/driverRouting/all"><MDBIcon icon="eye" /> View Drivers' Routes</MDBNavLink>
                                                 </MDBDropdownItem>
                                             </Can>
                                         </MDBDropdownMenu>
@@ -280,7 +296,7 @@ class HeaderNav extends React.Component {
                             <Can I='read' a='report'>
                                 <MDBNavItem>
                                     <MDBNavLink style={{ color: '#ffffff' }} to='/reporting'>
-                                       Reporting
+                                        Reporting
                                     </MDBNavLink>
                                 </MDBNavItem>
                             </Can>

@@ -39,18 +39,18 @@ class Header extends React.Component {
       <div>
         <header>
           <MDBNavbar color="black" dark expand="lg" scrolling fixed="top">
-            <MDBNavbarBrand>
-              <strong style={{ marginLeft: '15px', letterSpacing: '3px' }} className="white-text">VanSales</strong>
+            <MDBNavbarToggler left className='actionBarToggler' onClick={this.onClick} />
+            <MDBNavbarBrand className='actionBarBrand'>
+              <strong style={{ marginLeft: '15px', letterSpacing: '3px' }} className="font-weight-bold white-text">VanSales</strong>
             </MDBNavbarBrand>
             <MDBRow className='p-0 m-0'>
-              <MDBCol className='p-0 m-0 actioBarIcons'>
+              <MDBCol className='p-0 m-0 actionBarIcons'>
                 <MDBNavLink style={{ color: '#FFFFFF' }} onClick={this.reload} to=''><MDBIcon icon="redo" /></MDBNavLink>
               </MDBCol>
-              <MDBCol className='m-0 p-0 actioBarIcons'>
+              <MDBCol className='m-0 p-0 actionBarIcons'>
                 <MDBNavLink style={{ color: '#FFFFFF' }} onClick={this.goForward} to=''><MDBIcon icon="arrow-right" /></MDBNavLink>
               </MDBCol>
               <MDBCol className='p-0 m-0'>
-                <MDBNavbarToggler onClick={this.onClick} />
               </MDBCol>
             </MDBRow>
             <HeaderNav loggingOut={this.props.loggingOut} loggedIn={this.props.loggedIn} collapse={this.state.collapse} />

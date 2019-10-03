@@ -1,13 +1,13 @@
+iframe {
+    display: none;
+}
+
 a {
     color: inherit;
 }
 
 .list-group-flush {
     color: #495057;
-}
-iframe
-{
-    display: none;
 }
 
 main {
@@ -85,4 +85,12 @@ main {
     #breadcrumb {
         flex-direction: column;
     }
+}
+
+.nodisplayed {
+    display: none;
+}
+
+.newButton{
+    position: absolute !important
 }

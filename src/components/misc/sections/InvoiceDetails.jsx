@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { MDBInput, MDBRow, MDBCol, MDBAnimation} from 'mdbreact';
+import { MDBInput, MDBRow, MDBCol, MDBAnimation } from 'mdbreact';
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import Notification from './Notification'
 
 
@@ -32,12 +30,22 @@ class InvoiceDetails extends Component {
                 }
             })
             .catch((error) => console.log(error))
+        fetch('/getAllCustomerRoutes')
+            .then((res) => res.json())
+            .then((json) => {
+                // console.log(json)
+                if (this._isMounted) {
+                    this.setState({ customerRoutes: json.data })
+                }
+            })
+            .catch((error) => console.log(error))
 
         this.state = {
             trDate: new Date(),
             customer: '',
             customers: [],
             driverRoutes: [],
+            customerRoutes: [],
             total: 0,
             invoiceId: 1,
             notificationMessage: '',
@@ -148,7 +156,7 @@ class InvoiceDetails extends Component {
 
 
     render() {
-        var { trDate, customer, customers, driverRoutes, total } = this.state
+        var { trDate, customer, customers, driverRoutes, customerRoutes, total } = this.state
         const customerStyles = {
             control: (base, state) => ({
                 ...base,
@@ -159,21 +167,33 @@ class InvoiceDetails extends Component {
             })
         }
 
-        let Customers = []
-        if (customers .length!==0 && driverRoutes .length!==0) {
+        let Customers = [], thisDriverCustomers = []
+        if (customers.length !== 0 && driverRoutes.length !== 0 && customerRoutes.length !== 0) {
             let driverId = localStorage.getItem('ui')
             let thisDriverRoutes = driverRoutes.filter(driverRoute => driverRoute.driver_id === Number(driverId))
+
             thisDriverRoutes.forEach(driverRoute => {
+                customerRoutes.forEach(customerRoute => {
+                    if (customerRoute.route_id === driverRoute.route_id) {
+                        thisDriverCustomers.push(customerRoute)
+                    }
+                })
+            })
+
+            thisDriverCustomers.forEach(driverCustomer => {
                 customers.forEach(customer => {
-                    if (customer.route_id === driverRoute.route_id) {
+                    if (customer.id === driverCustomer.customer_id) {
                         Customers.push(customer)
                     }
                 })
             })
+            // console.log(thisDriverRoutes);
+            // console.log(thisDriverCustomers);
+            // console.log(customers);
         }
 
         var customerOptions;
-        if (Customers .length!==0 && Customers !== null && Customers !== undefined) {
+        if (Customers.length !== 0 && Customers !== null && Customers !== undefined) {
             customerOptions = Customers.map(Customer => ({
                 key: Customer.id, label: Customer.name, value: Customer.id, message: Customer.driver_message,
                 invoiceMessage: Customer.invoice_message, shop: Customer.shop_name, cell: Customer.cell, address: Customer.address

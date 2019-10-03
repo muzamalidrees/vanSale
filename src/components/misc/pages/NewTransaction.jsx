@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBInput, MDBBtn, MDBRow, MDBCol, MDBContainer, MDBCard, MDBCardBody,MDBAnimation, MDBCardHeader } from 'mdbreact';
+import { MDBInput, MDBBtn, MDBRow, MDBCol, MDBContainer, MDBCard, MDBCardBody, MDBAnimation, MDBCardHeader } from 'mdbreact';
 import Select from 'react-select';
 import { Can } from '../../../configs/Ability-context'
 import ScanProductModal from '../sections/ScanProductModal'
@@ -156,14 +156,16 @@ class NewTransaction extends Component {
             let customerAllPrices, customerPriceGroups = [], productCategoryId, desiredPriceGroup, productPrice
 
             //finding all price-groups assidned to customer
-            if (customerPrices .length!==0 && customerPrices !== undefined && customerPrices !== null) {
+            if (customerPrices.length !== 0 && customerPrices !== undefined && customerPrices !== null) {
                 customerAllPrices = customerPrices
                     .filter(customerPrice => customerPrice.customer_id === customerId);
             }
+            // console.log(customerAllPrices);
+
 
             //getting customer's price-groups' data
-            if (customerAllPrices .length!==0 && customerAllPrices !== undefined && customerAllPrices !== null) {
-                if (priceGroups .length!==0 && priceGroups !== undefined && priceGroups !== null) {
+            if (customerAllPrices.length !== 0 && customerAllPrices !== undefined && customerAllPrices !== null) {
+                if (priceGroups.length !== 0 && priceGroups !== undefined && priceGroups !== null) {
                     customerAllPrices.forEach(customerPrice => {
                         let a = priceGroups.filter(priceGroup => priceGroup.id === customerPrice.price_group_id)
                         let priceGroup = a.shift()
@@ -171,23 +173,31 @@ class NewTransaction extends Component {
                     });
                 }
             }
+            // console.log(customerPriceGroups);
 
             //finding selected product's category
-            if (products .length!==0 && products !== undefined && products !== null) {
+            if (products.length !== 0 && products !== undefined && products !== null) {
                 products.forEach(product => {
                     if (product.id === pId) {
                         productCategoryId = product.product_category_id;
                     }
                 });
             }
+            // console.log(productCategoryId);
 
             //finding price-group from customer's price-groups that holds this productCategory
-            if (customerPriceGroups .length!==0 && customerPriceGroups !== undefined && customerPriceGroups !== null) {
+            if (customerPriceGroups.length !== 0 && customerPriceGroups !== undefined && customerPriceGroups !== null) {
                 desiredPriceGroup = (customerPriceGroups.filter(priceGroup => priceGroup.product_category_id === productCategoryId)).shift()
+                if (desiredPriceGroup === undefined) {
+                    this.message.innerHTML = `Customer doesn't hold that product's price.`
+                    this.setState({ product: '' })
+                    return
+                }
             }
+            // console.log(desiredPriceGroup);
 
             //finding prices
-            if (productPrices .length!==0 && productPrices !== undefined && productPrices !== null) {
+            if (productPrices.length !== 0 && productPrices !== undefined && productPrices !== null) {
                 productPrice = (productPrices.filter(productPrice =>
                     (productPrice.price_group_id === desiredPriceGroup.id && productPrice.product_id === pId)).shift()
                 )
@@ -195,10 +205,10 @@ class NewTransaction extends Component {
 
             //setting selling and returning rates
             if (tableId === 'saleProductsTable') {
-                this.setState({ rate: productPrice.sell_price })
+                this.setState({ rate: productPrice.sell_price, qty: 1 })
             }
             else {
-                this.setState({ rate: productPrice.buy_back_price })
+                this.setState({ rate: productPrice.buy_back_price, qty: 1 })
             }
         }
     }
@@ -337,7 +347,7 @@ class NewTransaction extends Component {
 
         //setting product options
         var productOptions;
-        if (products .length!==0 && products !== null && products !== undefined) {
+        if (products.length !== 0 && products !== null && products !== undefined) {
             productOptions = products.map(product => ({
                 key: product.id, label: product.name, value: product.id,
             }));

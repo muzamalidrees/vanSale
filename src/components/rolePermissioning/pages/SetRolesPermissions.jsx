@@ -63,7 +63,7 @@ class SetRolesPermissions extends Component {
             this.setState({ role: null })
             return
         }
-        else if (this.state.permission === [] || this.state.permission === null || this.state.permission === '') {
+        else if (this.state.permission.length === 0 || this.state.permission === null || this.state.permission === '') {
             this.setState({ permission: null })
             return
         }
@@ -104,7 +104,6 @@ class SetRolesPermissions extends Component {
     render() {
 
         const { role, roles, permission, permissions, modalShow } = this.state
-        const animatedComponents = makeAnimated();
         const roleStyles = {
             control: (base, state) => ({
                 ...base,
@@ -118,6 +117,7 @@ class SetRolesPermissions extends Component {
                 borderRadius: 'none',
             })
         }
+        const animatedComponents = makeAnimated();
         const permissionStyles = {
             control: (base, state) => ({
                 ...base,
