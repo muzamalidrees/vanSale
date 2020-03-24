@@ -66,11 +66,11 @@ class InvoiceDetails extends Component {
     handleSelectChange = selectedOption => {
         if (this._isMounted) {
             if (selectedOption !== null) {
-                this.setState({
+                this._isMounted && this.setState({
                     notificationMessage: selectedOption.message,
                     notificationShow: true
                 })
-                setTimeout(() => this.setState({ notificationShow: false }), 15002);
+                setTimeout(() => this._isMounted && this.setState({ notificationShow: false }), 15002);
             }
             else {
                 this.setState({

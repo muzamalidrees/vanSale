@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBCol, MDBBtn, MDBNavLink, MDBRow } from 'mdbreact';
+import { MDBCol, MDBBtn, MDBNavLink, MDBFooter } from 'mdbreact';
 
 
 class SelectedCustomer extends Component {
@@ -28,6 +28,9 @@ class SelectedCustomer extends Component {
                         Create New Return
                     </MDBNavLink>
                 </MDBBtn>
+                <MDBFooter className='text-center fixed-bottom mb-5 font-small'>
+                    <MDBBtn size='sm' color='primary' className='mb-2 w-50' onClick={() => window.history.go(-1)}>Back</MDBBtn>
+                </MDBFooter>
             </MDBCol>
         )
     }

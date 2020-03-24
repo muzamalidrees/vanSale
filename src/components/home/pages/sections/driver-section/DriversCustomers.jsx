@@ -49,7 +49,6 @@ class DriversCustomers extends Component {
     }
 
     handleSelect = id => e => {
-        // console.log(id);
         this.props.history.push({ pathname: "/customers/customer", search: `@=${id}` })
     }
 

@@ -200,7 +200,7 @@ class ViewInvoiceModal extends Component {
 
         return (
             <MDBContainer>
-                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='lg' centered>
+                <MDBModal isOpen={this.state.modalShow} toggle={this.toggle} size='lg' className='mb-5 pb-5' centered>
                     <MDBModalHeader toggle={this.toggle}>Invoice details</MDBModalHeader>
                     <MDBModalBody>
                         <MDBRow center>

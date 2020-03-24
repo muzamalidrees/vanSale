@@ -119,12 +119,12 @@ class ProductsTable extends Component {
         this.props.loaderModalShow(true)
         let invoiceDetails = this.props.fetchInvoiceDetails();
         console.log(invoiceDetails);
-        
+
         this.props.saveInvoice()
         let { sales, returns } = this.state
         let currentComponent = this
         let calls = []
-        if (sales !== undefined && sales .length!==0) {
+        if (sales !== undefined && sales.length !== 0) {
             sales.forEach(sale => {
                 let Sales = {
                     productId: Number(sale.pId), rate: Number(sale.pRate), qty: Number(sale.pQty), price: Number(sale.pPrice), trDate: invoiceDetails.trDate,
@@ -146,7 +146,7 @@ class ProductsTable extends Component {
         let saleRequests = calls.map(call => fetch(call.path, call.options))
         Promise.all(saleRequests).then(() => {
             calls = []
-            if (returns !== undefined && returns .length!==0) {
+            if (returns !== undefined && returns.length !== 0) {
                 returns.forEach(Return => {
                     let Returns = {
                         productId: Number(Return.pId), rate: Number(Return.pRate), qty: Number(Return.pQty), price: Number(Return.pPrice), trDate: invoiceDetails.trDate,
